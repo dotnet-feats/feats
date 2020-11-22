@@ -2,7 +2,7 @@ using System;
 
 namespace Feats.Domain.Statistics 
 {
-    public record EvaluationCount(
+    public record EvaluationRatio(
         string FeatureName,
         string Path, 
         DateTime LastUpdatedOn,

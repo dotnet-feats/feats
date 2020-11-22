@@ -1,7 +1,9 @@
-public namespace Feats.CQRS.Queries
+using System.Threading.Tasks;
+
+namespace Feats.CQRS.Commands
 {
     public interface IHandleCommand<TCommand> 
-        where TCommandy : ICommand
+        where TCommand : ICommand
     {
         Task Handle(TCommand command);
     }

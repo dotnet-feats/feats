@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  postgres.db:
+    image: "postgres:13.1"
+    env_file:
+      - postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+
+  eventstore.db:
+    image: eventstore/eventstore:20.6.1-buster-slim
+    env_file:
+      - eventstore.env
+    ports:
+      - "1113:1113"
+      - "2113:2113"
+    volumes:
+      - type: volume
+        source: eventstore-volume-data
+        target: /var/lib/eventstore
+      - type: volume
+        source: eventstore-volume-logs
+        target: /var/log/eventstore
+
+volumes:
+  eventstore-volume-data:
+  eventstore-volume-logs:
+  postgres-data:
+

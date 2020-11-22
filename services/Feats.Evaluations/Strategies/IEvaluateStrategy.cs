@@ -1,4 +1,7 @@
 using System;
+using System.Threading.Tasks;
+using Feats.Domain;
+using Feats.Domain.Strategies;
 
 namespace Feats.Evaluations.Strategies
 {

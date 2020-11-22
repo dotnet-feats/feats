@@ -1,4 +1,4 @@
-public namespace Feats.CQRS.Queries
+namespace Feats.CQRS.Queries
 {
     public interface IQuery<TResult> 
         where TResult : class
