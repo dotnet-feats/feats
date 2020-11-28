@@ -11,27 +11,6 @@ namespace Feats.Management.EventStoreSetups
     /// Wrapper for client
     public interface IEventStoreClient : IDisposable
     {
-        //
-        // Summary:
-        //     Appends events asynchronously to a stream.
-        //
-        // Parameters:
-        //   expectedRevision:
-        //     The expected EventStore.Client.StreamRevision of the stream to append to.
-        //
-        //   eventData:
-        //     An System.Collections.Generic.IEnumerable`1 to append to the stream.
-        //
-        //   configureOperationOptions:
-        //     An System.Action`1 to configure the operation's options.
-        //
-        //   userCredentials:
-        //     The EventStore.Client.UserCredentials for the operation.
-        //
-        //   cancellationToken:
-        //     The optional System.Threading.CancellationToken.
-        Task<IWriteResult> AppendToStreamAsync(IStream stream, StreamRevision expectedRevision, IEnumerable<EventData> eventData, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
-        //
         // Summary:
         //     Appends events asynchronously to a stream.
         //
@@ -51,47 +30,7 @@ namespace Feats.Management.EventStoreSetups
         //   cancellationToken:
         //     The optional System.Threading.CancellationToken.
         Task<IWriteResult> AppendToStreamAsync(IStream stream, StreamState expectedState, IEnumerable<EventData> eventData, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
-        //
-        // Summary:
-        //     Asynchronously reads the metadata for a stream
-        //
-        // Parameters:
-        //   configureOperationOptions:
-        //     An System.Action`1 to configure the operation's options.
-        //
-        //   userCredentials:
-        //     The optional EventStore.Client.UserCredentials to perform operation with.
-        //
-        //   cancellationToken:
-        //     The optional System.Threading.CancellationToken.
-        Task<StreamMetadataResult> GetStreamMetadataAsync(IStream stream, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
-        //
-        // Summary:
-        //     Asynchronously reads all events.
-        //
-        // Parameters:
-        //   direction:
-        //     The EventStore.Client.Direction in which to read.
-        //
-        //   position:
-        //     The EventStore.Client.Position to start reading from.
-        //
-        //   maxCount:
-        //     The maximum count to read.
-        //
-        //   configureOperationOptions:
-        //     An System.Action`1 to configure the operation's options.
-        //
-        //   resolveLinkTos:
-        //     Whether to resolve LinkTo events automatically.
-        //
-        //   userCredentials:
-        //     The optional EventStore.Client.UserCredentials to perform operation with.
-        //
-        //   cancellationToken:
-        //     The optional System.Threading.CancellationToken.
-        IAsyncEnumerable<ResolvedEvent> ReadAllAsync(Direction direction, Position position, long maxCount = long.MaxValue, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, bool resolveLinkTos = false, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
-        //
+
         // Summary:
         //     Asynchronously reads all the events from a stream. The result could also be inspected
         //     as a means to avoid handling exceptions as the EventStore.Client.ReadState would
@@ -127,36 +66,7 @@ namespace Feats.Management.EventStoreSetups
             bool resolveLinkTos = false, 
             UserCredentials? userCredentials = null, 
             CancellationToken cancellationToken = default);
-        //
-        // Summary:
-        //     Subscribes to a stream from a checkpoint. This is exclusive of.
-        //
-        // Parameters:
-        //   eventAppeared:
-        //     A Task invoked and awaited when a new event is received over the subscription.
-        //
-        //   configureOperationOptions:
-        //     An System.Action`1 to configure the operation's options.
-        //
-        //   resolveLinkTos:
-        //     Whether to resolve LinkTo events automatically.
-        //
-        //   subscriptionDropped:
-        //     An action invoked if the subscription is dropped.
-        //
-        //   userCredentials:
-        //     The optional user credentials to perform operation with.
-        //
-        //   cancellationToken:
-        //     The optional System.Threading.CancellationToken.
-        Task<StreamSubscription> SubscribeToStreamAsync(
-            IStream stream, 
-            Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, 
-            bool resolveLinkTos = false, 
-            Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null, 
-            Action<EventStoreClientOperationOptions>? configureOperationOptions = null, 
-            UserCredentials? userCredentials = null, 
-            CancellationToken cancellationToken = default);
+        
         //
         // Summary:
         //     Subscribes to a stream from a checkpoint. This is exclusive of.
