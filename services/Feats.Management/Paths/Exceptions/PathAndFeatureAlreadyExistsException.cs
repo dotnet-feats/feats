@@ -3,9 +3,9 @@ using Feats.Domain;
 
 namespace Feats.Management.Features.Exceptions
 {
-    public class FeatureAlreadyExistsException : ConflictException
+    public class PathAndFeatureAlreadyExistsException : ConflictException
     {
-        public FeatureAlreadyExistsException()
+        public PathAndFeatureAlreadyExistsException()
             : base()
         {
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventStore.Client;
@@ -117,7 +118,15 @@ namespace Feats.Management.EventStoreSetups
         //
         //   cancellationToken:
         //     The optional System.Threading.CancellationToken.
-        EventStore.Client.EventStoreClient.ReadStreamResult ReadStreamAsync(IStream stream, Direction direction, StreamPosition revision, long maxCount = long.MaxValue, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, bool resolveLinkTos = false, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<ResolvedEvent> ReadStreamAsync(
+            IStream stream,
+            Direction direction, 
+            StreamPosition revision, 
+            long maxCount = long.MaxValue, 
+            Action<EventStoreClientOperationOptions>? configureOperationOptions = null, 
+            bool resolveLinkTos = false, 
+            UserCredentials? userCredentials = null, 
+            CancellationToken cancellationToken = default);
         //
         // Summary:
         //     Subscribes to a stream from a checkpoint. This is exclusive of.
@@ -140,7 +149,14 @@ namespace Feats.Management.EventStoreSetups
         //
         //   cancellationToken:
         //     The optional System.Threading.CancellationToken.
-        Task<StreamSubscription> SubscribeToStreamAsync(IStream stream, Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, bool resolveLinkTos = false, Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
+        Task<StreamSubscription> SubscribeToStreamAsync(
+            IStream stream, 
+            Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, 
+            bool resolveLinkTos = false, 
+            Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null, 
+            Action<EventStoreClientOperationOptions>? configureOperationOptions = null, 
+            UserCredentials? userCredentials = null, 
+            CancellationToken cancellationToken = default);
         //
         // Summary:
         //     Subscribes to a stream from a checkpoint. This is exclusive of.
@@ -166,7 +182,15 @@ namespace Feats.Management.EventStoreSetups
         //
         //   cancellationToken:
         //     The optional System.Threading.CancellationToken.
-        Task<StreamSubscription> SubscribeToStreamAsync(IStream stream, StreamPosition start, Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, bool resolveLinkTos = false, Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null, Action<EventStoreClientOperationOptions>? configureOperationOptions = null, UserCredentials? userCredentials = null, CancellationToken cancellationToken = default);
+        Task<StreamSubscription> SubscribeToStreamAsync(
+            IStream stream, 
+            StreamPosition start, 
+            Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, 
+            bool resolveLinkTos = false, 
+            Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null, 
+            Action<EventStoreClientOperationOptions>? configureOperationOptions = null, 
+            UserCredentials? userCredentials = null, 
+            CancellationToken cancellationToken = default);
     }
 
     public sealed class DecoratedEventStoreClient : IEventStoreClient
@@ -249,7 +273,7 @@ namespace Feats.Management.EventStoreSetups
                 cancellationToken);
         }
 
-        public EventStore.Client.EventStoreClient.ReadStreamResult ReadStreamAsync(
+        public async IAsyncEnumerable<ResolvedEvent> ReadStreamAsync(
             IStream stream,
             Direction direction, 
             StreamPosition revision, 
@@ -259,7 +283,7 @@ namespace Feats.Management.EventStoreSetups
             UserCredentials userCredentials = null, 
             CancellationToken cancellationToken = default)
         {
-            return this._eventStoreClient.ReadStreamAsync(
+            var results = this._eventStoreClient.ReadStreamAsync(
                 direction,
                 stream.Name,
                 revision, 
@@ -268,6 +292,11 @@ namespace Feats.Management.EventStoreSetups
                 resolveLinkTos,
                 userCredentials, 
                 cancellationToken);
+
+            // todo, i've killed a kitten here, i'm sorry, but i wanted to avoid reflexion, seriously though, why the internal constructor on ReadStreamResults..
+            await foreach (var @event in results) {
+                yield return @event;
+            }
         }
 
         public Task<StreamSubscription> SubscribeToStreamAsync(

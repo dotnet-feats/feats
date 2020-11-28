@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Feats.Management.EventStoreSetups;
 using Feats.Management.Features;
 using Feats.Management.Paths;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -33,9 +29,9 @@ namespace Feats.Management
             services.TryAddSingleton<ISystemClock>(new SystemClock());
             services.AddLogging();
             services
-            .AddEventStore()
-            .AddFeatures()
-            .AddPaths();
+                .AddEventStore()
+                .AddFeatures()
+                .AddPaths();
             services.AddRouting();
             services.AddMvcCore();
             services.AddControllers();

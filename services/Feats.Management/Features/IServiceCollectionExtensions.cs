@@ -3,6 +3,7 @@ using Feats.Management.Features.Commands;
 using Feats.Management.Features.Events;
 using Feats.Management.Features.Queries;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Feats.Management.Features
 {
@@ -14,6 +15,8 @@ namespace Feats.Management.Features
             .AddCommands()
             .AddEvents()
             .AddQueries();
+
+            services.TryAddScoped<IFeaturesAggregate, FeaturesAggregate>();
 
             return services;
         }

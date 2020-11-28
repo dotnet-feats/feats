@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Feats.CQRS.Commands;
 using Feats.Domain.Validations;
@@ -22,17 +23,12 @@ namespace Feats.Management.Features
 
         public async Task<IActionResult> Put([FromBody] CreateFeatureRequest createFeatureRequest)
         {
-            createFeatureRequest.Required(nameof(createFeatureRequest));
+            createFeatureRequest.Validate();
+            var command = createFeatureRequest.ToCreateFeatureCommand();
 
-            await this._handleCommand.Handle(new CreateFeatureCommand
-            {
-                Name = createFeatureRequest.Name,
-                Path = createFeatureRequest.Path,
-                CreatedBy = createFeatureRequest.CreatedBy,
-                StrategyNames = createFeatureRequest.StrategyNames,
-            });
+            await this._handleCommand.Handle(command);
 
-            return new CreatedResult(string.Empty, null);
+            return new StatusCodeResult((int) HttpStatusCode.Created);
         }
     }
 
@@ -45,5 +41,26 @@ namespace Feats.Management.Features
         public string CreatedBy { get; set; }
         
         public IEnumerable<string> StrategyNames { get; set; }
+    }
+
+    public static class CreateFeatureRequestExtensions
+    {
+        public static void Validate(this CreateFeatureRequest createFeatureRequest)
+        {
+            createFeatureRequest.Required(nameof(createFeatureRequest));
+            createFeatureRequest.Name.Required(nameof(createFeatureRequest.Name));
+            createFeatureRequest.CreatedBy.Required(nameof(createFeatureRequest.CreatedBy));
+        } 
+
+        public static CreateFeatureCommand ToCreateFeatureCommand(this CreateFeatureRequest createFeatureRequest)
+        {
+            return new CreateFeatureCommand
+            {
+                Name = createFeatureRequest.Name,
+                Path = createFeatureRequest.Path,
+                CreatedBy = createFeatureRequest.CreatedBy,
+                StrategyNames = createFeatureRequest.StrategyNames,
+            };
+        }   
     }
 }
