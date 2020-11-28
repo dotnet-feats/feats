@@ -6,7 +6,6 @@ using Feats.CQRS.Events;
 
 namespace Feats.Management.Features.Events
 {
-    // todo switch to record
     public class FeatureCreatedEvent : IEvent
     {
         public string Type => EventTypes.FeatureCreated;

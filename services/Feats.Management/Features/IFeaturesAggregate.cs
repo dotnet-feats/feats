@@ -77,6 +77,10 @@ namespace Feats.Management.Features
                 case FeatureCreatedEvent createdEvent:
                     return createdEvent.ToEventData();
 
+
+                case FeaturePublishedEvent publishedEvent:
+                    return publishedEvent.ToEventData();
+
                 default:
                     return null;
             }
@@ -88,6 +92,10 @@ namespace Feats.Management.Features
             {
                 case FeatureCreatedEvent createdEvent:
                     this.Apply(createdEvent);
+                    break;
+
+                case FeaturePublishedEvent publishedEvent:
+                    this.Apply(publishedEvent);
                     break;
 
                 default:
@@ -113,6 +121,33 @@ namespace Feats.Management.Features
                 State = FeatureState.Draft,
                 StrategyNames = e.StrategyNames,
             });
+        }
+
+        private void Apply(FeaturePublishedEvent e)
+        {
+            // the fact that you "can" publish an unkown feature is wanted
+            // basically its a NOOP, so I dont care :P Though luck if you don't agree
+            var pathAndName = System.IO.Path.Combine(e.Path, e.Name);
+            var features = this.Features
+                .Select(f => 
+                {
+                    if(System.IO.Path.Combine(f.Path, f.Name).Equals(pathAndName))
+                    {
+                        return new Feature
+                        {
+                            Name = e.Name,
+                            CreatedBy = f.CreatedBy,
+                            CreatedOn = f.CreatedOn,
+                            Path = e.Path,
+                            State = FeatureState.Published,
+                            StrategyNames = f.StrategyNames,
+                        };
+                    }
+
+                    return f;
+                });
+
+            this.Features = features;
         }
     }
 }

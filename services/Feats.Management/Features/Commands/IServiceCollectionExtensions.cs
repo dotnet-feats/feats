@@ -10,6 +10,7 @@ namespace Feats.Management.Features.Commands
         public static IServiceCollection AddCommands(this IServiceCollection services)
         {
             services.TryAddScoped<IHandleCommand<CreateFeatureCommand>, CreateFeatureCommandHandler>();
+            services.TryAddScoped<IHandleCommand<PublishFeatureCommand>, PublishFeatureCommandHandler>();
 
             return services;
         }

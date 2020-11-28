@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using EventStore.Client;
 using Feats.Common.Tests;
+using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
-using Feats.Management.EventStoreSetups;
-using Feats.Management.Features.Events;
+using Feats.EventStore;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using Microsoft.Extensions.Configuration;
 
 namespace Feats.EventStoreS.Tests
 {
@@ -38,8 +39,8 @@ namespace Feats.EventStoreS.Tests
             var client = this._factory.Create();
 
             var results = client.ReadStreamAsync(
-                new FeatureStream(), 
-                EventStore.Client.Direction.Forwards,
+                new TestStream(), 
+                Direction.Forwards,
                 0);
 
             if (results == null)
@@ -61,16 +62,16 @@ namespace Feats.EventStoreS.Tests
 
             var data = new List<EventData> 
             {
-                new FeatureCreatedEvent {
+                new TestEvent {
                     Name = "🦄",
                 }.ToEventData(),
-                new FeatureCreatedEvent {
+                new TestEvent {
                     Name = "bob",
                 }.ToEventData(),
             };
 
             var results = await client.AppendToStreamAsync(
-                new FeatureStream(),
+                new TestStream(),
                 StreamState.Any,
                 data);
 
@@ -84,8 +85,29 @@ namespace Feats.EventStoreS.Tests
         }
     }
 
-    public static class IEventStoreClientTestsExtenstions
+    public class TestStream : IStream
     {
-        
+        public string Name => "streams.tests.integration";
+    }
+
+    public class TestEvent : IEvent
+    {
+        public string Type => "test";
+
+        public string Name { get; set; }
+    }
+    
+
+    public static class FeatureCreatedEventExtensions
+    {
+        public static EventData ToEventData(this TestEvent featureCreatedEvent, JsonSerializerOptions settings = null)
+        {
+            var contentBytes = JsonSerializer.SerializeToUtf8Bytes(featureCreatedEvent, settings);
+            return new EventData(
+                eventId: Uuid.NewUuid(),
+                type : featureCreatedEvent.Type,
+                data: contentBytes
+            );
+        }
     }
 }
