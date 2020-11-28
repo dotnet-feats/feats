@@ -40,7 +40,7 @@ namespace Feats.Management.Tests.Features.Commands
             var command = new PublishFeatureCommand
             {
                 PublishedBy = "😎",
-                Path = "🌲/🦝",
+                Name = "🌲/🦝",
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -63,7 +63,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             await this.GivenCommandHandler(featuresAggregate.Object)
                 .WhenPublishingAFeature(command)
-                .ThenWeDontPublish(featuresAggregate, command);
+                .ThenWePublish(featuresAggregate, command);
         }
 
         [Test]

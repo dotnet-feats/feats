@@ -44,10 +44,9 @@ namespace Feats.Management.Tests.Features
             return () => aggregate.Publish(e);
         }
         
-        public static async Task ThenWePublish(
+        public static async Task ThenWeDontPublish(
             this Func<Task> funk,
-            Mock<IEventStoreClient> mockedClient,
-            FeatureCreatedEvent e)
+            Mock<IEventStoreClient> mockedClient)
         {
             await funk();
             
@@ -55,15 +54,11 @@ namespace Feats.Management.Tests.Features
                 _ => _.AppendToStreamAsync(
                     It.IsAny<FeatureStream>(),
                     It.IsAny<StreamState>(),
-                    It.Is<IEnumerable<EventData>>(items => 
-                        items.All(ed =>
-                            ed.Type.Equals(EventTypes.FeatureCreated) && 
-                            JsonSerializer.Deserialize<FeatureCreatedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
-                        )),
+                    It.IsAny<IEnumerable<EventData>>(),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),
                     It.IsAny<CancellationToken>()),
-                Times.Once());
+                Times.Never());
         }
     }
 }

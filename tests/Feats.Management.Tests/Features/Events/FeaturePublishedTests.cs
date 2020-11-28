@@ -5,12 +5,11 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using EventStore.Client;
-using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
+using Feats.Domain;
 using Feats.EventStore;
 using Feats.Management.Features.Events;
-using Feats.Management.Features.Exceptions;
 using Feats.Management.Tests.EventStoreSetups.TestExtensions;
 using FluentAssertions;
 using Moq;
@@ -18,35 +17,12 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class FeatureCreatedEventTests : FeaturesAggregateTests
+    public class FeaturePublishedEventTests : FeaturesAggregateTests
     {
         private readonly IStream _featureStream = new FeatureStream();
 
         [Test]
-        public async Task GivenAConflictingFeature_WhenPublishingFeatureCreatedEvent_ThenWeThrowAConflictException()
-        {
-            var createdAlready = new FeatureCreatedEvent {
-                Name = "bob",
-                Path = "let/me/show/you",
-            };
-
-            var client = this.GivenIEventStoreClient()
-                .WithAppendToStreamAsync(this._featureStream);
-
-            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
-                .WithEvents(new List<IEvent> { createdAlready });
-
-            var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
-
-            await aggregate
-                .WhenPublishing(createdAlready)
-                .ThenExceptionIsThrown<FeatureAlreadyExistsException>();
-        }
-
-        [Test]
-        public async Task GivenNoFeatures_WhenPublishingFeatureCreatedEvent_ThenWePublishTheFeature()
+        public async Task GivenNoFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
         {
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._featureStream);
@@ -54,7 +30,7 @@ namespace Feats.Management.Tests.Features
             var reader = this.GivenIReadStreamedEvents<FeatureStream>()
                 .WithEvents(Enumerable.Empty<IEvent>());
 
-            var created = new FeatureCreatedEvent {
+            var published = new FeaturePublishedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
             };
@@ -64,16 +40,52 @@ namespace Feats.Management.Tests.Features
                 .WithLoad();
 
             await aggregate
-                .WhenPublishing(created)
-                .ThenWePublish(client, created);
-            aggregate.Features.Select(_ => _.Name).Should()
-                .BeEquivalentTo(new List<string> { created.Name });
+                .WhenPublishing(published)
+                .ThenWePublish(client, published);
+
+            aggregate.Features.Should().BeEmpty();
         }
-        
+
         [Test]
-        public async Task GivenNotConflictingFeatures_WhenPublishingFeatureCreatedEvent_ThenWePublishTheFeature()
+        public async Task GivenNoMatchingFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
         {
-            var createdAlready = new FeatureCreatedEvent {
+            var created = new FeatureCreatedEvent {
+                Name = "🦝",
+                Path = "let/me/show/you",
+            };
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created });
+
+            var published = new FeaturePublishedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad();
+
+            await aggregate
+                .WhenPublishing(published)
+                .ThenWePublish(client, published);
+                
+            aggregate.Features.Should().Contain(_ => _.Name == created.Name);
+            aggregate.Features.Should().NotContain(_ => _.Name == published.Name);
+        }
+
+        [Test]
+        public async Task GivenAMatchingFeature_WhenPublishingFeaturePublishedEvent_ThenWePublishTheFeature()
+        {
+            var notMe = new FeatureCreatedEvent {
+                Name = "🌲",
+                Path = "let/me/show/you",
+            };
+
+            var created = new FeatureCreatedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
             };
@@ -82,10 +94,10 @@ namespace Feats.Management.Tests.Features
                 .WithAppendToStreamAsync(this._featureStream);
 
             var reader = this.GivenIReadStreamedEvents<FeatureStream>()
-                .WithEvents(new List<IEvent> { createdAlready });
+                .WithEvents(new List<IEvent> { created, notMe });
             
-            var created = new FeatureCreatedEvent {
-                Name = "bob2",
+            var published = new FeaturePublishedEvent {
+                Name = "bob",
                 Path = "let/me/show/you",
             };
 
@@ -94,20 +106,26 @@ namespace Feats.Management.Tests.Features
                 .WithLoad();
 
             await aggregate
-                .WhenPublishing(created)
-                .ThenWePublish(client, created);
+                .WhenPublishing(published)
+                .ThenWePublish(client, published);
                 
             aggregate.Features.Select(_ => _.Name).Should()
-                .BeEquivalentTo(new List<string> { created.Name, createdAlready.Name });
+                .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
+            aggregate.Features.Where(_ => _.Name == published.Name).Select(_ => _.State)
+                .Should()
+                .BeEquivalentTo(new List<FeatureState> { FeatureState.Published });
+            aggregate.Features.Where(_ => _.Name != published.Name).Select(_ => _.State)
+                .Should()
+                .BeEquivalentTo(new List<FeatureState> { FeatureState.Draft });
         }
     }
-
-    public static class FeatureCreatedEventTestsExtensions
+        
+    public static class FeaturePublishedEventTestsExtensions
     {
         public static async Task ThenWePublish(
             this Func<Task> funk,
             Mock<IEventStoreClient> mockedClient,
-            FeatureCreatedEvent e)
+            FeaturePublishedEvent e)
         {
             await funk();
             
@@ -117,8 +135,8 @@ namespace Feats.Management.Tests.Features
                     It.IsAny<StreamState>(),
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
-                            ed.Type.Equals(EventTypes.FeatureCreated) && 
-                            JsonSerializer.Deserialize<FeatureCreatedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
+                            ed.Type.Equals(EventTypes.FeaturePublished) && 
+                            JsonSerializer.Deserialize<FeaturePublishedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),
