@@ -2,7 +2,7 @@ using System;
 using Feats.Domain.Validations;
 using Microsoft.Extensions.Configuration;
 
-namespace Feats.Management.EventStoreSetups
+namespace Feats.EventStore
 {
     public interface IEventStoreConfiguration
     {

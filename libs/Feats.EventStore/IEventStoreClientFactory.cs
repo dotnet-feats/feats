@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using EventStore.Client;
 
-namespace Feats.Management.EventStoreSetups
+namespace Feats.EventStore
 {
     public interface IEventStoreClientFactory
     {

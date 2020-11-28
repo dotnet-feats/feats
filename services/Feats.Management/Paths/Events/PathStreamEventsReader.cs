@@ -5,7 +5,7 @@ using System.Text.Json;
 using EventStore.Client;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Feats.Management.Features.Events;
 using Microsoft.Extensions.Logging;
 

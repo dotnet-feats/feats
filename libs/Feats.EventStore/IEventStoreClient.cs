@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventStore.Client;
 using Feats.CQRS.Streams;
 
-namespace Feats.Management.EventStoreSetups
+namespace Feats.EventStore
 {
     /// Wrapper for client
     public interface IEventStoreClient : IDisposable

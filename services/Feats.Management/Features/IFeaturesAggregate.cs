@@ -8,7 +8,7 @@ using Feats.CQRS;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Feats.Management.Features.Events;
 using Feats.Management.Features.Exceptions;
 using Microsoft.Extensions.Logging;

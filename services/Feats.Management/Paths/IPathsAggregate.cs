@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EventStore.Client;
@@ -8,7 +7,7 @@ using Feats.CQRS;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Feats.Management.Features.Events;
 using Feats.Management.Features.Exceptions;
 using Microsoft.Extensions.Logging;

@@ -1,18 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
-using System.Text;
-using System.Text.Json;
 
-using EventStore.Client;
 using Feats.CQRS.Commands;
-using Feats.CQRS.Events;
 using Feats.Domain.Validations;
-using Feats.Management.EventStoreSetups;
 using Feats.Management.Features.Events;
-using Feats.Management.Features.Exceptions;
-using Feats.CQRS.Streams;
 
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
@@ -38,8 +30,6 @@ namespace Feats.Management.Features.Commands
         private readonly IFeaturesAggregate _featuresAggregate;
 
         private readonly IPathsAggregate _pathsAggregate;
-
-        private readonly IEventStoreClient _client;
 
         private readonly ISystemClock _clock;
 

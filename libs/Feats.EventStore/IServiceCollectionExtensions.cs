@@ -3,7 +3,7 @@ using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Feats.Management.EventStoreSetups
+namespace Feats.EventStore
 {
     public static class IServiceCollectionExtensions
     {

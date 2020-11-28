@@ -10,7 +10,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.EventStoreSetups
+namespace Feats.EventStoreS.Tests
 {
     [TestFixture]
     [Category("Integration")]

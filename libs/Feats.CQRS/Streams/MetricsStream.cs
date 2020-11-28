@@ -2,8 +2,15 @@ using System;
 
 namespace Feats.CQRS.Streams
 {
-    public class MetricsStream : IStream
+    public sealed class MetricsStream : IStream
     {
-        public string Name => "streams.metrics";
+        private readonly string _feature;
+
+        public MetricsStream(string featureName)
+        {
+            this._feature = featureName;
+        }
+
+        public string Name => $"streams.metrics.{this._feature}";
     }
 }

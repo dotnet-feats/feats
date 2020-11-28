@@ -2,7 +2,7 @@ using System;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Feats.Management.EventStoreSetups
+namespace Feats.EventStore
 {
     // https://developers.eventstore.com/clients/dotnet/generated/v20.6.1/connecting/grpc-interceptor.html
     public class MissingInterceptor : Interceptor 

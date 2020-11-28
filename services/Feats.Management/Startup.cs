@@ -1,5 +1,5 @@
 using System;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Feats.Management.Features;
 using Feats.Management.Paths;
 using Microsoft.AspNetCore.Builder;

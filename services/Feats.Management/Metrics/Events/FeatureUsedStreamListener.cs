@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using EventStore.Client;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Microsoft.Extensions.Logging;
 
 namespace Feats.Management.Features.Events
@@ -20,12 +20,13 @@ namespace Feats.Management.Features.Events
         public FeatureEventStreamListener(
             ILogger<FeatureEventStreamListener> logger,
             IEventStoreClient eventStore, 
-            IEnumerable<IHandleEvent> eventHandlers)
+            IEnumerable<IHandleEvent> eventHandlers,
+            string featureName)
         {
             this._logger = logger;
             this._eventStore = eventStore;
             this._eventHandlers = eventHandlers;
-            this._stream = new MetricsStream();
+            this._stream = new MetricsStream(featureName);
         }
 
         public async Task Listen()

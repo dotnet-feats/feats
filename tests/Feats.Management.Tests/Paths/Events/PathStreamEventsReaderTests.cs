@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
-using Feats.Management.EventStoreSetups;
+using Feats.EventStore;
 using Feats.Management.Features.Events;
 using Feats.Management.Paths.Events;
 using Feats.Management.Tests.EventStoreSetups.TestExtensions;
