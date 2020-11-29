@@ -16,6 +16,7 @@ namespace Feats.EventStoreS.Tests
     public class IEventStoreClientTests : TestBase
     {
         [Test]
+        [Category("Integration")]
         public async Task GivenEventStore_WhenReadingStream_ThenWeGetEvents()
         {
             var configuration = new EventStoreConfiguration(
@@ -44,6 +45,7 @@ namespace Feats.EventStoreS.Tests
         }
         
         [Test]
+        [Category("Integration")]
         public async Task GivenEventStore_WhenPublishingToStream_ThenWeGetEventPublished()
         {
             var configuration = new EventStoreConfiguration(

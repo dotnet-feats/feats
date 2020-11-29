@@ -22,12 +22,13 @@ namespace Feats.EventStore
         public EventStoreConfiguration(IConfiguration configuration)
         {
             configuration.Required(nameof(configuration));
+            var section = configuration.GetSection("feats:eventstore");
 
-            this.HostName = configuration.GetValue<string>("feats.eventstore.hostname", "localhost");
-            this.Protocol = configuration.GetValue<string>("feats.eventstore.protocol", "http");
-            this.Username = configuration.GetValue<string>("feats.eventstore.protocol", "admin");
-            this.Password = configuration.GetValue<string>("feats.eventstore.protocol", "changeit");
-            this.IsClusterModeEnabled = configuration.GetValue<bool>("feats.eventstore.isCluster", false);
+            this.HostName = section.GetValue<string>("hostname", "localhost");
+            this.Protocol = section.GetValue<string>("protocol", "http");
+            this.Username = section.GetValue<string>("username", "admin");
+            this.Password = section.GetValue<string>("password", "changeit");
+            this.IsClusterModeEnabled = section.GetValue<bool>("isCluster", false);
         }
 
         public string HostName { get; set; }

@@ -19,3 +19,8 @@ docker compose stuff eheh
 in the deploy folder:
 
 `docker-compose up`
+
+too lazy to make distinct solutions so for now:
+```
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+```
