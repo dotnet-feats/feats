@@ -1,6 +1,5 @@
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Feats.Common.Tests;
 using Feats.Management.Features;
@@ -15,18 +14,6 @@ public class CreateFeatureRequestTests : TestBase
         {
             this
                 .GivenValidRequest()
-                .WhenValidating()
-                .ThenNoExceptionIsThrown();
-        }
-
-        [Test]
-        public void GivenARequestWithMissingStrategies_WhenValidating_ThenNoExceptionIsThrown()
-        {
-            var command = this
-                .GivenValidRequest();
-            command.StrategyNames = Enumerable.Empty<string>();
-
-            command
                 .WhenValidating()
                 .ThenNoExceptionIsThrown();
         }
@@ -105,7 +92,6 @@ public class CreateFeatureRequestTests : TestBase
                 CreatedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
-                StrategyNames = new List<string> { "one", "two" },
             };
         }
 
@@ -123,7 +109,6 @@ public class CreateFeatureRequestTests : TestBase
         {
             var command = createFunc();
 
-            command.StrategyNames.Should().BeEquivalentTo(request.StrategyNames);   
             command.Name.Should().Be(request.Name);   
             command.Path.Should().BeEquivalentTo(request.Path);
             command.CreatedBy.Should().BeEquivalentTo(request.CreatedBy);

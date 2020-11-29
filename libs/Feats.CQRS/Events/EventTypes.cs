@@ -8,6 +8,8 @@ namespace Feats.CQRS.Events
         
         public const string FeaturePublished = "event.features.published";
 
+        public const string StrategyAssigned = "event.features.strategy.assigned";
+
         public const string PathCreated = "event.paths.created";
     }
 }

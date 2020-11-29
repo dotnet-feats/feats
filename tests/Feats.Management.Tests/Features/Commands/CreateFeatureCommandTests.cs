@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Feats.Common.Tests;
+using Feats.Domain.Events;
 using Feats.Management.Features.Commands;
 using Feats.Management.Features.Events;
 using FluentAssertions;
@@ -17,18 +18,6 @@ namespace Feats.Management.Tests.Features.Commands
         public void GivenACommandWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
         {
             this.GivenValidCommand()
-                .WhenValidating()
-                .ThenNoExceptionIsThrown();
-        }
-
-        [Test]
-        public void GivenACommandWithMissingStrategies_WhenValidating_ThenNoExceptionIsThrown()
-        {
-            var command = this
-                .GivenValidCommand();
-            command.StrategyNames = Enumerable.Empty<string>();
-
-            command
                 .WhenValidating()
                 .ThenNoExceptionIsThrown();
         }
@@ -133,7 +122,6 @@ namespace Feats.Management.Tests.Features.Commands
                 CreatedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
-                StrategyNames = new List<string> { "one", "two" },
             };
         }
 
@@ -169,7 +157,6 @@ namespace Feats.Management.Tests.Features.Commands
             feat.CreatedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
-            feat.StrategyNames.Should().BeEquivalentTo(command.StrategyNames);
         }
     }
 }

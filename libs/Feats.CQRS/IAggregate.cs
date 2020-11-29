@@ -3,10 +3,13 @@ using Feats.CQRS.Events;
 
 namespace Feats.CQRS
 {
-    public interface IAggregate
+    public interface IAggregate : IReadonlyAggregate
+    {        
+        Task Publish(IEvent e);
+    }
+    
+    public interface IReadonlyAggregate
     {
         Task Load();
-        
-        Task Publish(IEvent e);
     }
 }

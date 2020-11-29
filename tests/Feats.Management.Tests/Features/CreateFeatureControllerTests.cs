@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Commands;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 
@@ -54,7 +52,6 @@ namespace Feats.Management.Tests.Features
                 CreatedBy = "bob",
                 Name = "Ross",
                 Path = "🦄.🖼",
-                StrategyNames = new List<string> { "little brush strokes" },
             };
         }
 

@@ -6,4 +6,11 @@ namespace Feats.Domain.Strategies
     {
         string Name { get; }
     }
+
+    public interface IStrategy<TStrategySettings> : IStrategy
+        where TStrategySettings : IStrategySettings
+    {
+
+        TStrategySettings Settings { get; }
+    }
 }

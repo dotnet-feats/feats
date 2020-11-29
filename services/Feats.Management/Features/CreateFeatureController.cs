@@ -39,8 +39,6 @@ namespace Feats.Management.Features
         public string Path { get; set; }
         
         public string CreatedBy { get; set; }
-        
-        public IEnumerable<string> StrategyNames { get; set; }
     }
 
     public static class CreateFeatureRequestExtensions
@@ -59,7 +57,6 @@ namespace Feats.Management.Features
                 Name = createFeatureRequest.Name,
                 Path = createFeatureRequest.Path,
                 CreatedBy = createFeatureRequest.CreatedBy,
-                StrategyNames = createFeatureRequest.StrategyNames,
             };
         }   
     }

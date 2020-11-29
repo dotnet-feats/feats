@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class PublishFeatureCommandHandlerTests : TestBase
+    public class AssignIsOnStrategyToFeatureCommandHandlerTests : TestBase
     {
         [Test]
         public async Task GivenAnInvalidCommand_WhenPublishingAFeature_ThenWeThrow()
@@ -20,10 +20,11 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishing();
 
-            var command = new PublishFeatureCommand
+            var command = new AssignIsOnStrategyToFeatureCommand
             {
-                PublishedBy = "😎",
+                AssignedBy = "😎",
                 Path = "🌲/🦝",
+                IsEnabled = true,
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -37,10 +38,11 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishingThrows<NotImplementedException>();
             
-            var command = new PublishFeatureCommand
+            var command = new AssignIsOnStrategyToFeatureCommand
             {
-                PublishedBy = "😎",
+                AssignedBy = "😎",
                 Name = "🌲/🦝",
+                IsEnabled = true,
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -54,9 +56,9 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishing();
 
-            var command = new PublishFeatureCommand
+            var command = new AssignIsOnStrategyToFeatureCommand
             {
-                PublishedBy = "meeee",
+                AssignedBy = "meeee",
                 Name = "bob",
                 Path = "let/me/show/you",
             };
@@ -71,9 +73,9 @@ namespace Feats.Management.Tests.Features.Commands
         {
             var featuresAggregate = this.GivenIFeaturesAggregate();
 
-            var command = new PublishFeatureCommand
+            var command = new AssignIsOnStrategyToFeatureCommand
             {
-                PublishedBy = "meeee",
+                AssignedBy = "meeee",
                 Name = "bob",
                 Path = "let/me/show/you",
             };
@@ -84,22 +86,22 @@ namespace Feats.Management.Tests.Features.Commands
         }
     }
 
-    public static class PublishFeatureCommandHandlerTestsExtensions
+    public static class AssignIsOnStrategyToFeatureCommandHandlerTestsExtensions
     {
-        public static IHandleCommand<PublishFeatureCommand> GivenCommandHandler(
-            this PublishFeatureCommandHandlerTests tests,
+        public static IHandleCommand<AssignIsOnStrategyToFeatureCommand> GivenCommandHandler(
+            this AssignIsOnStrategyToFeatureCommandHandlerTests tests,
             IFeaturesAggregate featuresAggregate)
         {
-            return new PublishFeatureCommandHandler(
-                tests.GivenLogger<PublishFeatureCommandHandler>(),
+            return new AssignIsOnStrategyToFeatureCommandHandler(
+                tests.GivenLogger<AssignIsOnStrategyToFeatureCommandHandler>(),
                 featuresAggregate,
                 tests.GivenClock()
             );
         }
 
         public static Func<Task> WhenPublishingAFeature(
-            this IHandleCommand<PublishFeatureCommand> handler,
-            PublishFeatureCommand command)
+            this IHandleCommand<AssignIsOnStrategyToFeatureCommand> handler,
+            AssignIsOnStrategyToFeatureCommand command)
         {
             return () => handler.Handle(command);
         }
@@ -107,11 +109,11 @@ namespace Feats.Management.Tests.Features.Commands
         public static async Task ThenWePublish(
             this Func<Task> funk,
             Mock<IFeaturesAggregate> featuresAggregate,
-            PublishFeatureCommand command)
+            AssignIsOnStrategyToFeatureCommand command)
         {
             await funk();
             featuresAggregate.Verify(_ => _.Publish(
-                It.Is<FeaturePublishedEvent>(e => e.Name.Equals(
+                It.Is<StrategyAssignedEvent>(e => e.Name.Equals(
                     command.Name, 
                     StringComparison.InvariantCultureIgnoreCase))), 
                 Times.Once);
@@ -120,11 +122,11 @@ namespace Feats.Management.Tests.Features.Commands
         public static async Task ThenWeDontPublish(
             this Func<Task> funk,
             Mock<IFeaturesAggregate> featuresAggregate,
-            PublishFeatureCommand command)
+            AssignIsOnStrategyToFeatureCommand command)
         {
             await funk();
             featuresAggregate.Verify(_ => _.Publish(
-                It.Is<FeaturePublishedEvent>(e => e.Name.Equals(
+                It.Is<StrategyAssignedEvent>(e => e.Name.Equals(
                     command.Name, 
                     StringComparison.InvariantCultureIgnoreCase))), 
                 Times.Never);

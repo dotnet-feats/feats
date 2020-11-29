@@ -5,6 +5,7 @@ using System.Text.Json;
 using EventStore.Client;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
+using Feats.Domain.Events;
 using Feats.EventStore;
 using Microsoft.Extensions.Logging;
 
@@ -56,6 +57,13 @@ namespace Feats.Management.Features.Events
             {
                 case EventTypes.FeatureCreated:
                     return JsonSerializer.Deserialize<FeatureCreatedEvent>(json);
+                    
+                case EventTypes.FeaturePublished:
+                    return JsonSerializer.Deserialize<FeaturePublishedEvent>(json);
+                    
+                case EventTypes.StrategyAssigned:
+                    return JsonSerializer.Deserialize<StrategyAssignedEvent>(json);
+                    
                 default:
                     this._logger.LogWarning($"No event registered for type: {@event.Event.EventType}");
                     

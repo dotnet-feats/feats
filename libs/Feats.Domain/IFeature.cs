@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Feats.Domain 
 {
@@ -16,7 +15,7 @@ namespace Feats.Domain
 
         FeatureState State { get; }
 
-        IEnumerable<string> StrategyNames { get; }
+        IDictionary<string, string> Strategies { get; }
     }
     
     // a record would be nice...
@@ -24,7 +23,7 @@ namespace Feats.Domain
     {
         public Feature()
         {
-            this.StrategyNames = Enumerable.Empty<string>();
+            this.Strategies = new Dictionary<string, string>();
         }
 
         public string Name {get; set;}
@@ -33,10 +32,12 @@ namespace Feats.Domain
 
         public DateTimeOffset CreatedOn {get; set;}
 
+        public DateTimeOffset UpdatedOn {get; set;}
+
         public string CreatedBy {get; set;}
 
         public FeatureState State {get; set;}
 
-        public IEnumerable<string> StrategyNames {get; set;}
+        public IDictionary<string, string> Strategies {get; set;}
     }
 }

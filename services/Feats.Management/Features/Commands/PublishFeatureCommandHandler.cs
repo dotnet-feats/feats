@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 using Feats.CQRS.Commands;
+using Feats.Domain.Events;
 using Feats.Domain.Validations;
 using Feats.Management.Features.Events;
 using Microsoft.Extensions.Internal;

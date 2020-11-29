@@ -1,7 +1,9 @@
 
 using System;
+using System.Text.Json;
 using Feats.Common.Tests;
 using Feats.Domain.Events;
+using Feats.Domain.Strategies;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
 using Microsoft.Extensions.Internal;
@@ -9,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class PublishFeatureCommandTests : TestBase
+    public class AssignIsOnStrategyToFeatureCommandTests : TestBase
     {
         [Test]
         public void GivenACommandWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -20,7 +22,7 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         [Test]
-        public void GivenACommandIsNUll_WhenValidating_ThenArgumentNullIsThrown()
+        public void GivenACommandIsNull_WhenValidating_ThenArgumentNullIsThrown()
         {
             PublishFeatureCommand command = null;
 
@@ -54,11 +56,11 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         [Test]
-        public void GivenACommandWithMissingCreatedBy_WhenValidating_ThenArgumentNullIsThrown()
+        public void GivenACommandWithMissingAssignedBy_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
                 .GivenValidCommand();
-            command.PublishedBy = string.Empty;
+            command.AssignedBy = string.Empty;
 
             command
                 .WhenValidating()
@@ -66,58 +68,64 @@ namespace Feats.Management.Tests.Features.Commands
         }
         
         [Test]
-        public void GivenACommand_WhenExtractingFeaturePublishedEvent_ThenNoExceptionIsThrownt()
+        public void GivenACommand_WhenExtractingEvent_ThenNoExceptionIsThrownt()
         {
             var clock = this.GivenClock();
             
             this.GivenValidCommand()
-                .WhenExtractingFeaturePublishedEvent(clock)
+                .WhenExtractingEvent(clock)
                 .ThenNoExceptionIsThrown();
         }
         
         [Test]
-        public void GivenACommand_WhenExtractingFeaturePublishedEvent_ThenWeGetAPathCreatedEvent()
+        public void GivenACommand_WhenExtractingEvent_ThenWeGetAPathCreatedEvent()
         {
             var clock = this.GivenClock();
             var request = this
                 .GivenValidCommand();
             
             request
-                .WhenExtractingFeaturePublishedEvent(clock)
+                .WhenExtractingEvent(clock)
                 .ThenWeGetAFeaturePublishedEvent(request, clock);
         }
     }
 
-    public static class PublishFeatureCommandTestsExtensions 
+    public static class AssignIsOnStrategyToFeatureCommandTestsExtensions 
     {
-        public static PublishFeatureCommand GivenValidCommand(this PublishFeatureCommandTests tests)
+        public static AssignIsOnStrategyToFeatureCommand GivenValidCommand(this AssignIsOnStrategyToFeatureCommandTests tests)
         {
-            return new PublishFeatureCommand
+            return new AssignIsOnStrategyToFeatureCommand
             {
-                PublishedBy = "🦄",
+                AssignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
+                IsEnabled = true,
             };
         }
 
-        public static Action WhenValidating(this PublishFeatureCommand command)
+        public static Action WhenValidating(this AssignIsOnStrategyToFeatureCommand command)
         {
             return () => command.Validate();
         }
 
-        public static Func<FeaturePublishedEvent> WhenExtractingFeaturePublishedEvent(this PublishFeatureCommand command, ISystemClock clock)
+        public static Func<StrategyAssignedEvent> WhenExtractingEvent(this AssignIsOnStrategyToFeatureCommand command, ISystemClock clock)
         {
-            return () => command.ExtractFeaturePublishedEvent(clock);
+            return () => command.ExtractStrategyAssignedEvent(clock);
         }
         
-        public static void ThenWeGetAFeaturePublishedEvent(this Func<FeaturePublishedEvent> featFunc, PublishFeatureCommand command, ISystemClock clock)
+        public static void ThenWeGetAFeaturePublishedEvent(this Func<StrategyAssignedEvent> featFunc, AssignIsOnStrategyToFeatureCommand command, ISystemClock clock)
         {
             var feat = featFunc();
 
-            feat.PublishedBy.Should().Be(command.PublishedBy);
-            feat.PublishedOn.Should().Be(clock.UtcNow);
+            feat.AssignedBy.Should().Be(command.AssignedBy);
+            feat.AssignedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
+            feat.StrategyName.Should().Be(StrategyNames.IsEnabled);
+            feat.Settings.Should().Be(JsonSerializer.Serialize(new IsEnabledStrategySettings 
+            {
+                IsOn = command.IsEnabled,
+            }));
         }
     }
 }

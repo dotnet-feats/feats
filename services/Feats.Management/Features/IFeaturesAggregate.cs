@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EventStore.Client;
@@ -8,6 +7,7 @@ using Feats.CQRS;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
+using Feats.Domain.Events;
 using Feats.EventStore;
 using Feats.Management.Features.Events;
 using Feats.Management.Features.Exceptions;
@@ -77,9 +77,11 @@ namespace Feats.Management.Features
                 case FeatureCreatedEvent createdEvent:
                     return createdEvent.ToEventData();
 
-
                 case FeaturePublishedEvent publishedEvent:
                     return publishedEvent.ToEventData();
+
+                case StrategyAssignedEvent assignedEvent:
+                    return assignedEvent.ToEventData();
 
                 default:
                     return null;
@@ -96,6 +98,10 @@ namespace Feats.Management.Features
 
                 case FeaturePublishedEvent publishedEvent:
                     this.Apply(publishedEvent);
+                    break;
+
+                case StrategyAssignedEvent assignedEvent:
+                    this.Apply(assignedEvent);
                     break;
 
                 default:
@@ -117,9 +123,10 @@ namespace Feats.Management.Features
                 Name = e.Name,
                 CreatedBy = e.CreatedBy,
                 CreatedOn = e.CreatedOn,
+                UpdatedOn = e.CreatedOn,
                 Path = e.Path,
                 State = FeatureState.Draft,
-                StrategyNames = e.StrategyNames,
+                Strategies = new Dictionary<string, string>(),
             });
         }
 
@@ -138,9 +145,47 @@ namespace Feats.Management.Features
                             Name = e.Name,
                             CreatedBy = f.CreatedBy,
                             CreatedOn = f.CreatedOn,
+                            UpdatedOn = e.PublishedOn,
                             Path = e.Path,
                             State = FeatureState.Published,
-                            StrategyNames = f.StrategyNames,
+                            Strategies = f.Strategies,
+                        };
+                    }
+
+                    return f;
+                });
+
+            this.Features = features;
+        }
+
+        private void Apply(StrategyAssignedEvent e)
+        {
+            // the fact that you "can" publish an unkown feature is wanted
+            // basically its a NOOP, so I dont care :P Though luck if you don't agree
+            var pathAndName = System.IO.Path.Combine(e.Path, e.Name);
+            var features = this.Features
+                .Select(f => 
+                {
+                    if(System.IO.Path.Combine(f.Path, f.Name).Equals(pathAndName))
+                    {
+                        if (!f.Strategies.ContainsKey(e.StrategyName))
+                        {
+                            f.Strategies.Add(e.StrategyName, e.Settings);
+                        }
+                        else 
+                        {
+                            f.Strategies[e.StrategyName] = e.Settings;
+                        }
+
+                        return new Feature
+                        {
+                            Name = e.Name,
+                            CreatedBy = f.CreatedBy,
+                            CreatedOn = f.CreatedOn,
+                            UpdatedOn = e.AssignedOn,
+                            Path = e.Path,
+                            State = FeatureState.Published,
+                            Strategies = f.Strategies,
                         };
                     }
 

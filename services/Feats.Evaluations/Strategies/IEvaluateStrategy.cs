@@ -16,7 +16,6 @@ namespace Feats.Evaluations.Strategies
         // This domain is meant to be used by 2 web applications: meaning, if for some 
         // weird reason, you want to extract this and put it in a stand alone console app, 
         // I'm worried about your sanity...
-        Task<bool> IsOn<TFeature>(TFeature feature)
-            where TFeature : IFeature;
+        Task<bool> IsOn(TStrategy strategy);
     }
 }

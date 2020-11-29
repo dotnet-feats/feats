@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\libs\Feats.CQRS\Feats.CQRS.csproj" />
+    <ProjectReference Include="..\..\libs\Feats.Domain\Feats.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,7 @@ using Feats.Management.Features.Events;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Feats.Management.Paths;
+using Feats.Domain.Events;
 
 namespace Feats.Management.Features.Commands
 {
@@ -19,8 +20,6 @@ namespace Feats.Management.Features.Commands
         public string Path { get; set; }
         
         public string CreatedBy { get; set; }
-        
-        public IEnumerable<string> StrategyNames { get; set; }
     }
 
     public class CreateFeatureCommandHandler : IHandleCommand<CreateFeatureCommand>
@@ -79,7 +78,6 @@ namespace Feats.Management.Features.Commands
                 CreatedBy = command.CreatedBy,
                 CreatedOn = clock.UtcNow,
                 Path = command.Path,
-                StrategyNames = command.StrategyNames,
             };
         }
         
