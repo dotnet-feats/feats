@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Internal;
+using Prometheus;
 
 namespace Feats.Evaluations
 {
@@ -33,7 +34,9 @@ namespace Feats.Evaluations
             services.AddRouting();
             services.AddMvcCore();
             services.AddControllers();
-            services.AddHealthChecks();
+            services
+                .AddHealthChecks()
+                .ForwardToPrometheus();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +48,11 @@ namespace Feats.Evaluations
             }
 
             app.UseRouting();
+            app.UseHttpMetrics();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapMetrics();
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapControllerRoute(
                     name: "default",
