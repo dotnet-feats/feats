@@ -19,9 +19,12 @@ namespace Feats.Evaluations.Features
             this._handler = handdler;
         }
 
-        [Route("{path}/{name}")]
-        public async Task<bool> Get(string path, string name)
+        [Route("{urlEncodedPath}/{urlEncodedName}")]
+        public async Task<bool> Get(string urlEncodedPath, string urlEncodedName)
         {
+            var path = WebUtility.UrlDecode(urlEncodedPath);
+            var name = WebUtility.UrlDecode(urlEncodedName);
+
             path.Required(nameof(path));
             name.Required(nameof(name));
 
