@@ -30,15 +30,18 @@ namespace Feats.Management.Features.Commands
         private readonly IFeaturesAggregate _featuresAggregate;
 
         private readonly ISystemClock _clock;
+        private readonly IStrategySettingsSerializer _serializer;
 
         public AssignIsOnStrategyToFeatureCommandHandler(
             ILogger<AssignIsOnStrategyToFeatureCommandHandler> logger,
             IFeaturesAggregate featuresAggregate,
-            ISystemClock clock)
+            ISystemClock clock,
+            IStrategySettingsSerializer serializer)
         {
             this._logger = logger;
             this._featuresAggregate = featuresAggregate;
             this._clock = clock;
+            this._serializer = serializer;
         }
 
         public async Task Handle(AssignIsOnStrategyToFeatureCommand command)
@@ -47,7 +50,9 @@ namespace Feats.Management.Features.Commands
             await this._featuresAggregate.Load();
                        
             var @event = command
-                .ExtractStrategyAssignedEvent(this._clock);
+                .ExtractStrategyAssignedEvent(
+                    this._clock,
+                    this._serializer);
 
             await this._featuresAggregate.Publish(@event);
         }
@@ -62,7 +67,10 @@ namespace Feats.Management.Features.Commands
             command.AssignedBy.Required(nameof(command.AssignedBy));
         }
 
-        public static StrategyAssignedEvent ExtractStrategyAssignedEvent(this AssignIsOnStrategyToFeatureCommand command, ISystemClock clock)
+        public static StrategyAssignedEvent ExtractStrategyAssignedEvent(
+            this AssignIsOnStrategyToFeatureCommand command, 
+            ISystemClock clock,
+            IStrategySettingsSerializer serializer)
         {
             return new StrategyAssignedEvent
             {
@@ -71,7 +79,7 @@ namespace Feats.Management.Features.Commands
                 AssignedBy = command.AssignedBy,
                 AssignedOn = clock.UtcNow,
                 StrategyName = StrategyNames.IsOn,
-                Settings = JsonSerializer.Serialize(new IsOnStrategySettings 
+                Settings = serializer.Serialize(new IsOnStrategySettings 
                 {
                     IsOn = command.IsEnabled,
                 })

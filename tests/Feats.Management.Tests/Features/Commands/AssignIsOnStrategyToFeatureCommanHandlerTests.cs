@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Strategies;
 using Feats.CQRS.Commands;
 using Feats.Domain.Events;
+using Feats.Domain.Strategies;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using Feats.Management.Tests.Features.TestExtensions;
@@ -17,7 +19,8 @@ namespace Feats.Management.Tests.Features.Commands
         [Test]
         public async Task GivenAnInvalidCommand_WhenPublishingAFeature_ThenWeThrow()
         {
-            var featuresAggregate = this.GivenIFeaturesAggregate()
+            var featuresAggregate = this
+                .GivenIFeaturesAggregate()
                 .WithPublishing();
 
             var command = new AssignIsOnStrategyToFeatureCommand
@@ -95,7 +98,8 @@ namespace Feats.Management.Tests.Features.Commands
             return new AssignIsOnStrategyToFeatureCommandHandler(
                 tests.GivenLogger<AssignIsOnStrategyToFeatureCommandHandler>(),
                 featuresAggregate,
-                tests.GivenClock()
+                tests.GivenClock(),
+                tests.GivenIStrategySettingsSerializer()
             );
         }
 

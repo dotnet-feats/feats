@@ -2,6 +2,7 @@
 using System;
 using System.Text.Json;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Strategies;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
 using Feats.Management.Features.Commands;
@@ -73,7 +74,7 @@ namespace Feats.Management.Tests.Features.Commands
             var clock = this.GivenClock();
             
             this.GivenValidCommand()
-                .WhenExtractingEvent(clock)
+                .WhenExtractingEvent(clock, this.GivenIStrategySettingsSerializer())
                 .ThenNoExceptionIsThrown();
         }
         
@@ -85,7 +86,7 @@ namespace Feats.Management.Tests.Features.Commands
                 .GivenValidCommand();
             
             request
-                .WhenExtractingEvent(clock)
+                .WhenExtractingEvent(clock, this.GivenIStrategySettingsSerializer())
                 .ThenWeGetAFeaturePublishedEvent(request, clock);
         }
     }
@@ -108,9 +109,14 @@ namespace Feats.Management.Tests.Features.Commands
             return () => command.Validate();
         }
 
-        public static Func<StrategyAssignedEvent> WhenExtractingEvent(this AssignIsOnStrategyToFeatureCommand command, ISystemClock clock)
+        public static Func<StrategyAssignedEvent> WhenExtractingEvent(
+            this AssignIsOnStrategyToFeatureCommand command,
+            ISystemClock clock,
+            IStrategySettingsSerializer serializer)
         {
-            return () => command.ExtractStrategyAssignedEvent(clock);
+            return () => command.ExtractStrategyAssignedEvent(
+                clock,
+                serializer);
         }
         
         public static void ThenWeGetAFeaturePublishedEvent(this Func<StrategyAssignedEvent> featFunc, AssignIsOnStrategyToFeatureCommand command, ISystemClock clock)

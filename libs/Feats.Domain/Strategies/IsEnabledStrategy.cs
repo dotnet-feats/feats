@@ -2,11 +2,7 @@ using System;
 
 namespace Feats.Domain.Strategies
 {
-    public interface IIsOnStrategy : IStrategy<IsOnStrategySettings>
-    {
-    }
-
-    public class IsOnStrategy : IIsOnStrategy
+    public class IsOnStrategy : IStrategy<IsOnStrategySettings>
     {
         public string Name => StrategyNames.IsOn;
 

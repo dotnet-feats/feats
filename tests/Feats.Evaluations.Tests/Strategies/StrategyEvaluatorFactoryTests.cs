@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Strategies;
 using Feats.Domain.Strategies;
 using Feats.Evaluations.Strategies;
-using FluentAssertions;
 using NUnit.Framework;
 
 namespace Feats.Evaluations.Tests.Strategies
@@ -13,6 +13,7 @@ namespace Feats.Evaluations.Tests.Strategies
         [Test]
         public async Task GivenIsOnStrategy_WhenEvaluating_ThenIGetOn()
         {
+            var serializer = this.GivenIStrategySettingsSerializer();
             var strategy = new IsOnStrategy {
                 Settings = new IsOnStrategySettings 
                 {
@@ -22,7 +23,24 @@ namespace Feats.Evaluations.Tests.Strategies
 
             await this
                 .GivenEvaluatorFactory()
-                .WhenEvaluating(strategy)
+                .WhenEvaluating(StrategyNames.IsOn, serializer.Serialize(strategy.Settings))
+                .ThenIGet(strategy);
+        }
+        
+        [Test]
+        public async Task GivenIsOffStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var serializer = new StrategySettingsSerializer();
+            var strategy = new IsOnStrategy {
+                Settings = new IsOnStrategySettings 
+                {
+                    IsOn = false,
+                },
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(StrategyNames.IsOn, serializer.Serialize(strategy.Settings))
                 .ThenIGet(strategy);
         }
     }
@@ -33,15 +51,17 @@ namespace Feats.Evaluations.Tests.Strategies
             this StrategyEvaluatorFactoryTests tests)
         {
             return new StrategyEvaluatorFactory(
+                tests.GivenIStrategySettingsSerializer(),
                 new IsOnStrategyEvaluator()
             );
         }
 
         public static Func<Task<bool>> WhenEvaluating(
             this IStrategyEvaluatorFactory evaluatorFactory,
-            IsOnStrategy strategy)
+            string name, 
+            string json)
         {
-            return () => evaluatorFactory.IsOn(strategy);
+            return () => evaluatorFactory.IsOn(name, json);
         }
     }
 }

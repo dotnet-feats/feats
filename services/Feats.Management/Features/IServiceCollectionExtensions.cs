@@ -1,4 +1,5 @@
 using System;
+using Feats.Domain.Strategies;
 using Feats.Management.Features.Commands;
 using Feats.Management.Features.Events;
 using Feats.Management.Features.Queries;
@@ -17,6 +18,7 @@ namespace Feats.Management.Features
             .AddQueries();
 
             services.TryAddScoped<IFeaturesAggregate, FeaturesAggregate>();
+            services.TryAddSingleton<IStrategySettingsSerializer, StrategySettingsSerializer>();
 
             return services;
         }
