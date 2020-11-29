@@ -22,6 +22,77 @@ namespace Feats.Management.Tests.Features
         private readonly IStream _featureStream = new FeatureStream();
 
         [Test]
+        public async Task GivenNoMatchingFeatures_WhenLoading_ThenWeDontUpdateTheCreatedEvent()
+        {
+            var created = new FeatureCreatedEvent {
+                Name = "🦝",
+                Path = "let/me/show/you",
+            };
+
+            var assigned = new StrategyAssignedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+                StrategyName = StrategyNames.IsOn,
+                Settings = "settings",
+            };
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created, assigned });
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad();
+                            
+            var features = aggregate.Features.ToList();
+            features.Should().Contain(_ => _.Name == created.Name);
+            features.Should().NotContain(_ => _.Name == assigned.Name);
+        }
+
+        [Test]
+        public async Task GivenAMatchingFeature_WhenLoadingStrategyAssigned_ThenWeupdateTheFeature()
+        {
+            var notMe = new FeatureCreatedEvent {
+                Name = "🌲",
+                Path = "let/me/show/you",
+            };
+
+            var created = new FeatureCreatedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var assigned = new StrategyAssignedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+                StrategyName = StrategyNames.IsOn,
+                Settings = "settings",
+            };
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created, notMe, assigned });
+            
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad();
+
+            var features = aggregate.Features.ToList();
+
+            features.Select(_ => _.Name).Should()
+                .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
+
+            features.Where(_ => _.Name == assigned.Name)
+                .SelectMany(_ => _.Strategies.Keys)
+                .Should()
+                .BeEquivalentTo(new List<string> { StrategyNames.IsOn });
+        }
+        
+        [Test]
         public async Task GivenNoFeatures_WhenPublishingStrategyAssignedEvent_ThenWePublishEventThoguhIDontExist()
         {
             var client = this.GivenIEventStoreClient()
@@ -49,7 +120,7 @@ namespace Feats.Management.Tests.Features
         }
 
         [Test]
-        public async Task GivenNoMatchingFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
+        public async Task GivenNoMatchingFeatures_WhenPublishingStrategyAssigned_ThenWePublishEventThoguhIDontExist()
         {
             var created = new FeatureCreatedEvent {
                 Name = "🦝",

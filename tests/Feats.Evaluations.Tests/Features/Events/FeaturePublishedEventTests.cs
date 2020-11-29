@@ -66,7 +66,7 @@ namespace Feats.Evaluations.Tests.Features
         }
 
         [Test]
-        public async Task GivenAMatchingFeature_WHenLoading_ThenWeGetAPublishedFeature()
+        public async Task GivenAMatchingFeature_WhenLoading_ThenWeGetAPublishedFeature()
         {
             var createdNotMatching = new FeatureCreatedEvent {
                 Name = "🤚",

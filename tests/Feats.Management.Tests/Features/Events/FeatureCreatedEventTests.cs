@@ -24,6 +24,28 @@ namespace Feats.Management.Tests.Features
         private readonly IStream _featureStream = new FeatureStream();
 
         [Test]
+        public async Task GivenCreatedFeature_WhenLoading_ThenIGetFeature()
+        {
+            var created = new FeatureCreatedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created });
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad();
+               
+            aggregate.Features.Select(_ => _.Name).Should()
+                .BeEquivalentTo(new List<string> { created.Name }); 
+        } 
+        
+        [Test]
         public async Task GivenAConflictingFeature_WhenPublishingFeatureCreatedEvent_ThenWeThrowAConflictException()
         {
             var createdAlready = new FeatureCreatedEvent {

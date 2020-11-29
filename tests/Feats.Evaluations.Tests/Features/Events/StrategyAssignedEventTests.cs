@@ -16,7 +16,7 @@ namespace Feats.Evaluations.Tests.Features
     {
 
         [Test]
-        public async Task GivenNoMatchingFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
+        public async Task GivenNoMatchingFeatures_WhenLoading_ThenWeDontUpdateTheCreatedEvent()
         {
             var created = new FeatureCreatedEvent {
                 Name = "🦝",
@@ -43,7 +43,7 @@ namespace Feats.Evaluations.Tests.Features
         }
 
         [Test]
-        public async Task GivenAMatchingFeature_WhenPublishingStrategyAssigned_ThenWePublishTheFeature()
+        public async Task GivenAMatchingFeature_WhenLoadingStrategyAssigned_ThenWeupdateTheFeature()
         {
             var notMe = new FeatureCreatedEvent {
                 Name = "🌲",
