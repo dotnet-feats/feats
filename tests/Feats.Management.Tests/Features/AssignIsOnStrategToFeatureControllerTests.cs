@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class PublishFeatureControllerTests : TestBase
+    public class AssignIsOnStrategToFeatureControllerTests : TestBase
     {
         [Test]
         public async Task GivenRequest_WhenProcessingTheCommandIsSuccessful_ThenWeReturnOk()
@@ -18,7 +18,7 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<PublishFeatureCommand>()
+                .GivenCommandHandler<AssignIsOnStrategyToFeatureCommand>()
                 .WithHandling();
 
             await this
@@ -33,8 +33,8 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<PublishFeatureCommand>()
-                .WithException<PublishFeatureCommand, TestException>();
+                .GivenCommandHandler<AssignIsOnStrategyToFeatureCommand>()
+                .WithException<AssignIsOnStrategyToFeatureCommand, TestException>();
 
             await this
                 .GivenController(handler.Object)
@@ -43,30 +43,36 @@ namespace Feats.Management.Tests.Features
         }
     }
 
-    public static class PublishFeatureControllerTestsExtensions
+    public static class AssignIsOnStrategToFeatureControllerTestsExtensions
     {
-        public static PublishFeatureRequest GivenRequest(this PublishFeatureControllerTests tests)
+        public static AssignIsOnStrategyToFeatureRequest GivenRequest(this AssignIsOnStrategToFeatureControllerTests tests)
         {
-            return new PublishFeatureRequest
+            return new AssignIsOnStrategyToFeatureRequest
             {
-                PublishedBy = "bob",
+                AssignedBy = "bob",
                 Name = "Ross",
                 Path = "🦄.🖼",
             };
         }
 
-        public static PublishFeatureController GivenController(
-            this PublishFeatureControllerTests tests, 
-            IHandleCommand<PublishFeatureCommand> handler)
+        public static AssignIsOnStrategToFeatureController GivenController(
+            this AssignIsOnStrategToFeatureControllerTests tests, 
+            IHandleCommand<AssignIsOnStrategyToFeatureCommand> handler)
         {
-            return new PublishFeatureController(handler);
+            return new AssignIsOnStrategToFeatureController(handler);
         }
 
         public static Func<Task<IActionResult>> WhenProcessingCommand(
-            this PublishFeatureController controller,
-            PublishFeatureRequest request)
+            this AssignIsOnStrategToFeatureController controller,
+            AssignIsOnStrategyToFeatureRequest request)
         {
             return () => controller.Post(request);
+        }
+
+        public static async Task ThenWeReturnOK(this Func<Task<IActionResult>> processingFunc)
+        {
+            var asyncResults = await processingFunc() as StatusCodeResult;
+            asyncResults.StatusCode.Should().Be(200);
         }
     }
 }
