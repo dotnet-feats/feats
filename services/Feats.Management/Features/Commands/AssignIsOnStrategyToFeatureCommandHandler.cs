@@ -70,8 +70,8 @@ namespace Feats.Management.Features.Commands
                 Path = command.Path,
                 AssignedBy = command.AssignedBy,
                 AssignedOn = clock.UtcNow,
-                StrategyName = StrategyNames.IsEnabled,
-                Settings = JsonSerializer.Serialize(new IsEnabledStrategySettings 
+                StrategyName = StrategyNames.IsOn,
+                Settings = JsonSerializer.Serialize(new IsOnStrategySettings 
                 {
                     IsOn = command.IsEnabled,
                 })

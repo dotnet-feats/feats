@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Feats.Domain;
 using Feats.Domain.Strategies;
 
 namespace Feats.Evaluations.Strategies
@@ -8,6 +7,8 @@ namespace Feats.Evaluations.Strategies
     public interface IEvaluateStrategy<TStrategy>
         where TStrategy : IStrategy
     {
+        string StrategyName { get; }
+
         // No additional params, how am I going to ever be able to assess on complex data, 
         // why author whyyyy did you did to meee? 
         // If you want a complex strategy, use the DI to get a hold of HttpContextAccessor, 

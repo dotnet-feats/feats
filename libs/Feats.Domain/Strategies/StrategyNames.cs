@@ -4,6 +4,6 @@ namespace Feats.Domain.Strategies
 {
     public static class StrategyNames
     {
-        public const string IsEnabled = "isEnabled";
+        public const string IsOn = "IsOn";
     }
 }

@@ -2,18 +2,18 @@ using System;
 
 namespace Feats.Domain.Strategies
 {
-    public interface IIsEnabledStrategy : IStrategy<IsEnabledStrategySettings>
+    public interface IIsOnStrategy : IStrategy<IsOnStrategySettings>
     {
     }
 
-    public class IsEnabledStrategy : IIsEnabledStrategy
+    public class IsOnStrategy : IIsOnStrategy
     {
-        public string Name => StrategyNames.IsEnabled;
+        public string Name => StrategyNames.IsOn;
 
-        public IsEnabledStrategySettings Settings { get; set; }
+        public IsOnStrategySettings Settings { get; set; }
     }
 
-    public class IsEnabledStrategySettings : IStrategySettings
+    public class IsOnStrategySettings : IStrategySettings
     {
         public bool IsOn { get; set; }
     }

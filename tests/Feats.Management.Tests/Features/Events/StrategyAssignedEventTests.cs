@@ -33,7 +33,7 @@ namespace Feats.Management.Tests.Features
             var assigned = new StrategyAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
-                StrategyName = StrategyNames.IsEnabled,
+                StrategyName = StrategyNames.IsOn,
                 Settings = "settings",
             };
 
@@ -65,7 +65,7 @@ namespace Feats.Management.Tests.Features
             var assigned = new StrategyAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
-                StrategyName = StrategyNames.IsEnabled,
+                StrategyName = StrategyNames.IsOn,
                 Settings = "settings",
             };
 
@@ -104,7 +104,7 @@ namespace Feats.Management.Tests.Features
             var assigned = new StrategyAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
-                StrategyName = StrategyNames.IsEnabled,
+                StrategyName = StrategyNames.IsOn,
                 Settings = "settings",
             };
 
@@ -124,7 +124,7 @@ namespace Feats.Management.Tests.Features
             features.Where(_ => _.Name == assigned.Name)
                 .SelectMany(_ => _.Strategies.Keys)
                 .Should()
-                .BeEquivalentTo(new List<string> { StrategyNames.IsEnabled });
+                .BeEquivalentTo(new List<string> { StrategyNames.IsOn });
         }
     }
         

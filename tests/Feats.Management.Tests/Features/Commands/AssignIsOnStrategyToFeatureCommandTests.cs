@@ -121,8 +121,8 @@ namespace Feats.Management.Tests.Features.Commands
             feat.AssignedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
-            feat.StrategyName.Should().Be(StrategyNames.IsEnabled);
-            feat.Settings.Should().Be(JsonSerializer.Serialize(new IsEnabledStrategySettings 
+            feat.StrategyName.Should().Be(StrategyNames.IsOn);
+            feat.Settings.Should().Be(JsonSerializer.Serialize(new IsOnStrategySettings 
             {
                 IsOn = command.IsEnabled,
             }));

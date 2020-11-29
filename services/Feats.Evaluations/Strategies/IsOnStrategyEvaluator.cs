@@ -3,9 +3,11 @@ using Feats.Domain.Strategies;
 
 namespace Feats.Evaluations.Strategies
 {
-    public class IsEnabledStrategyEvaluator : IEvaluateStrategy<IsEnabledStrategy>
+    public class IsOnStrategyEvaluator : IEvaluateStrategy<IsOnStrategy>
     {
-        public Task<bool> IsOn(IsEnabledStrategy strategy)
+        public string StrategyName => StrategyNames.IsOn;
+
+        public Task<bool> IsOn(IsOnStrategy strategy)
         {
             return Task.FromResult(strategy.Settings.IsOn);
         }
