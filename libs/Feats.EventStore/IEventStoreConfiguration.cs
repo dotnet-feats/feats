@@ -1,5 +1,4 @@
 using System;
-using Feats.Domain.Validations;
 using Microsoft.Extensions.Configuration;
 
 namespace Feats.EventStore
@@ -21,7 +20,11 @@ namespace Feats.EventStore
     {
         public EventStoreConfiguration(IConfiguration configuration)
         {
-            configuration.Required(nameof(configuration));
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("A configuration is required");
+            }
+
             var section = configuration.GetSection("feats:eventstore");
 
             this.HostName = section.GetValue<string>("hostname", "localhost");

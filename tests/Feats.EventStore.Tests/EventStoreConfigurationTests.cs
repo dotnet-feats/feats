@@ -11,6 +11,14 @@ namespace Feats.EventStoreS.Tests
     public class EventStoreConfigurationTests : TestBase
     {
         [Test]
+        public void GivenNullConfiguration_WhenBuilding_ThenWeThrow()
+        {
+            var func = new Func<IEventStoreConfiguration>(() => new EventStoreConfiguration(null));
+
+            func.Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
         public void GivenEmptyConfiguration_WhenBuilding_ThenWeGetDefaults()
         {
             var configuration = new EventStoreConfiguration(
