@@ -34,10 +34,10 @@ namespace Feats.Evaluations.Features.Queries
         public async Task<bool> Handle(IsFeatureOnQuery query)
         {
             await this._featuresAggregate.Load();
-            var combined = System.IO.Path.Combine(query.Path, query.Name);
+            var combined = PathHelper.CombineNameAndPath(query.Path, query.Name);
             var feature = this._featuresAggregate.Features
                 .Where(_ => _.State == FeatureState.Published)
-                .Where(_ => System.IO.Path.Combine(_.Path, _.Name).Equals(combined, StringComparison.InvariantCultureIgnoreCase))
+                .Where(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(combined, StringComparison.InvariantCultureIgnoreCase))
                 .FirstOrDefault();
 
             if (feature == null)

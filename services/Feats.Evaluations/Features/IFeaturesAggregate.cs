@@ -84,13 +84,11 @@ namespace Feats.Evaluations.Features
 
         private void Apply(FeaturePublishedEvent e)
         {
-            // the fact that you "can" publish an unkown feature is wanted
-            // basically its a NOOP, so I dont care :P Though luck if you don't agree
-            var pathAndName = System.IO.Path.Combine(e.Path, e.Name);
+            var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
             var features = this.Features
                 .Select(f => 
                 {
-                    if(System.IO.Path.Combine(f.Path, f.Name).Equals(pathAndName))
+                    if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
                         return new Feature
                         {
@@ -111,11 +109,11 @@ namespace Feats.Evaluations.Features
 
         private void Apply(StrategyAssignedEvent e)
         {
-            var pathAndName = System.IO.Path.Combine(e.Path, e.Name);
+            var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
             var features = this.Features
                 .Select(f => 
                 {
-                    if(System.IO.Path.Combine(f.Path, f.Name).Equals(pathAndName))
+                    if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
                         if (!f.Strategies.ContainsKey(e.StrategyName))
                         {

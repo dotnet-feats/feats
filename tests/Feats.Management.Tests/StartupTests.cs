@@ -19,7 +19,7 @@ namespace Feats.Management.Tests
             try 
             {
                 using var client = new HttpClient();
-                client.BaseAddress = new Uri("http://localhost:5000");
+                client.BaseAddress = new Uri("http://localhost:5002");
                 
                 var metricsRequest = new HttpRequestMessage(
                     HttpMethod.Get, 

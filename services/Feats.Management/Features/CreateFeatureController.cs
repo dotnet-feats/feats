@@ -27,7 +27,7 @@ namespace Feats.Management.Features
 
             await this._handleCommand.Handle(command);
 
-            return new StatusCodeResult((int) HttpStatusCode.Created);
+            return new StatusCodeResult((int)HttpStatusCode.Created);
         }
     }
 
@@ -36,7 +36,7 @@ namespace Feats.Management.Features
         public string Name { get; set; }
 
         public string Path { get; set; }
-        
+
         public string CreatedBy { get; set; }
     }
 
@@ -47,7 +47,7 @@ namespace Feats.Management.Features
             createFeatureRequest.Required(nameof(createFeatureRequest));
             createFeatureRequest.Name.Required(nameof(createFeatureRequest.Name));
             createFeatureRequest.CreatedBy.Required(nameof(createFeatureRequest.CreatedBy));
-        } 
+        }
 
         public static CreateFeatureCommand ToCreateFeatureCommand(this CreateFeatureRequest createFeatureRequest)
         {
@@ -57,6 +57,6 @@ namespace Feats.Management.Features
                 Path = createFeatureRequest.Path,
                 CreatedBy = createFeatureRequest.CreatedBy,
             };
-        }   
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Feats.Management.Features
             this._handleCommand = handleCommand;
         }
 
-        [Route("is-on")]
+        [Route("ison")]
         public async Task<IActionResult> Post([FromBody] AssignIsOnStrategyToFeatureRequest request)
         {
             request.Validate();

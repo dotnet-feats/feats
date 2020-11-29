@@ -25,4 +25,15 @@ namespace Feats.Domain
 
         public string Name {get; set;}
     }
+
+    public static class PathHelper
+    {
+        public static string CombineNameAndPath(string path, string name)
+        {
+            var defaultPath = string.IsNullOrEmpty(path) ? string.Empty : path.Trim();
+            var defaultName = string.IsNullOrEmpty(name) ? string.Empty : name.Trim();
+            
+            return System.IO.Path.Combine(defaultPath, defaultName);
+        }
+    }
 }

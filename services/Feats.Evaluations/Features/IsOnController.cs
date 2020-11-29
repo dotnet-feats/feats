@@ -19,7 +19,7 @@ namespace Feats.Evaluations.Features
             this._handler = handdler;
         }
 
-        [Route("{path:string}/{name:string}")]
+        [Route("{path}/{name}")]
         public async Task<bool> Get(string path, string name)
         {
             path.Required(nameof(path));

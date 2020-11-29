@@ -201,10 +201,14 @@ namespace Feats.EventStore
                 resolveLinkTos,
                 userCredentials, 
                 cancellationToken);
-
-            // todo, i've killed a kitten here, i'm sorry, but i wanted to avoid reflexion, seriously though, why the internal constructor on ReadStreamResults..
-            await foreach (var @event in results) {
-                yield return @event;
+            var state = await results.ReadState;
+            
+            if (state != ReadState.StreamNotFound)
+            {
+                // todo, i've killed a kitten here, i'm sorry, but i wanted to avoid reflexion, seriously though, why the internal constructor on ReadStreamResults..
+                await foreach (var @event in results) {
+                    yield return @event;
+                }
             }
         }
 
