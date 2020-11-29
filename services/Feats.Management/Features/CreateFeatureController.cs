@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Feats.Management.Features
 {
-    //[Authorize]
     [ApiController]
     [Route("features")]
     public class CreateFeatureController
