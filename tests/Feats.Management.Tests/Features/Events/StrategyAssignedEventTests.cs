@@ -83,7 +83,7 @@ namespace Feats.Management.Tests.Features
         }
 
         [Test]
-        public async Task GivenAMatchingFeature_WhenPublishingFeaturePublishedEvent_ThenWePublishTheFeature()
+        public async Task GivenAMatchingFeature_WhenPublishingStrategyAssigned_ThenWePublishTheFeature()
         {
             var notMe = new FeatureCreatedEvent {
                 Name = "🌲",

@@ -17,7 +17,7 @@ namespace Feats.Evaluations.Tests.Features.Queries
     public class IsFeatureOnQueryHandlerTests : TestBase
     {
         [Test]
-        public async Task GivenOnStrategy_WhenEvaluating_ThenIGetOn()
+        public async Task GivenOffStrategy_WhenEvaluating_ThenIGetOff()
         {
             var query = new IsFeatureOnQuery()
             {

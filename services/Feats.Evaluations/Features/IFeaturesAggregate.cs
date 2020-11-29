@@ -61,6 +61,10 @@ namespace Feats.Evaluations.Features
                     this.Apply(publishedEvent);
                     break;
 
+                case StrategyAssignedEvent assigned:
+                    this.Apply(assigned);
+                    
+                    break;
                 default:
                     break;
             }
@@ -75,7 +79,7 @@ namespace Feats.Evaluations.Features
                 Path = e.Path,
                 State = FeatureState.Draft,
                 Strategies = new Dictionary<string, string>(),
-            });
+            }).ToList();
         }
 
         private void Apply(FeaturePublishedEvent e)
@@ -102,7 +106,42 @@ namespace Feats.Evaluations.Features
                     return f;
                 });
 
-            this.Features = features;
+            this.Features = features.ToList();
+        }
+
+        private void Apply(StrategyAssignedEvent e)
+        {
+            var pathAndName = System.IO.Path.Combine(e.Path, e.Name);
+            var features = this.Features
+                .Select(f => 
+                {
+                    if(System.IO.Path.Combine(f.Path, f.Name).Equals(pathAndName))
+                    {
+                        if (!f.Strategies.ContainsKey(e.StrategyName))
+                        {
+                            f.Strategies.Add(e.StrategyName, e.Settings);
+                        }
+                        else 
+                        {
+                            f.Strategies[e.StrategyName] = e.Settings;
+                        }
+
+                        return new Feature
+                        {
+                            Name = e.Name,
+                            CreatedBy = f.CreatedBy,
+                            CreatedOn = f.CreatedOn,
+                            UpdatedOn = e.AssignedOn,
+                            Path = e.Path,
+                            State = FeatureState.Published,
+                            Strategies = f.Strategies,
+                        };
+                    }
+
+                    return f;
+                });
+
+            this.Features = features.ToList();
         }
     }
 }

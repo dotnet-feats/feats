@@ -127,7 +127,7 @@ namespace Feats.Management.Features
                 Path = e.Path,
                 State = FeatureState.Draft,
                 Strategies = new Dictionary<string, string>(),
-            });
+            }).ToList();
         }
 
         private void Apply(FeaturePublishedEvent e)
@@ -155,7 +155,7 @@ namespace Feats.Management.Features
                     return f;
                 });
 
-            this.Features = features;
+            this.Features = features.ToList();
         }
 
         private void Apply(StrategyAssignedEvent e)
@@ -192,7 +192,7 @@ namespace Feats.Management.Features
                     return f;
                 });
 
-            this.Features = features;
+            this.Features = features.ToList();
         }
     }
 }

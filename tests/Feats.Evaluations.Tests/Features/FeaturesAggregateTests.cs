@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using EventStore.Client;
@@ -7,13 +9,13 @@ using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.EventStore;
-using Feats.Management.Features;
-using Feats.Management.Tests.EventStoreSetups.TestExtensions;
-using FluentAssertions;
+using Feats.Evaluations.Features;
 using Moq;
 using NUnit.Framework;
+using Feats.Evaluations.Tests.EventStoreSetups.TestExtensions;
+using FluentAssertions;
 
-namespace Feats.Management.Tests.Features
+namespace Feats.Evaluations.Tests.Features
 {
     public abstract class FeaturesAggregateTests : TestBase
     {
@@ -23,13 +25,10 @@ namespace Feats.Management.Tests.Features
         public async Task GivenNoFeatures_WhenLoadingAggregate_ThenWeHaveEmptyFeatureList()
         {
             var reader = this.GivenIReadStreamedEvents<FeatureStream>()
-                .WithEvents(System.Linq.Enumerable.Empty<IEvent>());
-
-            var client = this.GivenIEventStoreClient()
-                .WithAppendToStreamAsync(this._featureStream);
+                .WithEvents(Enumerable.Empty<IEvent>());
 
             var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
+                .GivenAggregate(reader.Object)
                 .WithLoad();
 
             aggregate.Features.Should().BeEmpty();
@@ -41,11 +40,8 @@ namespace Feats.Management.Tests.Features
             var reader = this.GivenIReadStreamedEvents<FeatureStream>()
                 .WithEvents(new List<IEvent>{ new NinjaEvent() });
 
-            var client = this.GivenIEventStoreClient()
-                .WithAppendToStreamAsync(this._featureStream);
-
             var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
+                .GivenAggregate(reader.Object)
                 .WithLoad();
 
             aggregate.Features.Should().BeEmpty();
@@ -54,20 +50,18 @@ namespace Feats.Management.Tests.Features
 
     internal class NinjaEvent : IEvent
     {
-        public string Type => "Akatsuki";
+        public string Type => "Kakashi";
     }
 
     public static class FeaturesAggregateTestsExtensions
     {
         public static IFeaturesAggregate GivenAggregate(
             this FeaturesAggregateTests tests, 
-            IReadStreamedEvents<FeatureStream> reader,
-            IEventStoreClient client)
+            IReadStreamedEvents<FeatureStream> reader)
         {
             return new FeaturesAggregate(
                 tests.GivenLogger<FeaturesAggregate>(), 
-                reader, 
-                client);
+                reader);
         }
 
         public static async Task<IFeaturesAggregate> WithLoad(this IFeaturesAggregate aggregate)
@@ -75,11 +69,6 @@ namespace Feats.Management.Tests.Features
             await aggregate.Load();
 
             return aggregate;
-        }
-
-        public static Func<Task> WhenPublishing(this IFeaturesAggregate aggregate, IEvent e)
-        {
-            return () => aggregate.Publish(e);
         }
         
         public static async Task ThenWeDontPublish(
