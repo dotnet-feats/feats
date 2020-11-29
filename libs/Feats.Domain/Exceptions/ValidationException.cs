@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace Feats.Domain
 {
+    [ExcludeFromCodeCoverage]
     public abstract class ValidationException : System.Exception
     {
         public ValidationException() { }
@@ -12,5 +14,13 @@ namespace Feats.Domain
             System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 
         public HttpStatusCode StatusCode => HttpStatusCode.Conflict;
+    }
+
+    [ExcludeFromCodeCoverage]
+    public sealed class ArgumentValidationException : ValidationException
+    {
+        public ArgumentValidationException(string message) 
+        : base($"Missing argument {message}")
+        { }
     }
 }

@@ -1,17 +1,19 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace Feats.Common.Tests
 {
     // too lazy, stolen from https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-5.0#create-a-custom-logger
-    
+    [ExcludeFromCodeCoverage]
     public class TestLoggerConfiguration
     {
         public LogLevel LogLevel { get; set; } = LogLevel.Debug;
         public int EventId { get; set; } = 0;
         public ConsoleColor Color { get; set; } = ConsoleColor.Yellow;
     }
-
+    
+    [ExcludeFromCodeCoverage]
     public class TestLogger<T> : ILogger<T>
     {
         private readonly string _name;

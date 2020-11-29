@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Feats.CQRS.Commands;
 using Moq;
 
 namespace Feats.Common.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class IHandleCommandExtensions 
     {
         public static Mock<IHandleCommand<T>> GivenCommandHandler<T>(this TestBase testClass)

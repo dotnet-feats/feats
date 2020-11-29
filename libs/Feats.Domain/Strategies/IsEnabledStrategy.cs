@@ -1,15 +1,18 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Feats.Domain.Strategies
 {
-    public class IsOnStrategy : IStrategy<IsOnStrategySettings>
+    [ExcludeFromCodeCoverage]
+    public sealed class IsOnStrategy : IStrategy<IsOnStrategySettings>
     {
         public string Name => StrategyNames.IsOn;
 
         public IsOnStrategySettings Settings { get; set; }
     }
-
-    public class IsOnStrategySettings : IStrategySettings
+    
+    [ExcludeFromCodeCoverage]
+    public sealed class IsOnStrategySettings : IStrategySettings
     {
         public bool IsOn { get; set; }
     }

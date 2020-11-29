@@ -24,7 +24,7 @@ namespace Feats.EventStore
             if (this._eventStoreConfiguration.IsClusterModeEnabled)
             {
                 var clusterSettings = new EventStoreClientSettings {
-	                Interceptors = new[] {new MissingInterceptor()},
+	                //Interceptors = new[] {new MissingInterceptor()},
                     ConnectivitySettings =
                     {
 		                Address = new Uri($"{this._eventStoreConfiguration.Protocol}://{this._eventStoreConfiguration.HostName}:2113"),
@@ -53,7 +53,7 @@ namespace Feats.EventStore
 
             var settings = new EventStoreClientSettings {
                 ConnectionName = "Management",
-                Interceptors = new[] {new MissingInterceptor()},
+                //Interceptors = new[] {new MissingInterceptor()},
                 ConnectivitySettings =
                 {
 		            Address = new Uri($"{this._eventStoreConfiguration.Protocol}://{this._eventStoreConfiguration.HostName}:2113")

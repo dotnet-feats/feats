@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Commands;
+using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
@@ -34,7 +35,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             await this.GivenCommandHandler(featuresAggregate.Object, pathsAggregate.Object)
                 .WhenCreatingAFeature(command)
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]

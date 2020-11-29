@@ -5,7 +5,7 @@ using Grpc.Core.Interceptors;
 namespace Feats.EventStore
 {
     // https://developers.eventstore.com/clients/dotnet/generated/v20.6.1/connecting/grpc-interceptor.html
-    public class MissingInterceptor : Interceptor 
+    internal class MissingInterceptor : Interceptor 
     {
         public override AsyncServerStreamingCall<TResponse>
             AsyncServerStreamingCall<TRequest, TResponse>(

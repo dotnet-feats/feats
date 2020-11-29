@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Feats.Domain 
@@ -12,6 +13,7 @@ namespace Feats.Domain
     }
     
 
+    [ExcludeFromCodeCoverage]
     public sealed class Path : IPath
     {
         public Path()

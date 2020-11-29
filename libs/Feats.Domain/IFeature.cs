@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Feats.Domain 
 {
@@ -18,6 +19,7 @@ namespace Feats.Domain
         IDictionary<string, string> Strategies { get; }
     }
     
+    [ExcludeFromCodeCoverage]
     // a record would be nice...
     public sealed class Feature : IFeature
     {

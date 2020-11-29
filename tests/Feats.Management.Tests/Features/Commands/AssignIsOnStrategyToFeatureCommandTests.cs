@@ -3,6 +3,7 @@ using System;
 using System.Text.Json;
 using Feats.Common.Tests;
 using Feats.Common.Tests.Strategies;
+using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
 using Feats.Management.Features.Commands;
@@ -29,7 +30,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             command
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]
@@ -41,7 +42,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             command
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             command
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
         
         [Test]

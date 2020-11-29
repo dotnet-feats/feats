@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace Feats.Domain
 {
+    [ExcludeFromCodeCoverage]
     public abstract class ConflictException : System.Exception
     {
         public ConflictException() { }

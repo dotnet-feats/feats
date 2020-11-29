@@ -1,10 +1,12 @@
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Feats.CQRS.Events;
 
 namespace Feats.Domain.Events
 {
-    public class FeatureCreatedEvent : IEvent
+    [ExcludeFromCodeCoverage]
+    public sealed class FeatureCreatedEvent : IEvent
     {
         public string Type => EventTypes.FeatureCreated;
 

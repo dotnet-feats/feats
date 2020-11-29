@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Feats.CQRS.Events
 {
+    [ExcludeFromCodeCoverage]
     public static class EventTypes
     {
         public const string FeatureCreated = "event.features.created";

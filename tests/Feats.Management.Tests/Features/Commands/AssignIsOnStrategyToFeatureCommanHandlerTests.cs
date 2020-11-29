@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Common.Tests.Strategies;
 using Feats.CQRS.Commands;
+using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
 using Feats.Management.Features;
@@ -32,7 +33,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             await this.GivenCommandHandler(featuresAggregate.Object)
                 .WhenPublishingAFeature(command)
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]

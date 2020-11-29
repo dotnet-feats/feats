@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Feats.Domain.Strategies
@@ -12,7 +13,8 @@ namespace Feats.Domain.Strategies
 
     }
 
-    public class StrategySettingsSerializer : IStrategySettingsSerializer
+    [ExcludeFromCodeCoverage]
+    public sealed class StrategySettingsSerializer : IStrategySettingsSerializer
     {
         public IStrategy Deserialize(string strategyName, string strategySettings)
         {

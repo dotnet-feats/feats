@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Internal;
@@ -11,7 +12,8 @@ namespace Feats.Common.Tests
     public abstract class TestBase
     {
     }
-
+    
+    [ExcludeFromCodeCoverage]
     public static class TestsExtensions 
     {
         public static ILogger<T> GivenLogger<T>(this TestBase testClass)

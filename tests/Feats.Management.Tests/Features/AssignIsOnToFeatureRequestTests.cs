@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Feats.Common.Tests;
+using Feats.Domain;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
@@ -25,7 +26,7 @@ public class AssignIsOnToFeatureRequestTests : TestBase
 
             request
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]
@@ -37,7 +38,7 @@ public class AssignIsOnToFeatureRequestTests : TestBase
 
             request
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
 
         [Test]
@@ -61,7 +62,7 @@ public class AssignIsOnToFeatureRequestTests : TestBase
 
             request
                 .WhenValidating()
-                .ThenExceptionIsThrown<ArgumentNullException>();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
                 
         [Test]

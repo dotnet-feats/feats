@@ -13,30 +13,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace Feats.EventStoreS.Tests
 {
-    [TestFixture]
-    [Category("Integration")]
     public class IEventStoreClientTests : TestBase
     {
-        private IEventStoreConfiguration _configuration;
-
-        private EventStoreClientFactory _factory;
-
-        [SetUp]
-        public void Up()
-        {
-            // for now i take for granted that you have launche docker compose :P
-            // cause i'm lazy
-            this._configuration = new EventStoreConfiguration(
-                new ConfigurationBuilder().Build()
-            );
-
-            this._factory = new EventStoreClientFactory(this._configuration);
-        }
-
         [Test]
         public async Task GivenEventStore_WhenReadingStream_ThenWeGetEvents()
         {
-            var client = this._factory.Create();
+            var configuration = new EventStoreConfiguration(
+                new ConfigurationBuilder().Build()
+            );
+
+            var factory = new EventStoreClientFactory(configuration);
+
+            using var client = factory.Create();
 
             var results = client.ReadStreamAsync(
                 new TestStream(), 
@@ -58,7 +46,13 @@ namespace Feats.EventStoreS.Tests
         [Test]
         public async Task GivenEventStore_WhenPublishingToStream_ThenWeGetEventPublished()
         {
-            var client = this._factory.Create();
+            var configuration = new EventStoreConfiguration(
+                new ConfigurationBuilder().Build()
+            );
+
+            var factory = new EventStoreClientFactory(configuration);
+
+            using var client = factory.Create();
 
             var data = new List<EventData> 
             {
