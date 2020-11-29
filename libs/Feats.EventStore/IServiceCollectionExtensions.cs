@@ -12,12 +12,12 @@ namespace Feats.EventStore
             services.TryAddSingleton<IEventStoreConfiguration, EventStoreConfiguration>();
             services.TryAddSingleton<IEventStoreClientFactory, EventStoreClientFactory>();
             
+            // the original client is a singleton, so keeping up with tradition i guess
             services.TryAddSingleton<IEventStoreClient>(provider => {
                 var factory = provider.GetRequiredService<IEventStoreClientFactory>();
                 
                 return factory.Create();
             });
-            services.AddEventStoreClient();
 
             return services;
         }

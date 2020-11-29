@@ -33,6 +33,7 @@ namespace Feats.Evaluations
             services.AddRouting();
             services.AddMvcCore();
             services.AddControllers();
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +48,8 @@ namespace Feats.Evaluations
 
             app.UseEndpoints(endpoints =>
             {
-               endpoints.MapControllerRoute(
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
