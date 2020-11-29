@@ -10,7 +10,7 @@ using Feats.Domain.Events;
 using Feats.EventStore;
 using Microsoft.Extensions.Logging;
 
-namespace Feats.Management.Features
+namespace Feats.Evaluations.Features
 {
     public interface IFeaturesAggregate : IReadonlyAggregate
     {

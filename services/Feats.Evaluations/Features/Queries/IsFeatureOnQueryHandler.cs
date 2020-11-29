@@ -1,16 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Feats.CQRS.Queries;
+using Feats.Domain;
+using Feats.Evaluations.Features.Exceptions;
 using Feats.Evaluations.Strategies;
-using Feats.Management.Features;
 
 namespace Feats.Evaluations.Features.Queries
 {
     public class IsFeatureOnQuery : IQuery<bool>
     {
-        public string PathAndName { get; set; }
+        public string Path { get; set; }
+        
+        public string Name { get; set; }
     }
 
     public class IsFeatureOnQueryHandler : IHandleQuery<IsFeatureOnQuery, bool>
@@ -30,10 +34,16 @@ namespace Feats.Evaluations.Features.Queries
         public async Task<bool> Handle(IsFeatureOnQuery query)
         {
             await this._featuresAggregate.Load();
-
+            var combined = System.IO.Path.Combine(query.Path, query.Name);
             var feature = this._featuresAggregate.Features
-                .Where(_ => Path.Combine(_.Path, _.Name).Equals(query.PathAndName))
+                .Where(_ => _.State == FeatureState.Published)
+                .Where(_ => System.IO.Path.Combine(_.Path, _.Name).Equals(combined, StringComparison.InvariantCultureIgnoreCase))
                 .FirstOrDefault();
+
+            if (feature == null)
+            {
+                throw new FeatureNotPublishedExeption();
+            }
 
             var results = new List<bool>();
             foreach(var strategyInFeature in feature.Strategies)
