@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  feats.evaluations:
+    image: feats.evaluations:1.0.0-SNAPSHOT
+    env_file:
+      - evaluations.env
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  feats.management:
+    image: feats.management:1.0.0-SNAPSHOT
+    env_file:
+      - management.env
+    ports:
+      - "5002:5002"
+      - "5003:5003"
+
+  eventstore.db:
+    image: eventstore/eventstore:20.6.1-buster-slim
+    env_file:
+      - eventstore.env
+    ports:
+      - "1113:1113"
+      - "2113:2113"
+    volumes:
+      - type: volume
+        source: eventstore-volume-data
+        target: /var/lib/eventstore
+      - type: volume
+        source: eventstore-volume-logs
+        target: /var/log/eventstore
+
+volumes:
+  eventstore-volume-data:
+  eventstore-volume-logs:
+  # postgres-data:
+

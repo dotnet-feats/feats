@@ -1,0 +1,23 @@
+# FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine
+# WORKDIR /app
+# COPY ./publish ./
+# ENTRYPOINT ["dotnet", "Feats.Evaluations.dll"]
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+WORKDIR /app
+
+COPY ./libs ./libs/
+COPY ./services/Feats.Evaluations ./services/Feats.Evaluations/
+WORKDIR /app/services/Feats.Evaluations
+
+RUN dotnet restore Feats.Evaluations.csproj
+RUN dotnet publish Feats.Evaluations.csproj -c Release -o ./published
+
+# well i did put runtime, but the framework compained the 
+# Microsoft.AspnetCore.App dll wasnt found for 5.0...
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS runtime
+USER nobody
+WORKDIR /app
+ENV ASPNETCORE_URLS="http://+:5000"
+COPY --from=build /app/services/Feats.Evaluations/published ./
+ENTRYPOINT ["dotnet", "Feats.Evaluations.dll"]

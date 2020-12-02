@@ -11,4 +11,16 @@ evaluations uses the postgresql projections as read-only and holds the basic eva
 ## cheat sheet for mimi
 
 postgres `docker run it `
-eventstore ``
+eventstore `docker run --name esdb-node -it -p 2113:2113 -p 1113:1113 eventstore/eventstore:20.6.1 --insecure --run-projections=All`
+
+or
+
+docker compose stuff eheh
+in the deploy folder:
+
+`docker-compose up`
+
+too lazy to make distinct solutions so for now:
+```
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+```
