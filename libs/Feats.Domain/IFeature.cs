@@ -12,6 +12,8 @@ namespace Feats.Domain
 
         DateTimeOffset CreatedOn { get; }
 
+        DateTimeOffset UpdatedOn { get; }
+
         string CreatedBy { get; }
 
         FeatureState State { get; }
@@ -26,6 +28,7 @@ namespace Feats.Domain
         public Feature()
         {
             this.Strategies = new Dictionary<string, string>();
+            this.State = FeatureState.Draft;
         }
 
         public string Name {get; set;}
