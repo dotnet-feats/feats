@@ -20,13 +20,13 @@ namespace Feats.Management.Paths
         }
 
         [Route("features")]
-        public async Task<IEnumerable<FeatureAndStrategy>> Get([FromQuery] string urlEncodedPath)
+        public async Task<IEnumerable<FeatureAndStrategy>> Get([FromQuery] string path)
         {
-            var path = WebUtility.UrlDecode(urlEncodedPath);
+            var safePath = WebUtility.UrlDecode(path);
 
             return await this._handler.Handle(new GetPathFeaturesQuery
             {
-                Path = path,
+                Path = safePath,
             });
         }
     }

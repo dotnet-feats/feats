@@ -25,21 +25,22 @@ namespace Feats.Evaluations.Features
             this._evaluationCounter = evaluationCounter;
         }
 
-        [Route("{urlEncodedPath}/{urlEncodedName}")]
-        public async Task<bool> Get(string urlEncodedPath, string urlEncodedName)
+        [HttpGet]
+        public async Task<bool> Get([FromQuery] string path, [FromQuery] string name)
         {
-            var path = WebUtility.UrlDecode(urlEncodedPath);
-            var name = WebUtility.UrlDecode(urlEncodedName);
+            var safePath = WebUtility.UrlDecode(path);
+            var safeName = WebUtility.UrlDecode(name);
 
-            path.Required(nameof(path));
-            name.Required(nameof(name));
+            safePath.Required(nameof(safePath));
+            safeName.Required(nameof(safeName));
+            
             var result = await this._handler.Handle(new IsFeatureOnQuery
             {
-                Path = path,
-                Name = name,
+                Path = safePath,
+                Name = safeName,
             });
 
-            this._evaluationCounter.Inc(PathHelper.CombineNameAndPath(path, name), result);
+            this._evaluationCounter.Inc(PathHelper.CombineNameAndPath(safePath, safeName), result);
 
             return result;
         }

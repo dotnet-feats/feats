@@ -18,15 +18,16 @@ namespace Feats.Management.Features
             this._handler = handler;
         }
 
-        public async Task<FeatureAndStrategyConfiguration> Get([FromQuery] string urlEncodedPath, [FromQuery] string urlEncodedName)
+        [HttpGet]
+        public async Task<FeatureAndStrategyConfiguration> Get([FromQuery] string path, [FromQuery] string name)
         {
-            var path = WebUtility.UrlDecode(urlEncodedPath);
-            var name = WebUtility.UrlDecode(urlEncodedName);
+            var safePath = WebUtility.UrlDecode(path);
+            var safeName = WebUtility.UrlDecode(name);
 
             return await this._handler.Handle(new GetFeatureQuery
             {
-                Path = path,
-                Name = name,
+                Path = safePath,
+                Name = safeName,
             });
         }
     }

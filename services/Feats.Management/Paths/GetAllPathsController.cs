@@ -21,11 +21,12 @@ namespace Feats.Management.Features
             this._handler = handler;
         }
 
-        public async Task<IEnumerable<PathAndFeatureCount>> Get([FromQuery] string filter)
+        [HttpGet]
+        public async Task<IEnumerable<PathAndFeatureCount>> Get([FromQuery] string path)
         {
             return await this._handler.Handle(new GetAllPathsQuery
             {
-                Filter = filter,
+                Filter = path,
             });
         }
     }
