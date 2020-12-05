@@ -115,7 +115,7 @@ namespace Feats.Management.Paths
                             return new Domain.Path
                             {
                                 Name = p.Name,
-                                FeatureNames = p.FeatureNames.Append(e.FeatureAdded),
+                                TotalFeatures = p.TotalFeatures + 1,
                             };
                         }
 
@@ -129,7 +129,7 @@ namespace Feats.Management.Paths
                             new Domain.Path
                             {
                                     Name = _,
-                                    FeatureNames = new List<string> { e.FeatureAdded },
+                                    TotalFeatures = 1,
                             }));
                 }
             }
@@ -139,7 +139,7 @@ namespace Feats.Management.Paths
                     new Domain.Path
                     {
                             Name = _,
-                            FeatureNames = new List<string> { e.FeatureAdded },
+                            TotalFeatures = 1,
                     }));
             }
         }

@@ -9,7 +9,7 @@ namespace Feats.Domain
     {
         string Name { get; }
 
-        IEnumerable<string> FeatureNames { get; }
+        int TotalFeatures { get; }
     }
     
 
@@ -18,10 +18,10 @@ namespace Feats.Domain
     {
         public Path()
         {
-            this.FeatureNames = Enumerable.Empty<string>();
+            this.TotalFeatures =  0;
         }
         
-        public IEnumerable<string> FeatureNames { get; set; }
+        public int TotalFeatures { get; set; }
 
         public string Name {get; set;}
     }
