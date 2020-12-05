@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Feats.CQRS.Queries;
 using Moq;
@@ -23,6 +24,18 @@ namespace Feats.Common.Tests
             mock
                 .Setup(_ => _.Handle(It.IsAny<TQuery>()))
                 .ReturnsAsync(result);
+
+            return mock;
+        }
+        
+        public static Mock<IHandleQuery<TQuery, TResult>> WithException<TQuery, TResult, TException>(
+            this Mock<IHandleQuery<TQuery, TResult>> mock)
+            where TQuery : IQuery<TResult>
+            where TException : Exception, new()
+        {
+            mock
+                .Setup(_ => _.Handle(It.IsAny<TQuery>()))
+                .ThrowsAsync(new TException());
 
             return mock;
         }
