@@ -16,14 +16,21 @@ services:
     volumes:
       - ./certs:/certs
 
-  postgres.db:
-    image: "postgres:13.1"
+  feats.evaluations:
+    image: feats.evaluations:1.0.0-SNAPSHOT
     env_file:
-      - postgres.env
+      - evaluations.env
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data/
+      - "5000:5000"
+      - "5001:5001"
+
+  feats.management:
+    image: feats.management:1.0.0-SNAPSHOT
+    env_file:
+      - management.env
+    ports:
+      - "5002:5002"
+      - "5003:5003"
 
   node1.eventstore: &template
     image: eventstore/eventstore:20.6.1-buster-slim
