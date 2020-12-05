@@ -19,7 +19,7 @@ namespace Feats.Management.Tests
             try 
             {
                 using var client = new HttpClient();
-                client.BaseAddress = new Uri("http://localhost:5002");
+                client.BaseAddress = new Uri("http://localhost:8003");
                 
                 var metricsRequest = new HttpRequestMessage(
                     HttpMethod.Get, 
@@ -39,6 +39,7 @@ namespace Feats.Management.Tests
     {
         public static IHost GivenHost(this StartupTests tests)
         {
+            Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "http://localhost:8003");
             return Program
                 .CreateHostBuilder(new string[0])
                 .Build();
