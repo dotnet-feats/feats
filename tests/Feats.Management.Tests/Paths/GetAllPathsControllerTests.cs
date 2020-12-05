@@ -9,7 +9,7 @@ using Feats.Management.Paths.Queries;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Features
+namespace Feats.Management.Tests.Paths
 {
     public class GetAllPathsControllerTests : TestBase
     {

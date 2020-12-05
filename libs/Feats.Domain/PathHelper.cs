@@ -9,6 +9,11 @@ namespace Feats.Domain
     {
         public static string CombineNameAndPath(string path, string name)
         {
+            if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
             var first = PathDelimiters.First(path);
             var defaultPath = string.IsNullOrEmpty(path) ? string.Empty : path.Trim(first.ToCharArray());
             var defaultName = string.IsNullOrEmpty(name) ? string.Empty : name.Trim(first.ToCharArray());

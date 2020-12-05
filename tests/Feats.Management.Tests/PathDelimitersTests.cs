@@ -20,7 +20,13 @@ namespace Feats.Management.Tests
         [Test]
         public void GivenAPathWithNoSections_WhenFindingFirstDelimiter_ThenWeReturnDot()
         {
-            PathDelimiters.First($"aaa").Should().Be(".");
+            PathDelimiters.First("aaa").Should().Be(".");
+        }
+        
+        [Test]
+        public void GivenEmptyPath_WhenFindingFirstDelimiter_ThenWeReturnDot()
+        {
+            PathDelimiters.First(string.Empty).Should().Be(".");
         }
     }
 }

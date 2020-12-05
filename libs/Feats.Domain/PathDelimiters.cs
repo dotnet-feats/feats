@@ -17,6 +17,11 @@ namespace Feats.Domain
 
         public static string First(string path)
         {
+            if(string.IsNullOrEmpty(path))
+            {
+                return Delimiters.First();
+            }
+
             var firstDelimiter = Delimiters
                 .Select(d => new KeyValuePair<string, int>(d, path.IndexOf(d)))
                 .Where(_ => _.Value >= 0)

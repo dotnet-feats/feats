@@ -20,6 +20,7 @@ namespace Feats.Management.Features
             this._handleCommand = handleCommand;
         }
 
+        [HttpPut]
         public async Task<IActionResult> Put([FromBody] CreateFeatureRequest createFeatureRequest)
         {
             createFeatureRequest.Validate();

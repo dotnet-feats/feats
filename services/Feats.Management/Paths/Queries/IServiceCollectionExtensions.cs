@@ -11,6 +11,7 @@ namespace Feats.Management.Paths.Queries
         public static IServiceCollection AddQueries(this IServiceCollection services)
         {
             services.TryAddScoped<IHandleQuery<GetAllPathsQuery, IEnumerable<PathAndFeatureCount>>, GetAllPathsQueryHandler>();
+            services.TryAddScoped<IHandleQuery<GetPathFeaturesQuery, IEnumerable<FeatureAndStrategy>>, GetPathFeaturesQueryHandler>();
 
             return services;
         }
