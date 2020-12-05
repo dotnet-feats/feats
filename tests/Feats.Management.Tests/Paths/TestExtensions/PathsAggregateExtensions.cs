@@ -14,11 +14,17 @@ namespace Feats.Management.Tests.Paths.TestExtensions
     {
         public static Mock<IPathsAggregate> GivenIPathsAggregate(this TestBase testClass)
         {
-            return new Mock<IPathsAggregate>();
+            var mock = new Mock<IPathsAggregate>();
+
+            mock
+                .Setup(_ => _.Load())
+                .Returns(Task.CompletedTask);
+
+            return mock;
         }
 
         public static Mock<IPathsAggregate> WithPaths(
-            this Mock<IPathsAggregate>  mock, 
+            this Mock<IPathsAggregate> mock, 
             IEnumerable<IPath> paths)
         {
             mock.Setup(_ => _.Paths)
@@ -53,7 +59,7 @@ namespace Feats.Management.Tests.Paths.TestExtensions
             return new Path
             {
                 Name = $"{Guid.NewGuid().ToString()}/moo",
-                FeatureNames = Enumerable.Range(0, random.Next(5)).Select(_ => Guid.NewGuid().ToString()),
+                TotalFeatures = random.Next(5),
             };
         }
     }

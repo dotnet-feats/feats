@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
+using Feats.Domain;
 using Feats.Management.Features.Events;
-using Feats.Management.Features.Exceptions;
 using Feats.Management.Tests.EventStoreSetups.TestExtensions;
 using FluentAssertions;
 using NUnit.Framework;
@@ -18,26 +17,41 @@ namespace Feats.Management.Tests.Paths
         private readonly IStream _pathStream = new PathStream();
 
         [Test]
-        public async Task GivenIdenticalPathAndFeature_WhenPublishingPathCreatedEvent_ThenWeTrowPathAndFeatureAlreadyExistsException()
+        public async Task GivenOtherPaths_WhenPublishingPathCreatedEvent_ThenWePublish()
         {
             var createdAlready = new PathCreatedEvent {
-                FeatureAdded = "bob",
-                Path = "let/me/show/you",
+                FeatureAdded = "derpy",
+                Path = "derpy/wants/muffins",
             };
-
+            
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._pathStream);
 
             var reader = this.GivenIReadStreamedEvents<PathStream>()
                 .WithEvents(new List<IEvent> { createdAlready });
 
+            var created = new PathCreatedEvent {
+                FeatureAdded = "bob",
+                Path = "let.me",
+            };
+
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
                 .WithLoad();
 
             await aggregate
-                .WhenPublishing(createdAlready)
-                .ThenExceptionIsThrown<PathAndFeatureAlreadyExistsException>();
+                .WhenPublishing(created)
+                .ThenWePublish(client, created);
+
+            aggregate.Paths.Select(_ => _.Name)
+                .Should()
+                .BeEquivalentTo(new List<string> { 
+                    "derpy",
+                    "derpy/wants", 
+                    "derpy/wants/muffins",
+                    "let", 
+                    "let.me"
+                });
         }
 
         [Test]
@@ -62,7 +76,14 @@ namespace Feats.Management.Tests.Paths
                 .WhenPublishing(created)
                 .ThenWePublish(client, created);
 
-            aggregate.Paths.Select(_ => _.Name).Should().BeEquivalentTo(new List<string> { created.Path });
+            aggregate.Paths.Select(_ => _.Name)
+                .Should()
+                .BeEquivalentTo(new List<string> { 
+                    "let",
+                    "let/me", 
+                    "let/me/show", 
+                    "let/me/show/you"
+                });
         }
         
         [Test]
@@ -84,6 +105,13 @@ namespace Feats.Management.Tests.Paths
                 Path = "let/me/show",
             };
 
+            var sections = new List<string> { 
+                "let",
+                "let/me", 
+                "let/me/show", 
+                "let/me/show/you"
+            };
+            
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
                 .WithLoad();
@@ -92,8 +120,84 @@ namespace Feats.Management.Tests.Paths
                 .WhenPublishing(created)
                 .ThenWePublish(client, created);
                 
-            aggregate.Paths.Select(_ => _.Name).Should()
-                .BeEquivalentTo(new List<string> { created.Path, createdAlready.Path });
+            aggregate.Paths.Should()
+                .BeEquivalentTo(new List<Path> 
+                {
+                    new Path 
+                    {
+                        Name = "let",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me/show",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me/show/you",
+                        TotalFeatures = 1,
+                    },
+                });
+        }
+        
+        
+        [Test]
+        public async Task GivenAdditionalPath_WhenPublishingPathCreatedEvent_ThenWePublishTheFeature()
+        {
+            var createdAlready = new PathCreatedEvent {
+                FeatureAdded = "bob",
+                Path = "let/me/show",
+            };
+            
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._pathStream);
+
+            var reader = this.GivenIReadStreamedEvents<PathStream>()
+                .WithEvents(new List<IEvent> { createdAlready });
+            
+            var created = new PathCreatedEvent {
+                FeatureAdded = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad();
+
+            await aggregate
+                .WhenPublishing(created)
+                .ThenWePublish(client, created);
+                
+            aggregate.Paths.Should()
+                .BeEquivalentTo(new List<Path> 
+                {
+                    new Path 
+                    {
+                        Name = "let",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me/show",
+                        TotalFeatures = 2,
+                    },
+                    new Path 
+                    {
+                        Name = "let/me/show/you",
+                        TotalFeatures = 1,
+                    },
+                });
         }
     }
 }

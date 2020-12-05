@@ -9,13 +9,13 @@ services:
       - "5000:5000"
       - "5001:5001"
 
-  feats.management:
-    image: feats.management:1.0.0-SNAPSHOT
-    env_file:
-      - management.env
-    ports:
-      - "5002:5002"
-      - "5003:5003"
+  # feats.management:
+  #   image: feats.management:1.0.0-SNAPSHOT
+  #   env_file:
+  #     - management.env
+  #   ports:
+  #     - "5002:5002"
+  #     - "5003:5003"
 
   eventstore.db:
     image: eventstore/eventstore:20.6.1-buster-slim
