@@ -37,6 +37,12 @@ namespace Feats.Management.Tests
             .Should().Be("name");
         }
         
+        [Test]
+        public void GivenEmtpyEverything_WhenCombiningNameAndPath_ThenWeGetEmptyDirectoryPath()
+        {
+            PathHelper.CombineNameAndPath(null, string.Empty)
+            .Should().Be(string.Empty);
+        }
 
         [Test]
         public void GivenPathAndEmptyName_WhenCombiningNameAndPath_ThenWeGetDirectoryPath()
