@@ -1,8 +1,3 @@
-# FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine
-# WORKDIR /app
-# COPY ./publish ./
-# ENTRYPOINT ["dotnet", "Feats.Management.dll"]
-
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /app
 
@@ -12,9 +7,8 @@ WORKDIR /app/services/Feats.Management
 
 RUN dotnet restore Feats.Management.csproj
 RUN dotnet publish Feats.Management.csproj -c Release -o ./published
-# well i did put runtime, but the framework compained the 
-# Microsoft.AspnetCore.App dll wasnt found for 5.0...
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS runtime
+
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
 USER nobody
 WORKDIR /app
 ENV ASPNETCORE_URLS="http://+:5002"
