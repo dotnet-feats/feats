@@ -64,7 +64,7 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishing();
             var pathsAggregate = this.GivenIPathsAggregate()
-                .WithPublishingThrows<PathAndFeatureAlreadyExistsException>();
+                .WithPublishingThrows<ArgumentNullException>();
 
             var command = new CreateFeatureCommand
             {
@@ -75,7 +75,7 @@ namespace Feats.Management.Tests.Features.Commands
 
             await this.GivenCommandHandler(featuresAggregate.Object, pathsAggregate.Object)
                 .WhenCreatingAFeature(command)
-                .ThenExceptionIsThrown<PathAndFeatureAlreadyExistsException>();
+                .ThenExceptionIsThrown<ArgumentNullException>();
         }
 
         [Test]

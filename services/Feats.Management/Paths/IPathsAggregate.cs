@@ -96,35 +96,52 @@ namespace Feats.Management.Paths
 
         private void Apply(PathCreatedEvent e)
         {
-            var existingPath = this.Paths
-                .FirstOrDefault(_ => _.Name.Equals(
-                    e.Path, 
-                    StringComparison.InvariantCultureIgnoreCase));
-            if(existingPath != null && !existingPath.FeatureNames.Contains(e.FeatureAdded))
+            var sections = PathHelper.TranformToPathLevels(e.Path);
+
+            var existingPaths = this.Paths
+                .Where(_ => sections.Contains(_.Name))
+                .Select(_ => _.Name)
+                .ToList();
+            var missingSections = sections
+                .Except(existingPaths)
+                .ToList();
+            if(existingPaths.Any())
             {
                 this.Paths = this.Paths
-                    .Where(_ => !_.Name.Equals(
-                        e.Path, 
-                        StringComparison.InvariantCultureIgnoreCase))
-                    .Append(new Domain.Path
+                    .Select(p => 
                     {
-                        Name = e.Path,
-                        FeatureNames = existingPath.FeatureNames.Append(e.FeatureAdded),
+                        if (sections.Contains(p.Name))
+                        {
+                            return new Domain.Path
+                            {
+                                Name = p.Name,
+                                FeatureNames = p.FeatureNames.Append(e.FeatureAdded),
+                            };
+                        }
+
+                        return p;
                     });
 
-                return;
-            }
-            else if(existingPath == null) {
-                this.Paths = this.Paths.Append(new Domain.Path
+                if(missingSections.Any())
                 {
-                        Name = e.Path,
-                        FeatureNames = new List<string> { e.FeatureAdded },
-                });
-                
-                return;
+                    this.Paths = this.Paths.Concat(
+                        missingSections.Select(_ =>
+                            new Domain.Path
+                            {
+                                    Name = _,
+                                    FeatureNames = new List<string> { e.FeatureAdded },
+                            }));
+                }
             }
-
-            throw new PathAndFeatureAlreadyExistsException();
+            else if(!existingPaths.Any()) {
+                this.Paths = this.Paths.Concat(
+                    sections.Select(_ =>
+                    new Domain.Path
+                    {
+                            Name = _,
+                            FeatureNames = new List<string> { e.FeatureAdded },
+                    }));
+            }
         }
     }
 }
