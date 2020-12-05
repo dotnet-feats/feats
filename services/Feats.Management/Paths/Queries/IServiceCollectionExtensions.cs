@@ -10,7 +10,7 @@ namespace Feats.Management.Paths.Queries
     {
         public static IServiceCollection AddQueries(this IServiceCollection services)
         {
-            services.TryAddSingleton<IHandleQuery<GetAllPathsQuery, IEnumerable<PathAndFeatureCount>>, GetAllPathsQueryHandler>();
+            services.TryAddScoped<IHandleQuery<GetAllPathsQuery, IEnumerable<PathAndFeatureCount>>, GetAllPathsQueryHandler>();
 
             return services;
         }
