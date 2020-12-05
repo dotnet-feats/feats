@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Feats.Management.Features
 {
     [ApiController]
-    [Route("features")]
+    [Route("paths")]
     public class GetAllPathsController
     {
         private readonly IHandleQuery<GetAllPathsQuery, IEnumerable<PathAndFeatureCount>> _handler;
