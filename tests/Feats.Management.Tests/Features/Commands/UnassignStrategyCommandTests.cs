@@ -138,7 +138,7 @@ namespace Feats.Management.Tests.Features.Commands
             feat.UnassignedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
-            feat.StrategyName.Should().Be(StrategyNames.IsOn);
+            feat.StrategyName.Should().Be(command.StrategyName);
         }
     }
 }
