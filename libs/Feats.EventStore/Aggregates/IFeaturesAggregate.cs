@@ -271,6 +271,11 @@ namespace Feats.EventStore.Aggregates
                 {
                     if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
+                        if (f.State != FeatureState.Draft)
+                        {
+                            throw new FeatureWasPublishedBeforeException();
+                        }
+
                         if (f.Strategies.ContainsKey(e.StrategyName))
                         {
                             f.Strategies.Remove(e.StrategyName);

@@ -184,6 +184,50 @@ namespace Feats.Management.Tests.Features
                 .WhenPublishing(unassigned)
                 .ThenExceptionIsThrown<FeatureNotFoundException>();
         }
+        
+
+        [Test]
+        public async Task GivenAPublishedFeature_WhenUnassigningAStrategy_ThenWeThrow()
+        {
+            var created = new FeatureCreatedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var assigned = new StrategyAssignedEvent {
+                Name = created.Name,
+                Path = created.Path,
+                StrategyName = "yolo",
+                Settings = "settings",
+            };
+
+            var published = new FeaturePublishedEvent {
+                Name = created.Name,
+                Path = created.Path,
+            };
+
+            var unassigned = new StrategyUnassignedEvent {
+                Name = created.Name,
+                Path = created.Path,
+                StrategyName = StrategyNames.IsOn,
+            };
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> {
+                    created,
+                    assigned,
+                    published,
+                    unassigned,
+                });
+
+            await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad()
+                .ThenExceptionIsThrown<FeatureWasPublishedBeforeException>();
+        }
     }
         
     public static class StrategyUnassignedEventTestsExtensions
