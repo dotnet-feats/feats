@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class AssignIsOnStrategToFeatureControllerTests : TestBase
+    public class AssignIsOnStrategyToFeatureControllerTests : TestBase
     {
         [Test]
         public async Task GivenRequest_WhenProcessingTheCommandIsSuccessful_ThenWeReturnOk()
@@ -45,7 +45,8 @@ namespace Feats.Management.Tests.Features
 
     public static class AssignIsOnStrategToFeatureControllerTestsExtensions
     {
-        public static AssignIsOnStrategyToFeatureRequest GivenRequest(this AssignIsOnStrategToFeatureControllerTests tests)
+        public static AssignIsOnStrategyToFeatureRequest GivenRequest(
+            this AssignIsOnStrategyToFeatureControllerTests tests)
         {
             return new AssignIsOnStrategyToFeatureRequest
             {
@@ -55,15 +56,15 @@ namespace Feats.Management.Tests.Features
             };
         }
 
-        public static AssignIsOnStrategToFeatureController GivenController(
-            this AssignIsOnStrategToFeatureControllerTests tests, 
+        public static AssignIsOnStrategyToFeatureController GivenController(
+            this AssignIsOnStrategyToFeatureControllerTests tests, 
             IHandleCommand<AssignIsOnStrategyToFeatureCommand> handler)
         {
-            return new AssignIsOnStrategToFeatureController(handler);
+            return new AssignIsOnStrategyToFeatureController(handler);
         }
 
         public static Func<Task<IActionResult>> WhenProcessingCommand(
-            this AssignIsOnStrategToFeatureController controller,
+            this AssignIsOnStrategyToFeatureController controller,
             AssignIsOnStrategyToFeatureRequest request)
         {
             return () => controller.Post(request);

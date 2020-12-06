@@ -72,6 +72,56 @@ namespace Feats.Management.Tests.Features
         }
         
         [Test]
+        public async Task GivenAMatchingFeatureButNOMatchingStrategy_WhenLoadingStrategyUnassigned_ThenWeChangeNothing()
+        {
+            var notMe = new FeatureCreatedEvent {
+                Name = "🌲",
+                Path = "let/me/show/you",
+            };
+
+            var created = new FeatureCreatedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var assigned = new StrategyAssignedEvent {
+                Name = created.Name,
+                Path = created.Path,
+                StrategyName = "yolo",
+                Settings = "settings",
+            };
+            
+            var unassigned = new StrategyUnassignedEvent {
+                Name = created.Name,
+                Path = created.Path,
+                StrategyName = StrategyNames.IsOn,
+            };
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created, notMe, assigned, unassigned });
+            
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad()();
+
+            var features = aggregate.Features.ToList();
+
+            features.Select(_ => _.Name).Should()
+                .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
+
+            features.Where(_ => _.Name == unassigned.Name)
+                .SelectMany(_ => _.Strategies.Select(s => s.Key))
+                .Should()
+                .BeEquivalentTo(new List<string> 
+                {
+                    "yolo",
+                });
+        }
+        
+        [Test]
         public async Task GivenAMatchingFeatureWithNoStrategies_WhenLoadingStrategyUnassigned_ThenWeupdateTheFeature()
         {
             var notMe = new FeatureCreatedEvent {
