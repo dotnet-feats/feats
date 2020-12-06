@@ -6,6 +6,7 @@ using Feats.CQRS.Commands;
 using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
+using Feats.EventStore.Aggregates;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using Feats.Management.Tests.Features.TestExtensions;

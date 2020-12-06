@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Feats.Common.Tests;
 using Feats.Domain;
 using Feats.Evaluations.Features;
+using Feats.EventStore.Aggregates;
 using Moq;
 
 namespace Feats.Evaluations.Tests.Features.TestExtensions

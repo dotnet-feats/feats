@@ -8,7 +8,7 @@ using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
-using System.Text.Json;
+using Feats.EventStore.Aggregates;
 
 namespace Feats.Management.Features.Commands
 {

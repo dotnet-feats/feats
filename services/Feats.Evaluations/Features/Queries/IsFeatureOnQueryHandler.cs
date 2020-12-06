@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Feats.CQRS.Queries;
 using Feats.Domain;
 using Feats.Evaluations.Features.Exceptions;
 using Feats.Evaluations.Strategies;
+using Feats.EventStore.Aggregates;
 
 namespace Feats.Evaluations.Features.Queries
 {
