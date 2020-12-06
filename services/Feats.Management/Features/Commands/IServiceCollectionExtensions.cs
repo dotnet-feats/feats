@@ -13,6 +13,8 @@ namespace Feats.Management.Features.Commands
             services.TryAddScoped<IHandleCommand<PublishFeatureCommand>, PublishFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<AssignIsOnStrategyToFeatureCommand>, AssignIsOnStrategyToFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<UnassignStrategyCommand>, UnassignStrategyCommandHandler>();
+            services.TryAddScoped<IHandleCommand<UpdateFeatureCommand>, UpdateFeatureCommandHandler>();
+            services.TryAddScoped<IHandleCommand<ArchiveFeatureCommand>, ArchiveFeatureCommandHandler>();
 
             return services;
         }

@@ -82,6 +82,9 @@ namespace Feats.EventStore.Aggregates
                 case FeaturePublishedEvent publishedEvent:
                     return publishedEvent.ToEventData();
 
+                case FeatureArchivedEvent archivedEvent:
+                    return archivedEvent.ToEventData();
+
                 case StrategyAssignedEvent assignedEvent:
                     return assignedEvent.ToEventData();
 
@@ -107,6 +110,10 @@ namespace Feats.EventStore.Aggregates
 
                 case FeaturePublishedEvent publishedEvent:
                     this.Apply(publishedEvent);
+                    break;
+
+                case FeatureArchivedEvent archivedEvent:
+                    this.Apply(archivedEvent);
                     break;
 
                 case StrategyAssignedEvent assignedEvent:
@@ -204,6 +211,38 @@ namespace Feats.EventStore.Aggregates
                             UpdatedOn = e.PublishedOn,
                             Path = f.Path,
                             State = FeatureState.Published,
+                            Strategies = f.Strategies,
+                        };
+                    }
+
+                    return f;
+                });
+
+            this.Features = features.ToList();
+        }
+        private void Apply(FeatureArchivedEvent e)
+        {
+            var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
+            
+            var exists = this.Features.Any(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(pathAndName));
+            if (!exists)
+            {
+                throw new FeatureNotFoundException(e.Path, e.Name);
+            }
+
+            var features = this.Features
+                .Select(f => 
+                {
+                    if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
+                    {
+                        return new Feature
+                        {
+                            Name = f.Name,
+                            CreatedBy = f.CreatedBy,
+                            CreatedOn = f.CreatedOn,
+                            UpdatedOn = e.ArchivedOn,
+                            Path = f.Path,
+                            State = FeatureState.Archived,
                             Strategies = f.Strategies,
                         };
                     }
