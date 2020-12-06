@@ -12,6 +12,8 @@ namespace Feats.CQRS.Events
         
         public const string FeaturePublished = "event.features.published";
 
+        public const string FeatureArchived = "event.features.archived";
+
         public const string StrategyAssigned = "event.features.strategy.assigned";
 
         public const string StrategyUnassigned = "event.features.strategy.unassigned";
