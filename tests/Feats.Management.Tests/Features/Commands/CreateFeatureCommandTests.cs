@@ -1,12 +1,10 @@
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Feats.Common.Tests;
 using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.Management.Features.Commands;
-using Feats.Management.Features.Events;
 using FluentAssertions;
 using Microsoft.Extensions.Internal;
 using NUnit.Framework;

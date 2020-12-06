@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Domain;
-using Feats.Management.Paths;
+using Feats.EventStore.Aggregates;
 using Feats.Management.Paths.Queries;
 using Feats.Management.Tests.Paths.TestExtensions;
 using FluentAssertions;

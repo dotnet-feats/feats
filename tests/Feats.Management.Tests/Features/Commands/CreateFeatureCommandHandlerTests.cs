@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Commands;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.Management.Features;
+using Feats.EventStore.Aggregates;
 using Feats.Management.Features.Commands;
-using Feats.Management.Features.Events;
 using Feats.Management.Features.Exceptions;
-using Feats.Management.Paths;
 using Feats.Management.Tests.Features.TestExtensions;
 using Feats.Management.Tests.Paths.TestExtensions;
 using Moq;

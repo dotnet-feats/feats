@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\Feats.Domain\Feats.Domain.csproj" />
     <ProjectReference Include="..\..\libs\Feats.CQRS\Feats.CQRS.csproj" />
   </ItemGroup>
 

@@ -1,9 +1,7 @@
 using System;
 using Feats.Management.Paths.Commands;
-using Feats.Management.Paths.Events;
 using Feats.Management.Paths.Queries;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Feats.Management.Paths
 {
@@ -13,10 +11,7 @@ namespace Feats.Management.Paths
         {
             services
             .AddCommands()
-            .AddEvents()
             .AddQueries();
-
-            services.TryAddScoped<IPathsAggregate, PathsAggregate>();
 
             return services;
         }
