@@ -44,27 +44,5 @@ namespace Feats.Management.Tests.Paths
         {
             return () => aggregate.Publish(e);
         }
-        
-        public static async Task ThenWePublish(
-            this Func<Task> funk,
-            Mock<IEventStoreClient> mockedClient,
-            PathCreatedEvent e)
-        {
-            await funk();
-
-            mockedClient.Verify(
-                _ => _.AppendToStreamAsync(
-                    It.IsAny<PathStream>(),
-                    It.IsAny<StreamState>(),
-                    It.Is<IEnumerable<EventData>>(items => 
-                        items.All(ed =>
-                            ed.Type.Equals(EventTypes.PathCreated) && 
-                            JsonSerializer.Deserialize<PathCreatedEvent>(ed.Data.ToArray(), null).Path.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase)
-                        )),
-                    It.IsAny<Action<EventStoreClientOperationOptions>?>(),
-                    It.IsAny<UserCredentials?>(),
-                    It.IsAny<CancellationToken>()),
-                Times.Once());
-        }
     }
 }
