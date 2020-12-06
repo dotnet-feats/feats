@@ -5,11 +5,13 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using EventStore.Client;
+using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.EventStore;
+using Feats.EventStore.Exceptions;
 using Feats.EventStore.Tests.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
@@ -37,15 +39,14 @@ namespace Feats.Management.Tests.Features
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._featureStream);
 
-            var aggregate = await this
+            await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
-
-            aggregate.Features.Should().BeEmpty();
+                .WithLoad()
+                .ThenExceptionIsThrown<FeatureNotFoundException>();
         }
 
         [Test]
-        public async Task GivenNoMatchingPublishedFeatures_WhenLoading_ThenWeGetONlyCreatedFeatures()
+        public async Task GivenNoMatchingPublishedFeatures_WhenLoading_ThenWeTHrowFeatureNotFoundException()
         {
             var created = new FeatureCreatedEvent {
                 Name = "🦝",
@@ -63,18 +64,14 @@ namespace Feats.Management.Tests.Features
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._featureStream);
 
-            var aggregate = await this
+            await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
-
-            var features = aggregate.Features.ToList();
-
-            features.Should().Contain(_ => _.Name == created.Name);
-            features.Should().NotContain(_ => _.Name == published.Name);
+                .WithLoad()
+                .ThenExceptionIsThrown<FeatureNotFoundException>();
         }
 
         [Test]
-        public async Task GivenAMatchingFeature_WHenLoading_ThenWeGetAPublishedFeature()
+        public async Task GivenAMatchingFeature_WhenLoading_ThenWeGetAPublishedFeature()
         {
             var createdNotMatching = new FeatureCreatedEvent {
                 Name = "🤚",
@@ -99,7 +96,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
 
             var features = aggregate.Features.ToList();
 
@@ -111,63 +108,6 @@ namespace Feats.Management.Tests.Features
             features.Where(_ => _.Name != published.Name).Select(_ => _.State)
                 .Should()
                 .BeEquivalentTo(new List<FeatureState> { FeatureState.Draft });
-        }
-
-        [Test]
-        public async Task GivenNoFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
-        {
-            var client = this.GivenIEventStoreClient()
-                .WithAppendToStreamAsync(this._featureStream);
-
-            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
-                .WithEvents(Enumerable.Empty<IEvent>());
-
-            var published = new FeaturePublishedEvent {
-                Name = "bob",
-                Path = "let/me/show/you",
-            };
-
-            var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
-
-            await aggregate
-                .WhenPublishing(published)
-                .ThenWePublish(client, published);
-
-            aggregate.Features.Should().BeEmpty();
-        }
-
-        [Test]
-        public async Task GivenNoMatchingFeatures_WhenPublishingFeaturePublijshedEvent_ThenWePublishEventThoguhIDontExist()
-        {
-            var created = new FeatureCreatedEvent {
-                Name = "🦝",
-                Path = "let/me/show/you",
-            };
-
-            var client = this.GivenIEventStoreClient()
-                .WithAppendToStreamAsync(this._featureStream);
-
-            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
-                .WithEvents(new List<IEvent> { created });
-
-            var published = new FeaturePublishedEvent {
-                Name = "bob",
-                Path = "let/me/show/you",
-            };
-
-            var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
-
-            await aggregate
-                .WhenPublishing(published)
-                .ThenWePublish(client, published);
-                
-            var features = aggregate.Features.ToList();
-            features.Should().Contain(_ => _.Name == created.Name);
-            features.Should().NotContain(_ => _.Name == published.Name);
         }
 
         [Test]
@@ -196,7 +136,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
 
             await aggregate
                 .WhenPublishing(published)
@@ -211,6 +151,35 @@ namespace Feats.Management.Tests.Features
             features.Where(_ => _.Name != published.Name).Select(_ => _.State)
                 .Should()
                 .BeEquivalentTo(new List<FeatureState> { FeatureState.Draft });
+        }
+        
+
+        [Test]
+        public async Task GivenNoMatchingPublishedFeatures_WhenPublishing_ThenWeTHrowFeatureNotFoundException()
+        {
+            var created = new FeatureCreatedEvent {
+                Name = "🦝",
+                Path = "let/me/show/you",
+            };
+            
+            var published = new FeaturePublishedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> { created });
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+            
+            var aggregate = await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad()();
+
+            await aggregate
+                .WhenPublishing(published)
+                .ThenExceptionIsThrown<FeatureNotFoundException>();
         }
     }
         

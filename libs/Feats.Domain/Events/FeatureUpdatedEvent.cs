@@ -14,6 +14,10 @@ namespace Feats.Domain.Events
 
         public string Path { get; set; }
 
+        public string NewName { get; set; }
+
+        public string NewPath { get; set; }
+
         public string UpdatedBy { get; set; }
 
         public DateTimeOffset UpdatedOn { get; set; }
