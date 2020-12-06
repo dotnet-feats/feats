@@ -75,6 +75,9 @@ namespace Feats.EventStore.Aggregates
                 case PathCreatedEvent createdEvent:
                     return createdEvent.ToEventData();
 
+                case PathRemovedEvent removedEvent:
+                    return removedEvent.ToEventData();
+
                 default:
                     return null;
             }
@@ -88,8 +91,42 @@ namespace Feats.EventStore.Aggregates
                     this.Apply(createdEvent);
                     break;
 
+                case PathRemovedEvent removedEvent:
+                    this.Apply(removedEvent);
+                    break;
+
                 default:
                     break;
+            }
+        }
+
+        private void Apply(PathRemovedEvent e)
+        {
+            if(this.Paths.Any(_ => _.Name.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase))){
+                var sections = PathHelper.TranformToPathLevels(e.Path);
+                var existingPaths = this.Paths
+                    .Where(_ => sections.Contains(_.Name))
+                    .Select(_ => _.Name)
+                    .ToList();
+                if(existingPaths.Any())
+                {
+                    this.Paths = this.Paths
+                        .Select(p => 
+                        {
+                            if (sections.Contains(p.Name))
+                            {
+                                return new Domain.Path
+                                {
+                                    Name = p.Name,
+                                    TotalFeatures = p.TotalFeatures - 1,
+                                };
+                            }
+
+                            return p;
+                        })
+                        .Where(_ => _.TotalFeatures > 0)
+                        .ToList();
+                }
             }
         }
 
@@ -119,7 +156,8 @@ namespace Feats.EventStore.Aggregates
                         }
 
                         return p;
-                    });
+                    })
+                    .ToList();
 
                 if(missingSections.Any())
                 {
@@ -129,7 +167,8 @@ namespace Feats.EventStore.Aggregates
                             {
                                     Name = _,
                                     TotalFeatures = 1,
-                            }));
+                            }))
+                            .ToList();
                 }
             }
             else if(!existingPaths.Any()) {
@@ -139,7 +178,8 @@ namespace Feats.EventStore.Aggregates
                     {
                             Name = _,
                             TotalFeatures = 1,
-                    }));
+                    }))
+                    .ToList();
             }
         }
     }

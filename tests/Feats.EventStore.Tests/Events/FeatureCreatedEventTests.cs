@@ -39,7 +39,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
                
             aggregate.Features.Select(_ => _.Name).Should()
                 .BeEquivalentTo(new List<string> { created.Name }); 
@@ -61,7 +61,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
 
             await aggregate
                 .WhenPublishing(createdAlready)
@@ -84,7 +84,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
 
             await aggregate
                 .WhenPublishing(created)
@@ -114,7 +114,7 @@ namespace Feats.Management.Tests.Features
 
             var aggregate = await this
                 .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+                .WithLoad()();
 
             await aggregate
                 .WhenPublishing(created)

@@ -27,9 +27,11 @@ namespace Feats.EventStore.Tests.Aggregates
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._featureStream);
 
-            var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+            var aggregate = this
+                .GivenAggregate(reader.Object, client.Object);
+            
+            await aggregate
+                .WithLoad()();
 
             aggregate.Features.Should().BeEmpty();
         }
@@ -43,9 +45,11 @@ namespace Feats.EventStore.Tests.Aggregates
             var client = this.GivenIEventStoreClient()
                 .WithAppendToStreamAsync(this._featureStream);
 
-            var aggregate = await this
-                .GivenAggregate(reader.Object, client.Object)
-                .WithLoad();
+            var aggregate = this
+                .GivenAggregate(reader.Object, client.Object);
+            
+            await aggregate
+                .WithLoad()();
 
             aggregate.Features.Should().BeEmpty();
         }
@@ -69,11 +73,13 @@ namespace Feats.EventStore.Tests.Aggregates
                 client);
         }
 
-        public static async Task<IFeaturesAggregate> WithLoad(this IFeaturesAggregate aggregate)
+        public static Func<Task<IFeaturesAggregate>> WithLoad(this IFeaturesAggregate aggregate)
         {
-            await aggregate.Load();
+            return async () => {
+                await aggregate.Load();
 
-            return aggregate;
+                return aggregate;
+            };
         }
 
         public static Func<Task> WhenPublishing(this IFeaturesAggregate aggregate, IEvent e)

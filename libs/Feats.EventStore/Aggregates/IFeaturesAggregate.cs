@@ -146,15 +146,27 @@ namespace Feats.EventStore.Aggregates
         private void Apply(FeatureUpdatedEvent e)
         {
             var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
+
+            var exists = this.Features.Any(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(pathAndName));
+            if (!exists)
+            {
+                throw new FeatureNotFoundException(e.Path, e.Name);
+            }
+
             var features = this.Features
                 .Select(f => 
                 {
                     if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
+                        if(f.State != FeatureState.Draft)
+                        {
+                            throw new FeatureWasPublishedBeforeException();
+                        }
+
                         return new Feature
                         {
-                            Name = e.Name,
-                            Path = e.Path,
+                            Name = e.NewName,
+                            Path = e.NewPath,
                             UpdatedOn = e.UpdatedOn,
                             CreatedBy = f.CreatedBy,
                             CreatedOn = f.CreatedOn,
@@ -172,6 +184,13 @@ namespace Feats.EventStore.Aggregates
         private void Apply(FeaturePublishedEvent e)
         {
             var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
+            
+            var exists = this.Features.Any(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(pathAndName));
+            if (!exists)
+            {
+                throw new FeatureNotFoundException(e.Path, e.Name);
+            }
+
             var features = this.Features
                 .Select(f => 
                 {
@@ -198,11 +217,23 @@ namespace Feats.EventStore.Aggregates
         private void Apply(StrategyAssignedEvent e)
         {
             var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
+            
+            var exists = this.Features.Any(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(pathAndName));
+            if (!exists)
+            {
+                throw new FeatureNotFoundException(e.Path, e.Name);
+            }
+
             var features = this.Features
                 .Select(f => 
                 {
                     if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
+                        if (f.State != FeatureState.Draft)
+                        {
+                            throw new FeatureWasPublishedBeforeException();
+                        }
+
                         if (!f.Strategies.ContainsKey(e.StrategyName))
                         {
                             f.Strategies.Add(e.StrategyName, e.Settings);
@@ -233,11 +264,23 @@ namespace Feats.EventStore.Aggregates
         private void Apply(StrategyUnassignedEvent e)
         {
             var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
+            
+            var exists = this.Features.Any(_ => PathHelper.CombineNameAndPath(_.Path, _.Name).Equals(pathAndName));
+            if (!exists)
+            {
+                throw new FeatureNotFoundException(e.Path, e.Name);
+            }
+            
             var features = this.Features
                 .Select(f => 
                 {
                     if(PathHelper.CombineNameAndPath(f.Path, f.Name).Equals(pathAndName))
                     {
+                        if (f.State != FeatureState.Draft)
+                        {
+                            throw new FeatureWasPublishedBeforeException();
+                        }
+
                         if (f.Strategies.ContainsKey(e.StrategyName))
                         {
                             f.Strategies.Remove(e.StrategyName);

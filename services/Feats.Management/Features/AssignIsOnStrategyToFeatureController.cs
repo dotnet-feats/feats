@@ -10,11 +10,11 @@ namespace Feats.Management.Features
 {
     [ApiController]
     [Route("features/strategies")]
-    public class AssignIsOnStrategToFeatureController
+    public class AssignIsOnStrategyToFeatureController
     {
         private readonly IHandleCommand<AssignIsOnStrategyToFeatureCommand> _handleCommand;
 
-        public AssignIsOnStrategToFeatureController(IHandleCommand<AssignIsOnStrategyToFeatureCommand> handleCommand)
+        public AssignIsOnStrategyToFeatureController(IHandleCommand<AssignIsOnStrategyToFeatureCommand> handleCommand)
         {
             this._handleCommand = handleCommand;
         }

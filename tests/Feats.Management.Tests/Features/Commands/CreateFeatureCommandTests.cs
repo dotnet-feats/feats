@@ -146,6 +146,7 @@ namespace Feats.Management.Tests.Features.Commands
             paths.CreatedBy.Should().Be(command.CreatedBy);
             paths.CreatedOn.Should().Be(clock.UtcNow);
             paths.FeatureAdded.Should().Be(command.Name);
+            paths.Path.Should().Be(command.Path);
         }
         
         public static void ThenWeGetAFeatureCreatedEvent(this Func<FeatureCreatedEvent> featFunc, CreateFeatureCommand command, ISystemClock clock)

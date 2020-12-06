@@ -17,5 +17,7 @@ namespace Feats.CQRS.Events
         public const string StrategyUnassigned = "event.features.strategy.unassigned";
 
         public const string PathCreated = "event.paths.created";
+        
+        public const string PathRemoved = "event.paths.removed";
     }
 }
