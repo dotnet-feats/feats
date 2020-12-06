@@ -6,6 +6,8 @@ using Feats.Domain;
 using Feats.Domain.Validations;
 using Feats.Evaluations.Features.Metrics;
 using Feats.Evaluations.Features.Queries;
+using Feats.Evaluations.Strategies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Feats.Evaluations.Features
@@ -17,12 +19,16 @@ namespace Feats.Evaluations.Features
         private readonly IHandleQuery<IsFeatureOnQuery, bool> _handler;
         private readonly IEvaluationCounter _evaluationCounter;
 
+        private readonly IValuesExtractor _extractor;
+
         public IsOnController(
             IHandleQuery<IsFeatureOnQuery, bool> handdler,
-            IEvaluationCounter evaluationCounter)
+            IEvaluationCounter evaluationCounter,
+            IValuesExtractor extractor)
         {
             this._handler = handdler;
             this._evaluationCounter = evaluationCounter;
+            this._extractor = extractor;
         }
 
         [HttpGet]
@@ -38,6 +44,7 @@ namespace Feats.Evaluations.Features
             {
                 Path = safePath,
                 Name = safeName,
+                Values = this._extractor.Extract(),
             });
 
             this._evaluationCounter.Inc(PathHelper.CombineNameAndPath(safePath, safeName), result);

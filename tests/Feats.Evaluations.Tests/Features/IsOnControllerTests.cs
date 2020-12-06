@@ -8,6 +8,8 @@ using Feats.Evaluations.Features;
 using Feats.Evaluations.Features.Metrics;
 using Feats.Evaluations.Features.Metrics.TestExtensions;
 using Feats.Evaluations.Features.Queries;
+using Feats.Evaluations.Strategies;
+using Feats.Evaluations.Tests.Strategies.TestExtensions;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -25,13 +27,17 @@ namespace Feats.Evaluations.Tests.Features
 
             var counter = this.GivenIEvaluationCounter()
                 .WithInc();
+
+            var extractor = this.GivenIValuesExtractor()
+                .WithEmptyExtract();
+
             var handler = this.GivenIHandleQuery<IsFeatureOnQuery, bool>()
                 .WithResults(result);
 
-            await this.GivenController(handler.Object, counter.Object)
+            await this.GivenController(handler.Object, counter.Object, extractor.Object)
                 .WhenCalled(path, name)
                 .ThenIReturn(result)
-                .AndVerifyIsCalled(path, name, result, handler, counter);
+                .AndVerifyIsCalled(path, name, result, handler, counter, extractor);
         }
     }
 
@@ -40,9 +46,10 @@ namespace Feats.Evaluations.Tests.Features
         public static IsOnController GivenController(
             this IsOnControllerTests tests,
             IHandleQuery<IsFeatureOnQuery, bool> handler,
-            IEvaluationCounter evaluationCounter)
+            IEvaluationCounter evaluationCounter,
+            IValuesExtractor extractor)
         {
-            return new IsOnController(handler, evaluationCounter);
+            return new IsOnController(handler, evaluationCounter, extractor);
         }
 
         public static Func<Task<bool>> WhenCalled(
@@ -65,11 +72,13 @@ namespace Feats.Evaluations.Tests.Features
             string name,
             bool result,
             Mock<IHandleQuery<IsFeatureOnQuery, bool>> handler, 
-            Mock<IEvaluationCounter> counter)
+            Mock<IEvaluationCounter> counter,
+            Mock<IValuesExtractor> extractor)
         {
             await evaluatedResultsTask;
             handler.Verify(_ => _.Handle(It.IsAny<IsFeatureOnQuery>()), Times.Once);
             counter.Verify(_ => _.Inc(PathHelper.CombineNameAndPath(path, name), result), Times.Once);
+            extractor.Verify(_ => _.Extract(), Times.Once);
         }
     }
 }

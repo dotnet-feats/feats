@@ -12,7 +12,7 @@ namespace Feats.Evaluations.Strategies
             services.TryAddSingleton<IEvaluateStrategy<IsOnStrategy>, IsOnStrategyEvaluator>();
             services.TryAddSingleton<IStrategyEvaluatorFactory, StrategyEvaluatorFactory>();
             services.TryAddSingleton<IStrategySettingsSerializer, StrategySettingsSerializer>();
-            
+            services.TryAddScoped<IValuesExtractor, ValuesExtractor>();
             return services;
         }
     }

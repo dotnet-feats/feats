@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Domain.Strategies;
 
@@ -6,7 +7,10 @@ namespace Feats.Evaluations.Strategies
 {
     public interface IStrategyEvaluatorFactory
     {
-        Task<bool> IsOn(string strategyName, string serializedStrategySettings);
+        Task<bool> IsOn(
+            string strategyName, 
+            string serializedStrategySettings,
+            IDictionary<string, string> values = null);
     }
 
     public class StrategyEvaluatorFactory : IStrategyEvaluatorFactory
@@ -23,14 +27,19 @@ namespace Feats.Evaluations.Strategies
             this._isOnEvaluator = isOnEvaluator;
         }
 
-        public async Task<bool> IsOn(string strategyName, string serializedStrategySettings)
+        public async Task<bool> IsOn(
+            string strategyName, 
+            string serializedStrategySettings,
+            IDictionary<string, string> values = null)
         {
             var strategy = this._strategySerializer.Deserialize(strategyName, serializedStrategySettings);
             
-            return await this.IsOn(strategy);
+            return await this.IsOn(strategy, values);
         }
 
-        private async Task<bool> IsOn(IStrategy strategy)
+        private async Task<bool> IsOn(
+            IStrategy strategy,
+            IDictionary<string, string> values = null)
         {
             switch(strategy)
             {
