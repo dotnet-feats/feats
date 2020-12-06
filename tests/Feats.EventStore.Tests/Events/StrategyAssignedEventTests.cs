@@ -161,6 +161,43 @@ namespace Feats.Management.Tests.Features
                 .Should()
                 .BeEquivalentTo(new List<string> { StrategyNames.IsOn });
         }
+        
+
+        [Test]
+        public async Task GivenAPublishedFeature_WhenAssigningAStrategy_ThenWeThrow()
+        {
+            var created = new FeatureCreatedEvent {
+                Name = "bob",
+                Path = "let/me/show/you",
+            };
+
+            var published = new FeaturePublishedEvent {
+                Name = created.Name,
+                Path = created.Path,
+            };
+
+            var assigned = new StrategyAssignedEvent {
+                Name = created.Name,
+                Path = created.Path,
+                StrategyName = "yolo",
+                Settings = "settings",
+            };
+
+            var client = this.GivenIEventStoreClient()
+                .WithAppendToStreamAsync(this._featureStream);
+
+            var reader = this.GivenIReadStreamedEvents<FeatureStream>()
+                .WithEvents(new List<IEvent> {
+                    created,
+                    published,
+                    assigned,
+                });
+
+            await this
+                .GivenAggregate(reader.Object, client.Object)
+                .WithLoad()
+                .ThenExceptionIsThrown<FeatureWasPublishedBeforeException>();
+        }
     }
         
     public static class StrategyAssignedEventTestsExtensions

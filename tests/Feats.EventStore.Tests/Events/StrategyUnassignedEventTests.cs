@@ -185,7 +185,6 @@ namespace Feats.Management.Tests.Features
                 .ThenExceptionIsThrown<FeatureNotFoundException>();
         }
         
-
         [Test]
         public async Task GivenAPublishedFeature_WhenUnassigningAStrategy_ThenWeThrow()
         {
