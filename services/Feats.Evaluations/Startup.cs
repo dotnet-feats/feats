@@ -27,6 +27,9 @@ namespace Feats.Evaluations
             services.TryAddSingleton<IConfiguration>(this._configuration);
             services.TryAddSingleton<ISystemClock>(new SystemClock());
             services.AddLogging();
+            
+            services.AddResponseCaching();
+            services.AddHttpContextAccessor();
             services
                 .AddEventStore()
                 .AddFeatures()
@@ -48,6 +51,7 @@ namespace Feats.Evaluations
             }
 
             app.UseRouting();
+            app.UseResponseCaching();
             app.UseHttpMetrics();
 
             app.UseEndpoints(endpoints =>

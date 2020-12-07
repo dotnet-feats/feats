@@ -25,6 +25,13 @@ namespace Feats.Domain.Strategies
                     {
                         Settings = JsonSerializer.Deserialize<IsOnStrategySettings>(strategySettings)
                     };
+                    
+                case StrategyNames.IsInList:
+                    return new IsInListStrategy
+                    {
+                        Settings = JsonSerializer.Deserialize<IsInListStrategySettings>(strategySettings)
+                    };
+                    
                 default: 
                     throw new NotImplementedException($"Requested settings don't exists for strategy {strategyName}");
             }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Evaluations.Strategies;
@@ -15,7 +16,10 @@ namespace Feats.Evaluations.Tests.Strategies.TestExtensions
         public static Mock<IStrategyEvaluatorFactory> WithOn(this Mock<IStrategyEvaluatorFactory> mock)
         {
             mock
-                .Setup(_ => _.IsOn(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(_ => _.IsOn(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<IDictionary<string, string>>()))
                 .ReturnsAsync(true);
 
             return mock;
@@ -24,7 +28,10 @@ namespace Feats.Evaluations.Tests.Strategies.TestExtensions
         public static Mock<IStrategyEvaluatorFactory> WithOff(this Mock<IStrategyEvaluatorFactory> mock)
         {
             mock
-                .Setup(_ => _.IsOn(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(_ => _.IsOn(
+                    It.IsAny<string>(), 
+                    It.IsAny<string>(),
+                    It.IsAny<IDictionary<string, string>>()))
                 .ReturnsAsync(false);
 
             return mock;

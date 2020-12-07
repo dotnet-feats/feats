@@ -10,9 +10,10 @@ namespace Feats.Evaluations.Strategies
         public static IServiceCollection AddStrategies(this IServiceCollection services)
         {
             services.TryAddSingleton<IEvaluateStrategy<IsOnStrategy>, IsOnStrategyEvaluator>();
+            services.TryAddSingleton<IEvaluateStrategy<IsInListStrategy>, IsInListStrategyEvaluator>();
             services.TryAddSingleton<IStrategyEvaluatorFactory, StrategyEvaluatorFactory>();
             services.TryAddSingleton<IStrategySettingsSerializer, StrategySettingsSerializer>();
-            
+            services.TryAddScoped<IValuesExtractor, ValuesExtractor>();
             return services;
         }
     }

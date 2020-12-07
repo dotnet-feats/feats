@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Common.Tests.Strategies;
 using Feats.Domain.Strategies;
 using Feats.Evaluations.Strategies;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Feats.Evaluations.Tests.Strategies
@@ -28,7 +30,27 @@ namespace Feats.Evaluations.Tests.Strategies
         }
         
         [Test]
-        public async Task GivenIsOffStrategy_WhenEvaluating_ThenIGetOn()
+        public async Task GivenIsInListStrategy_WhenEvaluating_ThenIGetStrategyResult()
+        {
+            var serializer = this.GivenIStrategySettingsSerializer();
+            var strategy = new IsInListStrategy {
+                Settings = new IsInListStrategySettings 
+                {
+                    Items = new List<string> { "a", "😎🦝" },
+                },
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(
+                    StrategyNames.IsInList, 
+                    serializer.Serialize(strategy.Settings),
+                    new Dictionary<string, string> { { StrategySettings.List, "a" } })
+                .ThenIGet(true);
+        }
+
+        [Test]
+        public async Task GivenIsOffStrategy_WhenEvaluating_ThenIGetOff()
         {
             var serializer = new StrategySettingsSerializer();
             var strategy = new IsOnStrategy {
@@ -52,16 +74,26 @@ namespace Feats.Evaluations.Tests.Strategies
         {
             return new StrategyEvaluatorFactory(
                 tests.GivenIStrategySettingsSerializer(),
-                new IsOnStrategyEvaluator()
+                new IsOnStrategyEvaluator(),
+                new IsInListStrategyEvaluator()
             );
         }
 
         public static Func<Task<bool>> WhenEvaluating(
             this IStrategyEvaluatorFactory evaluatorFactory,
             string name, 
-            string json)
+            string json,
+            IDictionary<string,string> values = null)
         {
-            return () => evaluatorFactory.IsOn(name, json);
+            return () => evaluatorFactory.IsOn(name, json, values);
+        }
+
+        public static  async Task ThenIGet(
+            this Func<Task<bool>> evaluationFunc,
+            bool expectedToBe)
+        {
+            var result = await evaluationFunc();
+            result.Should().Be(expectedToBe);
         }
     }
 }

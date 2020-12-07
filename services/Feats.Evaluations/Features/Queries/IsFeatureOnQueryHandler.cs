@@ -15,6 +15,8 @@ namespace Feats.Evaluations.Features.Queries
         public string Path { get; set; }
         
         public string Name { get; set; }
+        
+        public IDictionary<string, string> Values { get; set; }
     }
 
     public class IsFeatureOnQueryHandler : IHandleQuery<IsFeatureOnQuery, bool>
@@ -46,11 +48,12 @@ namespace Feats.Evaluations.Features.Queries
             }
 
             var results = new List<bool>();
-            foreach(var strategyInFeature in feature.Strategies)
+            foreach(var (strategyName, settings) in feature.Strategies)
             {
                 var result = await this._strategyEvaluator.IsOn(
-                    strategyInFeature.Key,
-                    strategyInFeature.Value);
+                    strategyName,
+                    settings,
+                    query.Values);
                 
                 results.Add(result);
             }
