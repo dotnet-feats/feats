@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Domain.Strategies;
@@ -25,7 +26,7 @@ namespace Feats.Evaluations.Tests.Strategies
                 .WhenEvaluating(strategy)
                 .ThenIGet(strategy);
         }
-        
+
         [Test]
         public async Task GivenOffStrategy_WhenEvaluating_ThenIGetOff()
         {
@@ -55,8 +56,7 @@ namespace Feats.Evaluations.Tests.Strategies
             IsOnStrategy strategy)
         {
             return () => evaluator.IsOn(strategy);
-        }
-        
+        }        
 
         public static  async Task ThenIGet(
             this Func<Task<bool>> evaluationFunc,

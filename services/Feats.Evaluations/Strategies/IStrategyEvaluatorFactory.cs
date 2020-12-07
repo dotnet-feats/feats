@@ -18,13 +18,17 @@ namespace Feats.Evaluations.Strategies
         private readonly IStrategySettingsSerializer _strategySerializer;
 
         private readonly IEvaluateStrategy<IsOnStrategy> _isOnEvaluator;
+        
+        private readonly IEvaluateStrategy<IsInListStrategy> _isInListEvaluator;
 
         public StrategyEvaluatorFactory(
             IStrategySettingsSerializer strategySerializer,
-            IEvaluateStrategy<IsOnStrategy> isOnEvaluator)
+            IEvaluateStrategy<IsOnStrategy> isOnEvaluator,
+            IEvaluateStrategy<IsInListStrategy> isInListEvaluator)
         {
             this._strategySerializer = strategySerializer;
             this._isOnEvaluator = isOnEvaluator;
+            this._isInListEvaluator = isInListEvaluator;
         }
 
         public async Task<bool> IsOn(
@@ -45,6 +49,10 @@ namespace Feats.Evaluations.Strategies
             {
                 case IsOnStrategy isOn:
                     return await this._isOnEvaluator.IsOn(isOn);
+                    
+                case IsInListStrategy isInList:
+                    return await this._isInListEvaluator.IsOn(isInList, values);
+
                 default:
                     throw new NotImplementedException("the requested strategy has not been implemented yet");
             }

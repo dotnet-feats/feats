@@ -7,7 +7,6 @@ using Feats.Domain.Validations;
 using Feats.Evaluations.Features.Metrics;
 using Feats.Evaluations.Features.Queries;
 using Feats.Evaluations.Strategies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Feats.Evaluations.Features
@@ -17,6 +16,7 @@ namespace Feats.Evaluations.Features
     public class IsOnController
     {
         private readonly IHandleQuery<IsFeatureOnQuery, bool> _handler;
+        
         private readonly IEvaluationCounter _evaluationCounter;
 
         private readonly IValuesExtractor _extractor;
@@ -32,6 +32,7 @@ namespace Feats.Evaluations.Features
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 60)]
         public async Task<bool> Get([FromQuery] string path, [FromQuery] string name)
         {
             var safePath = WebUtility.UrlDecode(path);

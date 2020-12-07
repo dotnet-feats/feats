@@ -1,13 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Common.Tests.Strategies;
 using Feats.CQRS.Commands;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.Domain.Strategies;
 using Feats.EventStore.Aggregates;
-using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using Feats.Management.Tests.Features.TestExtensions;
 using Feats.Management.Tests.Paths.TestExtensions;
@@ -16,7 +15,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class AssignIsOnStrategyToFeatureCommandHandlerTests : TestBase
+    public class AssignIsInListStrategyToFeatureCommandHandlerTests : TestBase
     {
         [Test]
         public async Task GivenAnInvalidCommand_WhenPublishingAFeature_ThenWeThrow()
@@ -25,11 +24,11 @@ namespace Feats.Management.Tests.Features.Commands
                 .GivenIFeaturesAggregate()
                 .WithPublishing();
 
-            var command = new AssignIsOnStrategyToFeatureCommand
+            var command = new AssignIsInListStrategyToFeatureCommand
             {
                 AssignedBy = "😎",
                 Path = "🌲/🦝",
-                IsEnabled = true,
+                Items = new List<string> { "a" },
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -43,11 +42,11 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishingThrows<NotImplementedException>();
             
-            var command = new AssignIsOnStrategyToFeatureCommand
+            var command = new AssignIsInListStrategyToFeatureCommand
             {
                 AssignedBy = "😎",
                 Name = "🌲/🦝",
-                IsEnabled = true,
+                Items = new List<string> { "a" },
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -61,7 +60,7 @@ namespace Feats.Management.Tests.Features.Commands
             var featuresAggregate = this.GivenIFeaturesAggregate()
                 .WithPublishing();
 
-            var command = new AssignIsOnStrategyToFeatureCommand
+            var command = new AssignIsInListStrategyToFeatureCommand
             {
                 AssignedBy = "meeee",
                 Name = "bob",
@@ -78,11 +77,12 @@ namespace Feats.Management.Tests.Features.Commands
         {
             var featuresAggregate = this.GivenIFeaturesAggregate();
 
-            var command = new AssignIsOnStrategyToFeatureCommand
+            var command = new AssignIsInListStrategyToFeatureCommand
             {
                 AssignedBy = "meeee",
                 Name = "bob",
                 Path = "let/me/show/you",
+                Items = new List<string> { "a" },
             };
 
             await this.GivenCommandHandler(featuresAggregate.Object)
@@ -91,14 +91,14 @@ namespace Feats.Management.Tests.Features.Commands
         }
     }
 
-    public static class AssignIsOnStrategyToFeatureCommandHandlerTestsExtensions
+    public static class AssignIsInListStrategyToFeatureCommandHandlerTestsExtensions
     {
-        public static IHandleCommand<AssignIsOnStrategyToFeatureCommand> GivenCommandHandler(
-            this AssignIsOnStrategyToFeatureCommandHandlerTests tests,
+        public static IHandleCommand<AssignIsInListStrategyToFeatureCommand> GivenCommandHandler(
+            this AssignIsInListStrategyToFeatureCommandHandlerTests tests,
             IFeaturesAggregate featuresAggregate)
         {
-            return new AssignIsOnStrategyToFeatureCommandHandler(
-                tests.GivenLogger<AssignIsOnStrategyToFeatureCommandHandler>(),
+            return new AssignIsInListStrategyToFeatureCommandHandler(
+                tests.GivenLogger<AssignIsInListStrategyToFeatureCommandHandler>(),
                 featuresAggregate,
                 tests.GivenClock(),
                 tests.GivenIStrategySettingsSerializer()
@@ -106,8 +106,8 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         public static Func<Task> WhenPublishingAFeature(
-            this IHandleCommand<AssignIsOnStrategyToFeatureCommand> handler,
-            AssignIsOnStrategyToFeatureCommand command)
+            this IHandleCommand<AssignIsInListStrategyToFeatureCommand> handler,
+            AssignIsInListStrategyToFeatureCommand command)
         {
             return () => handler.Handle(command);
         }
@@ -115,7 +115,7 @@ namespace Feats.Management.Tests.Features.Commands
         public static async Task ThenWePublish(
             this Func<Task> funk,
             Mock<IFeaturesAggregate> featuresAggregate,
-            AssignIsOnStrategyToFeatureCommand command)
+            AssignIsInListStrategyToFeatureCommand command)
         {
             await funk();
             featuresAggregate.Verify(_ => _.Publish(
