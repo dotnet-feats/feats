@@ -5,7 +5,6 @@ using System.Threading;
 using EventStore.Client;
 using Feats.Common.Tests;
 using Feats.CQRS.Streams;
-using Feats.EventStore;
 using Moq;
 
 namespace Feats.EventStore.Tests.TestExtensions

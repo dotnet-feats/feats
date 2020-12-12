@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Feats.Domain.Strategies;
 
-namespace Feats.Common.Tests.Strategies
+namespace Feats.Common.Tests.Strategies.TestExtensions
 {
     [ExcludeFromCodeCoverage]
     public static class IStrategySettingsSerializerExtensions 

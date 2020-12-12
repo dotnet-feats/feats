@@ -7,12 +7,12 @@ namespace Feats.EventStore.Events
 {
     public static class StrategyUnassignedEventExtensions
     {
-        public static EventData ToEventData(this StrategyUnassignedEvent UnassignedEvent, JsonSerializerOptions settings = null)
+        public static EventData ToEventData(this StrategyUnAssignedEvent unAssignedEvent, JsonSerializerOptions settings = null!)
         {
-            var contentBytes = JsonSerializer.SerializeToUtf8Bytes(UnassignedEvent, settings);
+            var contentBytes = JsonSerializer.SerializeToUtf8Bytes(unAssignedEvent, settings);
             return new EventData(
                 eventId: Uuid.NewUuid(),
-                type : UnassignedEvent.Type,
+                type : unAssignedEvent.Type,
                 data: contentBytes
             );
         }

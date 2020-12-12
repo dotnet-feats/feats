@@ -44,7 +44,7 @@ namespace Feats.Evaluations.Features.Queries
 
             if (feature == null)
             {
-                throw new FeatureNotPublishedExeption();
+                throw new FeatureNotPublishedException();
             }
 
             var results = new List<bool>();

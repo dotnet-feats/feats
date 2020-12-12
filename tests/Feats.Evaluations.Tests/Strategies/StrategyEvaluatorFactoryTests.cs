@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Common.Tests.Strategies;
+using Feats.Common.Tests.Strategies.TestExtensions;
 using Feats.Domain.Strategies;
 using Feats.Evaluations.Strategies;
 using FluentAssertions;
@@ -19,8 +20,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsOnStrategy {
                 Settings = new IsOnStrategySettings 
                 {
-                    IsOn = true,
-                },
+                    IsOn = true
+                }
             };
 
             await this
@@ -36,8 +37,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "a", "😎🦝" },
-                },
+                    Items = new List<string> { "a", "😎🦝" }
+                }
             };
 
             await this
@@ -56,8 +57,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsOnStrategy {
                 Settings = new IsOnStrategySettings 
                 {
-                    IsOn = false,
-                },
+                    IsOn = false
+                }
             };
 
             await this

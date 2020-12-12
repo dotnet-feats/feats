@@ -9,13 +9,13 @@ using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.EventStore;
+using Feats.EventStore.Tests.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Paths
+namespace Feats.EventStore.Tests.Events
 {
     public class PathCreatedEventTests : PathsAggregateTests
     {
@@ -108,13 +108,6 @@ namespace Feats.Management.Tests.Paths
             var created = new PathCreatedEvent {
                 FeatureAdded = "bob",
                 Path = "let/me/show",
-            };
-
-            var sections = new List<string> { 
-                "let",
-                "let/me", 
-                "let/me/show", 
-                "let/me/show/you"
             };
             
             var aggregate = await this
@@ -222,7 +215,7 @@ namespace Feats.Management.Tests.Paths
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
                             ed.Type.Equals(EventTypes.PathCreated) && 
-                            JsonSerializer.Deserialize<PathCreatedEvent>(ed.Data.ToArray(), null).Path.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase)
+                            JsonSerializer.Deserialize<PathCreatedEvent>(ed.Data.ToArray(), null)!.Path.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),

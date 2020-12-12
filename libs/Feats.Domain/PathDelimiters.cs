@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +24,7 @@ namespace Feats.Domain
             }
 
             var firstDelimiter = Delimiters
-                .Select(d => new KeyValuePair<string, int>(d, path.IndexOf(d)))
+                .Select(d => new KeyValuePair<string, int>(d, path.IndexOf(d, StringComparison.InvariantCultureIgnoreCase)))
                 .Where(_ => _.Value >= 0)
                 .OrderBy(kv => kv.Value)
                 .Select(_ => _.Key)

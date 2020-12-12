@@ -1,10 +1,8 @@
 using System;
-using System.Text.Json;
 using Feats.CQRS.Events;
 
 namespace Feats.Domain.Events
 {
-    // todo switch to record
     public class PathCreatedEvent : IEvent
     {
         public string Type => EventTypes.PathCreated;

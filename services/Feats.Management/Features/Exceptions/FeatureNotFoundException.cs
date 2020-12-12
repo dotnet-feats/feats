@@ -1,8 +1,9 @@
 using Feats.Domain;
+using Feats.Domain.Exceptions;
 
 namespace Feats.Management.Features.Exceptions
 {
-    public class FeatureNotFoundException : NotFoundException
+    public sealed class FeatureNotFoundException : NotFoundException
     {
         public FeatureNotFoundException()
         :base()

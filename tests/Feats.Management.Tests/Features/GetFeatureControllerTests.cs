@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Queries;
 using Feats.CQRS.Queries;
 using Feats.Domain;
 using Feats.Management.Features;
@@ -46,7 +46,6 @@ namespace Feats.Management.Tests.Features
         [Test]
         public async Task GivenAFilterQueryString_WhenQueryReturnsResults_ThenWeReturnTheResults()
         {
-            var filter = string.Empty;
             var expectedResults = new FeatureAndStrategyConfiguration
             {
                 Path = "bob/painting",

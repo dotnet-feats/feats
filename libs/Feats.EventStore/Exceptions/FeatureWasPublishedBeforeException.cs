@@ -1,4 +1,5 @@
 using Feats.Domain;
+using Feats.Domain.Exceptions;
 
 namespace Feats.EventStore.Exceptions
 {

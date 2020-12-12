@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Commands;
 using Feats.CQRS.Commands;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;

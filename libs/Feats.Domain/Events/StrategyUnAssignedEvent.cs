@@ -5,7 +5,7 @@ using Feats.CQRS.Events;
 namespace Feats.Domain.Events
 {
     [ExcludeFromCodeCoverage]
-    public sealed class StrategyUnassignedEvent : IEvent
+    public sealed class StrategyUnAssignedEvent : IEvent
     {
         public string Type => EventTypes.StrategyUnassigned;
 

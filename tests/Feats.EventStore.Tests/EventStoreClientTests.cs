@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -6,14 +5,13 @@ using EventStore.Client;
 using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
-using Feats.EventStore;
 using FluentAssertions;
-using NUnit.Framework;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 
-namespace Feats.EventStoreS.Tests
+namespace Feats.EventStore.Tests
 {
-    public class IEventStoreClientTests : TestBase
+    public class EventStoreClientTests : TestBase
     {
         [Test]
         [Category("Integration")]
@@ -90,13 +88,13 @@ namespace Feats.EventStoreS.Tests
     {
         public string Type => "test";
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
     
 
     public static class FeatureCreatedEventExtensions
     {
-        public static EventData ToEventData(this TestEvent featureCreatedEvent, JsonSerializerOptions settings = null)
+        public static EventData ToEventData(this TestEvent featureCreatedEvent, JsonSerializerOptions settings = null!)
         {
             var contentBytes = JsonSerializer.SerializeToUtf8Bytes(featureCreatedEvent, settings);
             return new EventData(

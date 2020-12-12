@@ -7,7 +7,7 @@ namespace Feats.EventStore.Events
 {
     public static class StrategyAssignedEventExtensions
     {
-        public static EventData ToEventData(this StrategyAssignedEvent assignedEvent, JsonSerializerOptions settings = null)
+        public static EventData ToEventData(this StrategyAssignedEvent assignedEvent, JsonSerializerOptions settings = null!)
         {
             var contentBytes = JsonSerializer.SerializeToUtf8Bytes(assignedEvent, settings);
             return new EventData(

@@ -10,7 +10,6 @@ using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.EventStore;
 using Feats.EventStore.Exceptions;
 using Feats.EventStore.Tests.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
@@ -18,7 +17,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Features
+namespace Feats.EventStore.Tests.Events
 {
     public class FeaturePublishedEventTests : FeaturesAggregateTests
     {
@@ -199,7 +198,7 @@ namespace Feats.Management.Tests.Features
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
                             ed.Type.Equals(EventTypes.FeaturePublished) && 
-                            JsonSerializer.Deserialize<FeaturePublishedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
+                            JsonSerializer.Deserialize<FeaturePublishedEvent>(ed.Data.ToArray(), null)!.Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),

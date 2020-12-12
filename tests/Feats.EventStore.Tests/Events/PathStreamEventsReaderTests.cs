@@ -6,12 +6,11 @@ using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain.Events;
-using Feats.EventStore;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Feats.Management.Paths.Tests
+namespace Feats.EventStore.Tests.Events
 {
     public class PathStreamEventsReaderTests : TestBase
     {
@@ -25,10 +24,9 @@ namespace Feats.Management.Paths.Tests
             var client = this.GivenIEventStoreClient()
                 .WithReadStreamAsync(this._stream, results);
 
-            await this
-                .GivenPathStreamEventsReader(client.Object)
-                .WhenReading()
-                .ThenWeReturnEmptyList();
+            await PathStreamEventsReaderTestsExtenstions.ThenWeReturnEmptyList(this
+                    .GivenPathStreamEventsReader(client.Object)
+                    .WhenReading());
         }
 
         [Test]
@@ -47,10 +45,9 @@ namespace Feats.Management.Paths.Tests
             var client = this.GivenIEventStoreClient()
                 .WithReadStreamAsync(this._stream, results);
 
-            await this
-                .GivenPathStreamEventsReader(client.Object)
-                .WhenReading()
-                .ThenWeReturnEmptyList();
+            await PathStreamEventsReaderTestsExtenstions.ThenWeReturnEmptyList(this
+                    .GivenPathStreamEventsReader(client.Object)
+                    .WhenReading());
         }
 
         [Test]
@@ -69,10 +66,9 @@ namespace Feats.Management.Paths.Tests
             var client = this.GivenIEventStoreClient()
                 .WithReadStreamAsync(this._stream, results);
 
-            await this
-                .GivenPathStreamEventsReader(client.Object)
-                .WhenReading()
-                .ThenWeReturnEventList(new List<IEvent> { eventOne });
+            await PathStreamEventsReaderTestsExtenstions.ThenWeReturnEventList(this
+                    .GivenPathStreamEventsReader(client.Object)
+                    .WhenReading(), new List<IEvent> { eventOne });
         }
     }
 

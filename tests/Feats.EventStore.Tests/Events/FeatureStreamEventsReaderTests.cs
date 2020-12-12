@@ -6,12 +6,11 @@ using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain.Events;
-using Feats.EventStore;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Feats.Management.Features.Tests
+namespace Feats.EventStore.Tests.Events
 {
     public class FeatureStreamEventsReaderTests : TestBase
     {
@@ -54,7 +53,7 @@ namespace Feats.Management.Features.Tests
         }
 
         [Test]
-        public async Task GivenEventsInStream_Whenreading_ThenWeReturnEventList()
+        public async Task GivenEventsInStream_WhenReading_ThenWeReturnEventList()
         {
             var eventOne = new FeatureCreatedEvent
             {
@@ -91,35 +90,6 @@ namespace Feats.Management.Features.Tests
             this FeatureStreamEventsReader reader)
         {
             return () => reader.Read();
-        }
-
-        public static async Task ThenWeReturnEventList(
-            this Func<IAsyncEnumerable<IEvent>> resultsFunc,
-            IEnumerable<IEvent> events)
-        {
-            var results = resultsFunc();
-            var list = new List<IEvent>();
-            await foreach(var e in results)
-            {
-                list.Add(e);
-            }
-
-            list.Should().BeEquivalentTo(events);
-        }
-
-        public static async Task ThenWeReturnEmptyList(
-            this Func<IAsyncEnumerable<IEvent>> resultsFunc)
-        {
-            var results = resultsFunc();
-            results.Should().NotBe(null);
-            
-            var list = new List<IEvent>();
-            await foreach(var e in results)
-            {
-                list.Add(e);
-            }
-
-            list.Should().BeEmpty();
         }
     }
 }

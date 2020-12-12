@@ -1,5 +1,4 @@
 using System;
-using EventStore.Client;
 using Feats.CQRS.Streams;
 using Feats.EventStore.Aggregates;
 using Microsoft.Extensions.DependencyInjection;

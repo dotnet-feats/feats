@@ -9,6 +9,7 @@ using Feats.CQRS.Streams;
 using Feats.Domain;
 using Feats.Domain.Events;
 using Feats.EventStore.Events;
+using Feats.EventStore.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Feats.EventStore.Aggregates
@@ -18,7 +19,7 @@ namespace Feats.EventStore.Aggregates
         IEnumerable<IPath> Paths { get; }
     }
 
-    public class PathsAggregate : IAggregate, IPathsAggregate
+    public class PathsAggregate : IPathsAggregate
     {
         private readonly ILogger _logger;
 
@@ -56,7 +57,7 @@ namespace Feats.EventStore.Aggregates
         {
             this.Apply(e);
             var eventData = this.ToEventData(e);
-
+            
             await this._client.AppendToStreamAsync(
                 stream: this._pathStream,
                 expectedState: StreamState.Any,
@@ -79,7 +80,7 @@ namespace Feats.EventStore.Aggregates
                     return removedEvent.ToEventData();
 
                 default:
-                    return null;
+                    throw new EventSerializationUnsupportedException();
             }
         }
 

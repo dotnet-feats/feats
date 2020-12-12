@@ -10,20 +10,20 @@ namespace Feats.Management.Features
 {
     [ApiController]
     [Route("features/strategies")]
-    public class UnassignStrategyController
+    public class UnAssignStrategyController
     {
-        private readonly IHandleCommand<UnassignStrategyCommand> _handleCommand;
+        private readonly IHandleCommand<UnAssignStrategyCommand> _handleCommand;
 
-        public UnassignStrategyController(IHandleCommand<UnassignStrategyCommand> handleCommand)
+        public UnAssignStrategyController(IHandleCommand<UnAssignStrategyCommand> handleCommand)
         {
             this._handleCommand = handleCommand;
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Post([FromBody] UnassignStrategyRequest request)
+        public async Task<IActionResult> Post([FromBody] UnAssignStrategyRequest request)
         {
             request.Validate();
-            var command = request.ToUnassignStrategyCommand();
+            var command = request.ToUnAssignStrategyCommand();
 
             await this._handleCommand.Handle(command);
 
@@ -31,7 +31,7 @@ namespace Feats.Management.Features
         }
     }
 
-    public class UnassignStrategyRequest
+    public class UnAssignStrategyRequest
     {
         public string Name { get; set; }
 
@@ -42,9 +42,9 @@ namespace Feats.Management.Features
         public string StrategyName { get; set; }
     }
 
-    public static class UnassignStrategyRequestExtensions
+    public static class UnAssignStrategyRequestExtensions
     {
-        public static void Validate(this UnassignStrategyRequest request)
+        public static void Validate(this UnAssignStrategyRequest request)
         {
             request.Required(nameof(request));
             request.Name.Required(nameof(request.Name));
@@ -52,9 +52,9 @@ namespace Feats.Management.Features
             request.UnassignedBy.Required(nameof(request.UnassignedBy));
         } 
 
-        public static UnassignStrategyCommand ToUnassignStrategyCommand(this UnassignStrategyRequest request)
+        public static UnAssignStrategyCommand ToUnAssignStrategyCommand(this UnAssignStrategyRequest request)
         {
-            return new UnassignStrategyCommand
+            return new UnAssignStrategyCommand
             {
                 Name = request.Name,
                 Path = request.Path,

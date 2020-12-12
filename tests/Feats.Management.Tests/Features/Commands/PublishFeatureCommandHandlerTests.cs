@@ -4,10 +4,10 @@ using Feats.Common.Tests;
 using Feats.CQRS.Commands;
 using Feats.Domain;
 using Feats.Domain.Events;
+using Feats.Domain.Exceptions;
 using Feats.EventStore.Aggregates;
 using Feats.Management.Features.Commands;
 using Feats.Management.Tests.Features.TestExtensions;
-using Feats.Management.Tests.Paths.TestExtensions;
 using Moq;
 using NUnit.Framework;
 

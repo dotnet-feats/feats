@@ -2,13 +2,14 @@
 using System;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Queries;
 using Feats.CQRS.Queries;
 using Feats.Domain;
 using Feats.Evaluations.Features;
 using Feats.Evaluations.Features.Metrics;
-using Feats.Evaluations.Features.Metrics.TestExtensions;
 using Feats.Evaluations.Features.Queries;
 using Feats.Evaluations.Strategies;
+using Feats.Evaluations.Tests.Features.Metrics.TestExtensions;
 using Feats.Evaluations.Tests.Strategies.TestExtensions;
 using FluentAssertions;
 using Moq;

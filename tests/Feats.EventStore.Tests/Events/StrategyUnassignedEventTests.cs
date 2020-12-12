@@ -10,7 +10,6 @@ using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
-using Feats.EventStore;
 using Feats.EventStore.Exceptions;
 using Feats.EventStore.Tests.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
@@ -18,7 +17,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Features
+namespace Feats.EventStore.Tests.Events
 {
     public class StrategyUnassignedEventTests : FeaturesAggregateTests
     {
@@ -44,7 +43,7 @@ namespace Feats.Management.Tests.Features
                 Settings = "settings",
             };
             
-            var unassigned = new StrategyUnassignedEvent {
+            var unassigned = new StrategyUnAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
                 StrategyName = assigned.StrategyName,
@@ -91,7 +90,7 @@ namespace Feats.Management.Tests.Features
                 Settings = "settings",
             };
             
-            var unassigned = new StrategyUnassignedEvent {
+            var unassigned = new StrategyUnAssignedEvent {
                 Name = created.Name,
                 Path = created.Path,
                 StrategyName = StrategyNames.IsOn,
@@ -134,7 +133,7 @@ namespace Feats.Management.Tests.Features
                 Path = "let/me/show/you",
             };
             
-            var unassigned = new StrategyUnassignedEvent {
+            var unassigned = new StrategyUnAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
                 StrategyName = StrategyNames.IsOn,
@@ -170,7 +169,7 @@ namespace Feats.Management.Tests.Features
             var reader = this.GivenIReadStreamedEvents<FeatureStream>()
                 .WithEvents(Enumerable.Empty<IEvent>());
 
-            var unassigned = new StrategyUnassignedEvent {
+            var unassigned = new StrategyUnAssignedEvent {
                 Name = "bob",
                 Path = "let/me/show/you",
                 StrategyName = StrategyNames.IsOn,
@@ -205,7 +204,7 @@ namespace Feats.Management.Tests.Features
                 Path = created.Path,
             };
 
-            var unassigned = new StrategyUnassignedEvent {
+            var unassigned = new StrategyUnAssignedEvent {
                 Name = created.Name,
                 Path = created.Path,
                 StrategyName = StrategyNames.IsOn,
@@ -234,7 +233,7 @@ namespace Feats.Management.Tests.Features
         public static async Task ThenWePublish(
             this Func<Task> funk,
             Mock<IEventStoreClient> mockedClient,
-            StrategyUnassignedEvent e)
+            StrategyUnAssignedEvent e)
         {
             await funk();
             
@@ -245,7 +244,7 @@ namespace Feats.Management.Tests.Features
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
                             ed.Type.Equals(EventTypes.StrategyAssigned) && 
-                            JsonSerializer.Deserialize<StrategyUnassignedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
+                            JsonSerializer.Deserialize<StrategyUnAssignedEvent>(ed.Data.ToArray(), null)!.Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),
