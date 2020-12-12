@@ -167,7 +167,7 @@ namespace Feats.EventStore.Aggregates
                     {
                         if(f.State != FeatureState.Draft)
                         {
-                            throw new FeatureWasPublishedBeforeException();
+                            throw new FeatureIsNotInDraftException();
                         }
 
                         return new Feature
@@ -270,7 +270,7 @@ namespace Feats.EventStore.Aggregates
                     {
                         if (f.State != FeatureState.Draft)
                         {
-                            throw new FeatureWasPublishedBeforeException();
+                            throw new FeatureIsNotInDraftException();
                         }
 
                         if (!f.Strategies.ContainsKey(e.StrategyName))
@@ -317,7 +317,7 @@ namespace Feats.EventStore.Aggregates
                     {
                         if (f.State != FeatureState.Draft)
                         {
-                            throw new FeatureWasPublishedBeforeException();
+                            throw new FeatureIsNotInDraftException();
                         }
 
                         if (f.Strategies.ContainsKey(e.StrategyName))

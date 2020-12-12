@@ -3,9 +3,9 @@ using Feats.Domain.Exceptions;
 
 namespace Feats.EventStore.Exceptions
 {
-    public class FeatureWasPublishedBeforeException : ValidationException
+    public class FeatureIsNotInDraftException : ValidationException
     {        
-        public FeatureWasPublishedBeforeException()
+        public FeatureIsNotInDraftException()
             : base($"A once published feature cannot be modified")
         {
         }

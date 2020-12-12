@@ -25,20 +25,16 @@ namespace Feats.Management.Features.Commands
 
     public class AssignIsOnStrategyToFeatureCommandHandler : IHandleCommand<AssignIsOnStrategyToFeatureCommand>
     {
-        private readonly ILogger _logger;
-
         private readonly IFeaturesAggregate _featuresAggregate;
 
         private readonly ISystemClock _clock;
         private readonly IStrategySettingsSerializer _serializer;
 
         public AssignIsOnStrategyToFeatureCommandHandler(
-            ILogger<AssignIsOnStrategyToFeatureCommandHandler> logger,
             IFeaturesAggregate featuresAggregate,
             ISystemClock clock,
             IStrategySettingsSerializer serializer)
         {
-            this._logger = logger;
             this._featuresAggregate = featuresAggregate;
             this._clock = clock;
             this._serializer = serializer;

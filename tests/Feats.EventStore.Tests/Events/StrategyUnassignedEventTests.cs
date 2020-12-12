@@ -224,7 +224,7 @@ namespace Feats.EventStore.Tests.Events
             await this
                 .GivenAggregate(reader.Object, client.Object)
                 .WithLoad()
-                .ThenExceptionIsThrown<FeatureWasPublishedBeforeException>();
+                .ThenExceptionIsThrown<FeatureIsNotInDraftException>();
         }
     }
         

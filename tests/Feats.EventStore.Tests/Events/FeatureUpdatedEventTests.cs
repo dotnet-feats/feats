@@ -110,7 +110,7 @@ namespace Feats.EventStore.Tests.Events
 
             await aggregate
                 .WhenPublishing(updated)
-                .ThenExceptionIsThrown<FeatureWasPublishedBeforeException>();
+                .ThenExceptionIsThrown<FeatureIsNotInDraftException>();
         }
     }
 
