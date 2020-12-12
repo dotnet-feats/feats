@@ -1,4 +1,3 @@
-
 using Feats.Domain.Strategies;
 using FluentAssertions;
 using NUnit.Framework;
@@ -22,9 +21,9 @@ namespace Feats.Evaluations.Tests.Strategies
         {
             var serializer = new StrategySettingsSerializer();
             var json = "{ \"IsOn\":true}";
-            var stragety = serializer.Deserialize(StrategyNames.IsOn, json);
+            var strategy = serializer.Deserialize(StrategyNames.IsOn, json);
 
-            stragety.Should().BeOfType<IsOnStrategy>();
+            strategy.Should().BeOfType<IsOnStrategy>();
         }
         
         [Test]
@@ -32,9 +31,30 @@ namespace Feats.Evaluations.Tests.Strategies
         {
             var serializer = new StrategySettingsSerializer();
             var json = "{ \"IsInLits\":[\"a\",\"b\"]}";
-            var stragety = serializer.Deserialize(StrategyNames.IsInList, json);
+            var strategy = serializer.Deserialize(StrategyNames.IsInList, json);
 
-            stragety.Should().BeOfType<IsInListStrategy>();
+            strategy.Should().BeOfType<IsInListStrategy>();
+        }
+        
+        [Test]
+        public void GivenASerializer_WhenDeserializingIsGreaterThan_ThenWeGetSettings()
+        {
+            var serializer = new StrategySettingsSerializer();
+            var json = "{ \"Value\": 5 }";
+            var strategy = serializer.Deserialize(StrategyNames.IsGreaterThan, json);
+
+            strategy.Should().BeOfType<IsGreaterThanStrategy>();
+        }
+        
+        
+        [Test]
+        public void GivenASerializer_WhenDeserializingIsLowerThan_ThenWeGetSettings()
+        {
+            var serializer = new StrategySettingsSerializer();
+            var json = "{ \"Value\": 5 }";
+            var strategy = serializer.Deserialize(StrategyNames.IsLowerThan, json);
+
+            strategy.Should().BeOfType<IsLowerThanStrategy>();
         }
     }
 }

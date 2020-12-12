@@ -20,15 +20,23 @@ namespace Feats.Evaluations.Strategies
         private readonly IEvaluateStrategy<IsOnStrategy> _isOnEvaluator;
         
         private readonly IEvaluateStrategy<IsInListStrategy> _isInListEvaluator;
+        
+        private readonly IEvaluateStrategy<IsGreaterThanStrategy> _isGreaterThanEvaluator;
+        
+        private readonly IEvaluateStrategy<IsLowerThanStrategy> _isLowerThanEvaluator;
 
         public StrategyEvaluatorFactory(
             IStrategySettingsSerializer strategySerializer,
             IEvaluateStrategy<IsOnStrategy> isOnEvaluator,
-            IEvaluateStrategy<IsInListStrategy> isInListEvaluator)
+            IEvaluateStrategy<IsInListStrategy> isInListEvaluator,
+            IEvaluateStrategy<IsGreaterThanStrategy> isGreaterThanEvaluator,
+            IEvaluateStrategy<IsLowerThanStrategy> isLowerThanEvaluator)
         {
             this._strategySerializer = strategySerializer;
             this._isOnEvaluator = isOnEvaluator;
             this._isInListEvaluator = isInListEvaluator;
+            this._isGreaterThanEvaluator = isGreaterThanEvaluator;
+            this._isLowerThanEvaluator = isLowerThanEvaluator;
         }
 
         public async Task<bool> IsOn(
@@ -52,6 +60,12 @@ namespace Feats.Evaluations.Strategies
                     
                 case IsInListStrategy isInList:
                     return await this._isInListEvaluator.IsOn(isInList, values);
+                    
+                case IsGreaterThanStrategy isGreaterThan:
+                    return await this._isGreaterThanEvaluator.IsOn(isGreaterThan, values);
+                
+                case IsLowerThanStrategy isLowerThan:
+                    return await this._isLowerThanEvaluator.IsOn(isLowerThan, values);
 
                 default:
                     throw new NotImplementedException("the requested strategy has not been implemented yet");

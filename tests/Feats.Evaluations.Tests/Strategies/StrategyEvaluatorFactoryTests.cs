@@ -27,9 +27,49 @@ namespace Feats.Evaluations.Tests.Strategies
             await this
                 .GivenEvaluatorFactory()
                 .WhenEvaluating(StrategyNames.IsOn, serializer.Serialize(strategy.Settings))
-                .ThenIGet(strategy);
+                .ThenIGet(true);
         }
         
+        [Test]
+        public async Task GivenIsGreaterThanStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var serializer = this.GivenIStrategySettingsSerializer();
+            var strategy = new IsGreaterThanStrategy() {
+                Settings = new NumericalStrategySettings() 
+                {
+                    Value = 1
+                }
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(
+                    StrategyNames.IsGreaterThan, 
+                    serializer.Serialize(strategy.Settings),
+                    new Dictionary<string, string> { { StrategySettings.GreaterThan, "5" } })
+                .ThenIGet(true);
+        }
+        
+        [Test]
+        public async Task GivenIsLowerThanStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var serializer = this.GivenIStrategySettingsSerializer();
+            var strategy = new IsLowerThanStrategy() {
+                Settings = new NumericalStrategySettings() 
+                {
+                    Value = 1
+                }
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(
+                    StrategyNames.IsLowerThan, 
+                    serializer.Serialize(strategy.Settings),
+                    new Dictionary<string, string> { { StrategySettings.LowerThan, "0" } })
+                .ThenIGet(true);
+        }
+
         [Test]
         public async Task GivenIsInListStrategy_WhenEvaluating_ThenIGetStrategyResult()
         {
@@ -76,7 +116,9 @@ namespace Feats.Evaluations.Tests.Strategies
             return new StrategyEvaluatorFactory(
                 tests.GivenIStrategySettingsSerializer(),
                 new IsOnStrategyEvaluator(),
-                new IsInListStrategyEvaluator()
+                new IsInListStrategyEvaluator(),
+                new IsGreaterThanStrategyEvaluator(tests.GivenLogger<IsGreaterThanStrategyEvaluator>()),
+                new IsLowerThanStrategyEvaluator(tests.GivenLogger<IsLowerThanStrategyEvaluator>())
             );
         }
 

@@ -54,7 +54,7 @@ namespace Feats.Evaluations.Tests.Strategies
 
             await this
                 .GivenEvaluator()
-                .WhenEvaluating(strategy, new Dictionary<string, string> { { StrategySettings.Number, "0" } })
+                .WhenEvaluating(strategy, new Dictionary<string, string> { { "something", "0" } })
                 .ThenIGet(false);
         }
     }

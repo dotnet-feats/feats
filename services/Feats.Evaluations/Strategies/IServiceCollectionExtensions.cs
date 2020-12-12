@@ -11,6 +11,9 @@ namespace Feats.Evaluations.Strategies
         {
             services.TryAddSingleton<IEvaluateStrategy<IsOnStrategy>, IsOnStrategyEvaluator>();
             services.TryAddSingleton<IEvaluateStrategy<IsInListStrategy>, IsInListStrategyEvaluator>();
+            services.TryAddSingleton<IEvaluateStrategy<IsGreaterThanStrategy>, IsGreaterThanStrategyEvaluator>();
+            services.TryAddSingleton<IEvaluateStrategy<IsLowerThanStrategy>, IsLowerThanStrategyEvaluator>();
+            
             services.TryAddSingleton<IStrategyEvaluatorFactory, StrategyEvaluatorFactory>();
             services.TryAddSingleton<IStrategySettingsSerializer, StrategySettingsSerializer>();
             services.TryAddScoped<IValuesExtractor, ValuesExtractor>();
