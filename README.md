@@ -115,10 +115,10 @@ You can assign more than one strategy to a feature, they are currently all linke
 
 ## Publish a feature
 
-Publishing a feature maes it available in the evaluation service and blocks modifications to its definition.
+Publishing a feature makes it available in the evaluation service and blocks modifications to its definition.
 
 - Relative Path : `/features/publish`
-- Verb: `PUT`
+- Verb: `POST`
 - Content-Type: `application/json`
 - Body: 
 ```json
@@ -129,13 +129,21 @@ Publishing a feature maes it available in the evaluation service and blocks modi
 }
 ```
 
-## Un-publishing a feature
-
-TODO
-
 ## Archiving a feature
 
-TODO
+Archiving a feature removes it from the evaluation service.
+
+- Relative Path : `/features/archive`
+- Verb: `POST`
+- Content-Type: `application/json`
+- Body: 
+```json
+{
+    "name": "dimsum",
+    "path" : "cats",
+    "archivedBy" : "mommy"
+}
+```
 
 ## Listing Paths
 
@@ -145,7 +153,7 @@ our features:
 - Relative Path : `/paths`
 - Verb: `GET`
 - Content-Type: `application/json`
-- Response: a list of paths with their feature counter
+- Response: a list of paths with their feature counter (currently no filtering on status)
 ```json
 [
     {
@@ -162,7 +170,7 @@ our features:
 
 ## Listing Paths features
 
-We can return all features at the root of the path and sub-paths when calling this endpoint:
+We can return all features at the root of the path and sub-paths when calling this endpoint (currently no filtering on status):
 
 - Relative Path : `/paths/features?path=one`
 - Verb: `GET`

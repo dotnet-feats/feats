@@ -20,6 +20,7 @@ namespace Feats.Management.Features
         }
 
         [Route("archive")]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] ArchiveFeatureRequest request)
         {
             request.Validate();

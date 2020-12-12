@@ -20,6 +20,7 @@ namespace Feats.Management.Features
         }
 
         [Route("publish")]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] PublishFeatureRequest request)
         {
             request.Validate();

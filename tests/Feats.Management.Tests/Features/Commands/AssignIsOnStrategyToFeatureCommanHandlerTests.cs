@@ -96,7 +96,6 @@ namespace Feats.Management.Tests.Features.Commands
             IFeaturesAggregate featuresAggregate)
         {
             return new AssignIsOnStrategyToFeatureCommandHandler(
-                tests.GivenLogger<AssignIsOnStrategyToFeatureCommandHandler>(),
                 featuresAggregate,
                 tests.GivenClock(),
                 tests.GivenIStrategySettingsSerializer()
