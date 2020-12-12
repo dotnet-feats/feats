@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Feats.Common.Tests;
-using Feats.EventStore;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Feats.EventStoreS.Tests
+namespace Feats.EventStore.Tests
 {
     public class EventStoreConfigurationTests : TestBase
     {
         [Test]
         public void GivenNullConfiguration_WhenBuilding_ThenWeThrow()
         {
-            var func = new Func<IEventStoreConfiguration>(() => new EventStoreConfiguration(null));
+            var func = new Func<IEventStoreConfiguration>(() => new EventStoreConfiguration(null!));
 
             func.Should().Throw<ArgumentNullException>();
         }

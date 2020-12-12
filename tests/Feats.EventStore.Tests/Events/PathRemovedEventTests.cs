@@ -9,13 +9,13 @@ using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.EventStore;
+using Feats.EventStore.Tests.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Paths
+namespace Feats.EventStore.Tests.Events
 {
     public class PathRemovedEventTests : PathsAggregateTests
     {
@@ -37,7 +37,7 @@ namespace Feats.Management.Tests.Paths
 
             var removing = new PathRemovedEvent {
                 FeatureRemoved = "bob",
-                Path = "let.me",
+                Path = "let.me"
             };
 
             var aggregate = await this
@@ -60,7 +60,7 @@ namespace Feats.Management.Tests.Paths
 
             var removed = new PathRemovedEvent {
                 FeatureRemoved = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
 
             var aggregate = await this
@@ -81,17 +81,17 @@ namespace Feats.Management.Tests.Paths
         {
             var created = new PathCreatedEvent {
                 FeatureAdded = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
             
             var createdSecond = new PathCreatedEvent {
                 FeatureAdded = "bob",
-                Path = "let/me/show",
+                Path = "let/me/show"
             };
             
             var createdThird = new PathCreatedEvent {
                 FeatureAdded = "bob",
-                Path = "let/me",
+                Path = "let/me"
             };
 
             var client = this.GivenIEventStoreClient()
@@ -102,7 +102,7 @@ namespace Feats.Management.Tests.Paths
             
             var removed = new PathRemovedEvent {
                 FeatureRemoved = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
             
             var aggregate = await this
@@ -119,18 +119,18 @@ namespace Feats.Management.Tests.Paths
                     new Path 
                     {
                         Name = "let",
-                        TotalFeatures = 2,
+                        TotalFeatures = 2
                     },
                     new Path 
                     {
                         Name = "let/me",
-                        TotalFeatures = 2,
+                        TotalFeatures = 2
                     },
                     new Path 
                     {
                         Name = "let/me/show",
-                        TotalFeatures = 1,
-                    },
+                        TotalFeatures = 1
+                    }
                 });
         }
         
@@ -139,12 +139,12 @@ namespace Feats.Management.Tests.Paths
         {
             var created = new PathCreatedEvent {
                 FeatureAdded = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
 
             var removed = new PathRemovedEvent {
                 FeatureRemoved = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
 
             var client = this.GivenIEventStoreClient()
@@ -165,12 +165,12 @@ namespace Feats.Management.Tests.Paths
         {
             var created = new PathCreatedEvent {
                 FeatureAdded = "bob",
-                Path = "let/me/show/you",
+                Path = "let/me/show/you"
             };
 
             var removed = new PathRemovedEvent {
                 FeatureRemoved = "bob",
-                Path = "let/me/show/arrrrgh",
+                Path = "let/me/show/arrrrgh"
             };
 
             var client = this.GivenIEventStoreClient()
@@ -189,23 +189,23 @@ namespace Feats.Management.Tests.Paths
                     new Path 
                     {
                         Name = "let",
-                        TotalFeatures = 1,
+                        TotalFeatures = 1
                     },
                     new Path 
                     {
                         Name = "let/me",
-                        TotalFeatures = 1,
+                        TotalFeatures = 1
                     },
                     new Path 
                     {
                         Name = "let/me/show",
-                        TotalFeatures = 1,
+                        TotalFeatures = 1
                     },
                     new Path 
                     {
                         Name = "let/me/show/you",
-                        TotalFeatures = 1,
-                    },
+                        TotalFeatures = 1
+                    }
                 });
         }
     }
@@ -226,7 +226,7 @@ namespace Feats.Management.Tests.Paths
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
                             ed.Type.Equals(EventTypes.PathRemoved) && 
-                            JsonSerializer.Deserialize<PathRemovedEvent>(ed.Data.ToArray(), null).Path.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase)
+                            JsonSerializer.Deserialize<PathRemovedEvent>(ed.Data.ToArray(), null)!.Path.Equals(e.Path, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),

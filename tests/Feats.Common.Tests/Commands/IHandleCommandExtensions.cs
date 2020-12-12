@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Feats.CQRS.Commands;
 using Moq;
 
-namespace Feats.Common.Tests
+namespace Feats.Common.Tests.Commands
 {
     [ExcludeFromCodeCoverage]
     public static class IHandleCommandExtensions 

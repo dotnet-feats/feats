@@ -1,14 +1,15 @@
-
 using System;
-using System.Linq;
 using Feats.Common.Tests;
 using Feats.Domain;
+using Feats.Domain.Exceptions;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
 using NUnit.Framework;
 
-public class UpdateFeatureRequestTests : TestBase
+namespace Feats.Management.Tests.Features
+{
+    public class UpdateFeatureRequestTests : TestBase
     {
         [Test]
         public void GivenARequestWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -143,3 +144,4 @@ public class UpdateFeatureRequestTests : TestBase
             command.UpdatedBy.Should().BeEquivalentTo(request.UpdatedBy);
         }
     }
+}

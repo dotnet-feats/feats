@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Commands;
 using Feats.CQRS.Commands;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
@@ -17,7 +18,7 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<UnassignStrategyCommand>()
+                .GivenCommandHandler<UnAssignStrategyCommand>()
                 .WithHandling();
 
             await this
@@ -32,8 +33,8 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<UnassignStrategyCommand>()
-                .WithException<UnassignStrategyCommand, TestException>();
+                .GivenCommandHandler<UnAssignStrategyCommand>()
+                .WithException<UnAssignStrategyCommand, TestException>();
 
             await this
                 .GivenController(handler.Object)
@@ -44,10 +45,10 @@ namespace Feats.Management.Tests.Features
 
     public static class UnassignStrategyControllerTestsExtensions
     {
-        public static UnassignStrategyRequest GivenRequest(
+        public static UnAssignStrategyRequest GivenRequest(
             this UnassignStrategyControllerTests tests)
         {
-            return new UnassignStrategyRequest
+            return new UnAssignStrategyRequest
             {
                 UnassignedBy = "bob",
                 Name = "Ross",
@@ -56,16 +57,16 @@ namespace Feats.Management.Tests.Features
             };
         }
 
-        public static UnassignStrategyController GivenController(
+        public static UnAssignStrategyController GivenController(
             this UnassignStrategyControllerTests tests, 
-            IHandleCommand<UnassignStrategyCommand> handler)
+            IHandleCommand<UnAssignStrategyCommand> handler)
         {
-            return new UnassignStrategyController(handler);
+            return new UnAssignStrategyController(handler);
         }
 
         public static Func<Task<IActionResult>> WhenProcessingCommand(
-            this UnassignStrategyController controller,
-            UnassignStrategyRequest request)
+            this UnAssignStrategyController controller,
+            UnAssignStrategyRequest request)
         {
             return () => controller.Post(request);
         }

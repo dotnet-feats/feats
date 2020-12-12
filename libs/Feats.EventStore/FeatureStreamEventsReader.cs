@@ -48,7 +48,7 @@ namespace Feats.EventStore
             }
         }
 
-        private IEvent FromResolvedEvent(ResolvedEvent @event)
+        private IEvent? FromResolvedEvent(ResolvedEvent @event)
         {
             var json = Encoding.UTF8.GetString(@event.Event.Data.ToArray());
 
@@ -67,7 +67,7 @@ namespace Feats.EventStore
                     return JsonSerializer.Deserialize<StrategyAssignedEvent>(json);
                     
                 case EventTypes.StrategyUnassigned:
-                    return JsonSerializer.Deserialize<StrategyUnassignedEvent>(json);
+                    return JsonSerializer.Deserialize<StrategyUnAssignedEvent>(json);
                     
                 default:
                     this._logger.LogWarning($"No event registered for type: {@event.Event.EventType}");

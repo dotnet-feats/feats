@@ -48,7 +48,7 @@ namespace Feats.EventStore
             }
         }
 
-        private IEvent FromResolvedEvent(ResolvedEvent @event)
+        private IEvent? FromResolvedEvent(ResolvedEvent @event)
         {
             var json = Encoding.UTF8.GetString(@event.Event.Data.ToArray());
 

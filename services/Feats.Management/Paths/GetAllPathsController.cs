@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Feats.CQRS.Queries;
-using Feats.Domain.Validations;
-using Feats.Management.Features.Commands;
 using Feats.Management.Paths.Queries;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Feats.Management.Features
+namespace Feats.Management.Paths
 {
     [ApiController]
     [Route("paths")]

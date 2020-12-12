@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Feats.Domain.Exceptions;
 
 namespace Feats.Domain.Validations
 {

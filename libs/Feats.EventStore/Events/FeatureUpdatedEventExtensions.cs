@@ -7,7 +7,7 @@ namespace Feats.EventStore.Events
 {
     public static class FeatureUpdatedEventExtensions
     {
-        public static EventData ToEventData(this FeatureUpdatedEvent featureUpdatedEvent, JsonSerializerOptions settings = null)
+        public static EventData ToEventData(this FeatureUpdatedEvent featureUpdatedEvent, JsonSerializerOptions settings = null!)
         {
             var contentBytes = JsonSerializer.SerializeToUtf8Bytes(featureUpdatedEvent, settings);
             return new EventData(

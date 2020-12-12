@@ -1,15 +1,17 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Feats.Common.Tests;
 using Feats.Domain;
+using Feats.Domain.Exceptions;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
 using NUnit.Framework;
 
-public class AssignIsInListToFeatureRequestTests : TestBase
+namespace Feats.Management.Tests.Features
+{
+    public class AssignIsInListToFeatureRequestTests : TestBase
     {
         [Test]
         public void GivenARequestWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -130,3 +132,4 @@ public class AssignIsInListToFeatureRequestTests : TestBase
             command.Items.Should().BeEquivalentTo(request.Items);
         }
     }
+}

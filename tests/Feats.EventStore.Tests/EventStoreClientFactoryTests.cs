@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
 using Feats.Common.Tests;
-using Feats.EventStore;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Feats.EventStoreS.Tests
+namespace Feats.EventStore.Tests
 {
     public class EventStoreClientFactoryTests : TestBase
     {
         [Test]
-        public void GivenAFactory_WhenCreatingACLient_thenAClientIsInstanciated()
+        public void GivenAFactory_WhenCreatingACLient_thenAClientIsInstantiated()
         {
             var configuration = new EventStoreConfiguration(
                 new ConfigurationBuilder().Build()
@@ -25,7 +23,7 @@ namespace Feats.EventStoreS.Tests
         }
         
         [Test]
-        public void GivenAFactory_WhenCreatingAClusterModeClient_thenAClientIsInstanciated()
+        public void GivenAFactory_WhenCreatingAClusterModeClient_thenAClientIsInstantiated()
         {
             var values = new Dictionary<string, string> {
                 { "feats:eventstore:hostname", "host" },

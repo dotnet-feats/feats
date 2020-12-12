@@ -1,13 +1,9 @@
 using System;
-using Feats.Domain;
+using Feats.Domain.Exceptions;
 
 namespace Feats.Management.Features.Exceptions
 {
-    public class FeatureAlreadyExistsException : ConflictException
+    public sealed class FeatureAlreadyExistsException : ConflictException
     {
-        public FeatureAlreadyExistsException()
-            : base()
-        {
-        }
     }
 }

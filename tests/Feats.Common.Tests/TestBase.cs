@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -58,7 +57,7 @@ namespace Feats.Common.Tests
             act.Should().NotThrow();
         }
                 
-        public static void ThenExceptionIsThrown<T, A>(this Func<A> act)
+        public static void ThenExceptionIsThrown<T, TA>(this Func<TA> act)
             where T : Exception
         {
             act.Should().Throw<T>();

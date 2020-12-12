@@ -3,7 +3,7 @@ using System;
 using Feats.Common.Tests;
 using Feats.Domain;
 using Feats.Domain.Events;
-using Feats.Domain.Strategies;
+using Feats.Domain.Exceptions;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
 using Microsoft.Extensions.Internal;
@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class UnassignStrategyCommandTests : TestBase
+    public class UnAssignStrategyCommandTests : TestBase
     {
         [Test]
         public void GivenACommandWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -104,9 +104,9 @@ namespace Feats.Management.Tests.Features.Commands
 
     public static class UnassignStrategyCommandTestsExtensions 
     {
-        public static UnassignStrategyCommand GivenValidCommand(this UnassignStrategyCommandTests tests)
+        public static UnAssignStrategyCommand GivenValidCommand(this UnAssignStrategyCommandTests tests)
         {
-            return new UnassignStrategyCommand
+            return new UnAssignStrategyCommand
             {
                 UnassignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
@@ -115,21 +115,21 @@ namespace Feats.Management.Tests.Features.Commands
             };
         }
 
-        public static Action WhenValidating(this UnassignStrategyCommand command)
+        public static Action WhenValidating(this UnAssignStrategyCommand command)
         {
             return () => command.Validate();
         }
 
-        public static Func<StrategyUnassignedEvent> WhenExtractingEvent(
-            this UnassignStrategyCommand command,
+        public static Func<StrategyUnAssignedEvent> WhenExtractingEvent(
+            this UnAssignStrategyCommand command,
             ISystemClock clock)
         {
             return () => command.ExtractStrategyUnassignedEvent(clock);
         }
         
         public static void ThenWeGetAFeaturePublishedEvent(
-            this Func<StrategyUnassignedEvent> featFunc,
-             UnassignStrategyCommand command, 
+            this Func<StrategyUnAssignedEvent> featFunc,
+             UnAssignStrategyCommand command, 
              ISystemClock clock)
         {
             var feat = featFunc();

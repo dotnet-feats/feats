@@ -1,7 +1,8 @@
 using Feats.Common.Tests;
+using Feats.Evaluations.Features.Metrics;
 using Moq;
 
-namespace Feats.Evaluations.Features.Metrics.TestExtensions
+namespace Feats.Evaluations.Tests.Features.Metrics.TestExtensions
 {
     public static class IEvaluationCounterExtensions
     {

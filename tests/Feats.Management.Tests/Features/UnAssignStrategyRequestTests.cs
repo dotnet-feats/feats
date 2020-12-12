@@ -1,14 +1,15 @@
-
 using System;
-using System.Linq;
 using Feats.Common.Tests;
 using Feats.Domain;
+using Feats.Domain.Exceptions;
 using Feats.Management.Features;
 using Feats.Management.Features.Commands;
 using FluentAssertions;
 using NUnit.Framework;
 
-public class UnassignStrategyRequestTests : TestBase
+namespace Feats.Management.Tests.Features
+{
+    public class UnAssignStrategyRequestTests : TestBase
     {
         [Test]
         public void GivenARequestWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -22,7 +23,7 @@ public class UnassignStrategyRequestTests : TestBase
         [Test]
         public void GivenARequestIsNUll_WhenValidating_ThenArgumentNullIsThrown()
         {
-            UnassignStrategyRequest request = null;
+            UnAssignStrategyRequest request = null;
 
             request
                 .WhenValidating()
@@ -98,9 +99,9 @@ public class UnassignStrategyRequestTests : TestBase
 
     public static class UnassignStrategyRequestTestsExtensions 
     {
-        public static UnassignStrategyRequest GivenValidRequest(this UnassignStrategyRequestTests tests)
+        public static UnAssignStrategyRequest GivenValidRequest(this UnAssignStrategyRequestTests tests)
         {
-            return new UnassignStrategyRequest
+            return new UnAssignStrategyRequest
             {
                 UnassignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
@@ -109,17 +110,17 @@ public class UnassignStrategyRequestTests : TestBase
             };
         }
 
-        public static Action WhenValidating(this UnassignStrategyRequest request)
+        public static Action WhenValidating(this UnAssignStrategyRequest request)
         {
             return () => request.Validate();
         }
 
-        public static Func<UnassignStrategyCommand> WhenExtractingCommand(this UnassignStrategyRequest request)
+        public static Func<UnAssignStrategyCommand> WhenExtractingCommand(this UnAssignStrategyRequest request)
         {
-            return () => request.ToUnassignStrategyCommand();
+            return () => request.ToUnAssignStrategyCommand();
         }
 
-        public static void ThenCommandIsFilled(this Func<UnassignStrategyCommand> createFunc, UnassignStrategyRequest request)
+        public static void ThenCommandIsFilled(this Func<UnAssignStrategyCommand> createFunc, UnAssignStrategyRequest request)
         {
             var command = createFunc();
 
@@ -129,3 +130,4 @@ public class UnassignStrategyRequestTests : TestBase
             command.StrategyName.Should().Be(request.StrategyName);
         }
     }
+}

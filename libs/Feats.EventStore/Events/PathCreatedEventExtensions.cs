@@ -6,7 +6,7 @@ namespace Feats.EventStore.Events
 {
     public static class PathCreatedEventExtensions
     {
-        public static EventData ToEventData(this PathCreatedEvent pathCreatedEvent, JsonSerializerOptions settings = null)
+        public static EventData ToEventData(this PathCreatedEvent pathCreatedEvent, JsonSerializerOptions settings = null!)
         {
             var contentBytes = JsonSerializer.SerializeToUtf8Bytes(pathCreatedEvent, settings);
             return new EventData(

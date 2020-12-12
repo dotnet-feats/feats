@@ -112,7 +112,7 @@ namespace Feats.Evaluations.Tests.Features.Queries
             await this
                 .GivenHandler(featuresAggregate.Object, strategyEvaluator.Object)
                 .WhenHandling(query)
-                .ThenExceptionIsThrown<FeatureNotPublishedExeption>();
+                .ThenExceptionIsThrown<FeatureNotPublishedException>();
         }
     }
 

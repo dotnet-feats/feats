@@ -7,12 +7,11 @@ using Feats.Domain.Validations;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Feats.Domain.Events;
-using Feats.Domain.Strategies;
 using Feats.EventStore.Aggregates;
 
 namespace Feats.Management.Features.Commands
 {
-    public sealed class UnassignStrategyCommand : ICommand
+    public sealed class UnAssignStrategyCommand : ICommand
     {
         public string Name { get; set; }
 
@@ -23,17 +22,16 @@ namespace Feats.Management.Features.Commands
         public string StrategyName { get; set; }
     }
 
-    public class UnassignStrategyCommandHandler : IHandleCommand<UnassignStrategyCommand>
+    public class UnAssignStrategyCommandHandler : IHandleCommand<UnAssignStrategyCommand>
     {
         private readonly ILogger _logger;
 
         private readonly IFeaturesAggregate _featuresAggregate;
 
         private readonly ISystemClock _clock;
-        private readonly IStrategySettingsSerializer _serializer;
 
-        public UnassignStrategyCommandHandler(
-            ILogger<UnassignStrategyCommandHandler> logger,
+        public UnAssignStrategyCommandHandler(
+            ILogger<UnAssignStrategyCommandHandler> logger,
             IFeaturesAggregate featuresAggregate,
             ISystemClock clock)
         {
@@ -42,7 +40,7 @@ namespace Feats.Management.Features.Commands
             this._clock = clock;
         }
 
-        public async Task Handle(UnassignStrategyCommand command)
+        public async Task Handle(UnAssignStrategyCommand command)
         {
             command.Validate();
             await this._featuresAggregate.Load();
@@ -55,9 +53,9 @@ namespace Feats.Management.Features.Commands
         }
     }
 
-    public static class UnassignStrategyCommandExtensions 
+    public static class UnAssignStrategyCommandExtensions 
     {
-        public static void Validate(this UnassignStrategyCommand command)
+        public static void Validate(this UnAssignStrategyCommand command)
         {
             command.Required(nameof(command));
             command.Name.Required(nameof(command.Name));
@@ -65,11 +63,11 @@ namespace Feats.Management.Features.Commands
             command.UnassignedBy.Required(nameof(command.UnassignedBy));
         }
 
-        public static StrategyUnassignedEvent ExtractStrategyUnassignedEvent(
-            this UnassignStrategyCommand command, 
+        public static StrategyUnAssignedEvent ExtractStrategyUnassignedEvent(
+            this UnAssignStrategyCommand command, 
             ISystemClock clock)
         {
-            return new StrategyUnassignedEvent
+            return new StrategyUnAssignedEvent
             {
                 Name = command.Name,
                 Path = command.Path,

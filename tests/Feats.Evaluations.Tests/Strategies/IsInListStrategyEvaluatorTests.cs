@@ -16,8 +16,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "👌", "message for ou sir" },
-                },
+                    Items = new List<string> { "👌", "message for ou sir" }
+                }
             };
 
             await this
@@ -32,8 +32,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "👌", "message for ou sir" },
-                },
+                    Items = new List<string> { "👌", "message for ou sir" }
+                }
             };
 
             await this
@@ -48,8 +48,8 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "👌", "message for ou sir" },
-                },
+                    Items = new List<string> { "👌", "message for ou sir" }
+                }
             };
 
             await this

@@ -19,7 +19,7 @@ namespace Feats.EventStore.Aggregates
         IEnumerable<IFeature> Features { get; }
     }
 
-    public class FeaturesAggregate : IAggregate, IFeaturesAggregate
+    public class FeaturesAggregate : IFeaturesAggregate
     {
         private readonly ILogger _logger;
 
@@ -88,11 +88,11 @@ namespace Feats.EventStore.Aggregates
                 case StrategyAssignedEvent assignedEvent:
                     return assignedEvent.ToEventData();
 
-                case StrategyUnassignedEvent unassignedEvent:
+                case StrategyUnAssignedEvent unassignedEvent:
                     return unassignedEvent.ToEventData();
 
                 default:
-                    return null;
+                    throw new EventSerializationUnsupportedException();
             }
         }
 
@@ -120,7 +120,7 @@ namespace Feats.EventStore.Aggregates
                     this.Apply(assignedEvent);
                     break;
 
-                case StrategyUnassignedEvent unassignedEvent:
+                case StrategyUnAssignedEvent unassignedEvent:
                     this.Apply(unassignedEvent);
                     break;
 
@@ -300,7 +300,7 @@ namespace Feats.EventStore.Aggregates
             this.Features = features.ToList();
         }
 
-        private void Apply(StrategyUnassignedEvent e)
+        private void Apply(StrategyUnAssignedEvent e)
         {
             var pathAndName = PathHelper.CombineNameAndPath(e.Path, e.Name);
             

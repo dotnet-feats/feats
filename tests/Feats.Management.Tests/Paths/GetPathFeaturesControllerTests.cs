@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
+using Feats.Common.Tests.Queries;
 using Feats.CQRS.Queries;
 using Feats.Domain;
 using Feats.Management.Paths;
@@ -49,7 +50,6 @@ namespace Feats.Management.Tests.Paths
         [Test]
         public async Task GivenAFilterQueryString_WhenQueryReturnsResults_ThenWeReturnTheResults()
         {
-            var filter = string.Empty;
             var expectedResults = new List<FeatureAndStrategy>
             {
                 new FeatureAndStrategy 

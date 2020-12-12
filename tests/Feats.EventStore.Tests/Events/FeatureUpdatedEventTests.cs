@@ -9,7 +9,6 @@ using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain.Events;
-using Feats.EventStore;
 using Feats.EventStore.Aggregates;
 using Feats.EventStore.Exceptions;
 using Feats.EventStore.Tests.Aggregates;
@@ -18,7 +17,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace Feats.Management.Tests.Features
+namespace Feats.EventStore.Tests.Events
 {
     public class FeatureUpdatedEventTests : FeaturesAggregateTests
     {
@@ -131,7 +130,7 @@ namespace Feats.Management.Tests.Features
                     It.Is<IEnumerable<EventData>>(items => 
                         items.All(ed =>
                             ed.Type.Equals(EventTypes.FeatureUpdated) && 
-                            JsonSerializer.Deserialize<FeatureUpdatedEvent>(ed.Data.ToArray(), null).Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
+                            JsonSerializer.Deserialize<FeatureUpdatedEvent>(ed.Data.ToArray(), null)!.Name.Equals(e.Name, StringComparison.InvariantCultureIgnoreCase)
                         )),
                     It.IsAny<Action<EventStoreClientOperationOptions>?>(),
                     It.IsAny<UserCredentials?>(),
