@@ -16,13 +16,14 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "👌", "message for ou sir" }
+                    Items = new List<string> { "👌", "message for ou sir" },
+                    ListName = "feats.someList"
                 }
             };
 
             await this
                 .GivenEvaluator()
-                .WhenEvaluating(strategy, new Dictionary<string, string> { { StrategySettings.List, "👌" } })
+                .WhenEvaluating(strategy, new Dictionary<string, string> { { strategy.Settings.ListName, "👌" } })
                 .ThenIGet(true);
         }
         
@@ -32,13 +33,14 @@ namespace Feats.Evaluations.Tests.Strategies
             var strategy = new IsInListStrategy {
                 Settings = new IsInListStrategySettings 
                 {
-                    Items = new List<string> { "👌", "message for ou sir" }
+                    Items = new List<string> { "👌", "message for ou sir" },
+                    ListName = "feats.someList"
                 }
             };
 
             await this
                 .GivenEvaluator()
-                .WhenEvaluating(strategy, new Dictionary<string, string> { { StrategySettings.List, "roger" } })
+                .WhenEvaluating(strategy, new Dictionary<string, string> { { strategy.Settings.ListName, "roger" } })
                 .ThenIGet(false);
         }
 

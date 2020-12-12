@@ -6,8 +6,6 @@ namespace Feats.Domain.Strategies
 
     public static class StrategySettings
     {
-        public const string List = "feats.list";
-        
         public const string Before = "feats.before";
         
         public const string After = "feats.after";

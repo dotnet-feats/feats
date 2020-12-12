@@ -61,6 +61,18 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         [Test]
+        public void GivenACommandWithMissingListName_WhenValidating_ThenNoExceptionIsThrown()
+        {
+            var command = this
+                .GivenValidCommand();
+            command.ListName = string.Empty;
+
+            command
+                .WhenValidating()
+                .ThenNoExceptionIsThrown();
+        }
+
+        [Test]
         public void GivenACommandWithMissingAssignedBy_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
@@ -105,6 +117,7 @@ namespace Feats.Management.Tests.Features.Commands
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
                 Items = new List<string> { "🎉" },
+                ListName = "allo"
             };
         }
 
@@ -135,6 +148,7 @@ namespace Feats.Management.Tests.Features.Commands
             feat.Settings.Should().Be(JsonSerializer.Serialize(new IsInListStrategySettings 
             {
                 Items = command.Items,
+                ListName = command.ListName
             }));
         }
     }

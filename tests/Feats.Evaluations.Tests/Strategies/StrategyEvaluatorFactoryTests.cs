@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
-using Feats.Common.Tests.Strategies;
 using Feats.Common.Tests.Strategies.TestExtensions;
 using Feats.Domain.Strategies;
 using Feats.Evaluations.Strategies;
@@ -69,6 +68,46 @@ namespace Feats.Evaluations.Tests.Strategies
                     new Dictionary<string, string> { { StrategySettings.LowerThan, "0" } })
                 .ThenIGet(true);
         }
+        
+        [Test]
+        public async Task GivenIBeforeStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var serializer = this.GivenIStrategySettingsSerializer();
+            var strategy = new IsBeforeStrategy() {
+                Settings = new DateTimeOffsetStrategySettings() 
+                {
+                    Value = this.GivenClock().UtcNow
+                }
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(
+                    StrategyNames.IsBefore, 
+                    serializer.Serialize(strategy.Settings),
+                    new Dictionary<string, string> { { StrategySettings.Before, this.GivenClock().UtcNow.AddDays(-3).ToString("O") } })
+                .ThenIGet(true);
+        }
+        
+        [Test]
+        public async Task GivenIsAfterStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var serializer = this.GivenIStrategySettingsSerializer();
+            var strategy = new IsAfterStrategy() {
+                Settings = new DateTimeOffsetStrategySettings() 
+                {
+                    Value = this.GivenClock().UtcNow
+                }
+            };
+
+            await this
+                .GivenEvaluatorFactory()
+                .WhenEvaluating(
+                    StrategyNames.IsAfter, 
+                    serializer.Serialize(strategy.Settings),
+                    new Dictionary<string, string> { { StrategySettings.After, this.GivenClock().UtcNow.AddDays(3).ToString("O") } })
+                .ThenIGet(true);
+        }
 
         [Test]
         public async Task GivenIsInListStrategy_WhenEvaluating_ThenIGetStrategyResult()
@@ -86,7 +125,7 @@ namespace Feats.Evaluations.Tests.Strategies
                 .WhenEvaluating(
                     StrategyNames.IsInList, 
                     serializer.Serialize(strategy.Settings),
-                    new Dictionary<string, string> { { StrategySettings.List, "a" } })
+                    new Dictionary<string, string> { { strategy.Settings.ListName, "a" } })
                 .ThenIGet(true);
         }
 
@@ -118,7 +157,9 @@ namespace Feats.Evaluations.Tests.Strategies
                 new IsOnStrategyEvaluator(),
                 new IsInListStrategyEvaluator(),
                 new IsGreaterThanStrategyEvaluator(tests.GivenLogger<IsGreaterThanStrategyEvaluator>()),
-                new IsLowerThanStrategyEvaluator(tests.GivenLogger<IsLowerThanStrategyEvaluator>())
+                new IsLowerThanStrategyEvaluator(tests.GivenLogger<IsLowerThanStrategyEvaluator>()),
+                new IsAfterStrategyEvaluator(tests.GivenLogger<IsAfterStrategyEvaluator>()),
+                new IsBeforeStrategyEvaluator(tests.GivenLogger<IsBeforeStrategyEvaluator>())
             );
         }
 

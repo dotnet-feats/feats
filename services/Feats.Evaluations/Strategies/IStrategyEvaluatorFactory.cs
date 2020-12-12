@@ -24,19 +24,27 @@ namespace Feats.Evaluations.Strategies
         private readonly IEvaluateStrategy<IsGreaterThanStrategy> _isGreaterThanEvaluator;
         
         private readonly IEvaluateStrategy<IsLowerThanStrategy> _isLowerThanEvaluator;
+        
+        private readonly IEvaluateStrategy<IsAfterStrategy> _isAfterEvaluator;
+        
+        private readonly IEvaluateStrategy<IsBeforeStrategy> _isBeforeEvaluator;
 
         public StrategyEvaluatorFactory(
             IStrategySettingsSerializer strategySerializer,
             IEvaluateStrategy<IsOnStrategy> isOnEvaluator,
             IEvaluateStrategy<IsInListStrategy> isInListEvaluator,
             IEvaluateStrategy<IsGreaterThanStrategy> isGreaterThanEvaluator,
-            IEvaluateStrategy<IsLowerThanStrategy> isLowerThanEvaluator)
+            IEvaluateStrategy<IsLowerThanStrategy> isLowerThanEvaluator,
+            IEvaluateStrategy<IsAfterStrategy> isAfterEvaluator,
+            IEvaluateStrategy<IsBeforeStrategy> isBeforeEvaluator)
         {
             this._strategySerializer = strategySerializer;
             this._isOnEvaluator = isOnEvaluator;
             this._isInListEvaluator = isInListEvaluator;
             this._isGreaterThanEvaluator = isGreaterThanEvaluator;
             this._isLowerThanEvaluator = isLowerThanEvaluator;
+            this._isAfterEvaluator = isAfterEvaluator;
+            this._isBeforeEvaluator = isBeforeEvaluator;
         }
 
         public async Task<bool> IsOn(
@@ -66,6 +74,12 @@ namespace Feats.Evaluations.Strategies
                 
                 case IsLowerThanStrategy isLowerThan:
                     return await this._isLowerThanEvaluator.IsOn(isLowerThan, values);
+
+                case IsAfterStrategy isAfter:
+                    return await this._isAfterEvaluator.IsOn(isAfter, values);
+
+                case IsBeforeStrategy isBefore:
+                    return await this._isBeforeEvaluator.IsOn(isBefore, values);
 
                 default:
                     throw new NotImplementedException("the requested strategy has not been implemented yet");

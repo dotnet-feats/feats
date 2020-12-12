@@ -26,6 +26,8 @@ namespace Feats.Management.Features.Commands
         public string Path { get; set; }
 
         public string AssignedBy { get; set; }
+        
+        public string ListName { get; set; }
 
         public IEnumerable<string> Items { get; set; }
     }
@@ -86,6 +88,7 @@ namespace Feats.Management.Features.Commands
                 Settings = serializer.Serialize(new IsInListStrategySettings 
                 {
                     Items = command.Items,
+                    ListName = command.ListName
                 })
             };
         }

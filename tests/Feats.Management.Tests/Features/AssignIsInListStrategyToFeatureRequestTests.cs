@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class AssignIsInListToFeatureRequestTests : TestBase
+    public class AssignIsInListStrategyToFeatureRequestTests : TestBase
     {
         [Test]
         public void GivenARequestWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -55,6 +55,19 @@ namespace Feats.Management.Tests.Features
                 .WhenValidating()
                 .ThenNoExceptionIsThrown();
         }
+
+        [Test]
+        public void GivenARequestWithMissingListName_WhenValidating_ThenNoExceptionIsThrown()
+        {
+            var request = this
+                .GivenValidRequest();
+            request.ListName = string.Empty;
+
+            request
+                .WhenValidating()
+                .ThenNoExceptionIsThrown();
+        }
+
 
         [Test]
         public void GivenARequestWithMissingCreatedBy_WhenValidating_ThenArgumentNullIsThrown()
@@ -101,7 +114,7 @@ namespace Feats.Management.Tests.Features
 
     public static class AssignIsInListToFeatureRequestTestsExtensions 
     {
-        public static AssignIsInListStrategyToFeatureRequest GivenValidRequest(this AssignIsInListToFeatureRequestTests tests)
+        public static AssignIsInListStrategyToFeatureRequest GivenValidRequest(this AssignIsInListStrategyToFeatureRequestTests tests)
         {
             return new AssignIsInListStrategyToFeatureRequest
             {
@@ -109,6 +122,7 @@ namespace Feats.Management.Tests.Features
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
                 Items = new List<string> { "are you suggesting coconuts migrate" },
+                ListName =  "boom"
             };
         }
 
@@ -128,6 +142,7 @@ namespace Feats.Management.Tests.Features
 
             command.Name.Should().Be(request.Name);   
             command.Path.Should().Be(request.Path);
+            command.ListName.Should().Be(request.ListName);
             command.AssignedBy.Should().Be(request.AssignedBy);
             command.Items.Should().BeEquivalentTo(request.Items);
         }
