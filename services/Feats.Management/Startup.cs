@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Feats.EventStore;
 using Feats.Management.Features;
 using Feats.Management.Paths;
@@ -35,7 +36,11 @@ namespace Feats.Management
                 .AddPaths();
             services.AddRouting();
             services.AddMvcCore();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             services
                 .AddHealthChecks()
                 .ForwardToPrometheus();
