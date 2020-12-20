@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class AssignIsInListStrategyToFeatureControllerTests : TestBase
+    public class AssignIsAfterStrategyToFeatureControllerTests : TestBase
     {
         [Test]
         public async Task GivenRequest_WhenProcessingTheCommandIsSuccessful_ThenWeReturnOk()
@@ -19,7 +19,7 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<AssignIsInListStrategyToFeatureCommand>()
+                .GivenCommandHandler<AssignIsAfterStrategyToFeatureCommand>()
                 .WithHandling();
 
             await this
@@ -34,8 +34,8 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<AssignIsInListStrategyToFeatureCommand>()
-                .WithException<AssignIsInListStrategyToFeatureCommand, TestException>();
+                .GivenCommandHandler<AssignIsAfterStrategyToFeatureCommand>()
+                .WithException<AssignIsAfterStrategyToFeatureCommand, TestException>();
 
             await this
                 .GivenController(handler.Object)
@@ -44,30 +44,30 @@ namespace Feats.Management.Tests.Features
         }
     }
 
-    public static class AssignIsInListStrategyToFeatureControllerTestsExtensions
+    public static class AssignIsAfterStrategyToFeatureControllerTestsExtensions
     {
-        public static AssignIsInListStrategyToFeatureRequest GivenRequest(
-            this AssignIsInListStrategyToFeatureControllerTests tests)
+        public static AssignIsAfterStrategyToFeatureRequest GivenRequest(
+            this AssignIsAfterStrategyToFeatureControllerTests tests)
         {
-            return new AssignIsInListStrategyToFeatureRequest
+            return new AssignIsAfterStrategyToFeatureRequest
             {
                 AssignedBy = "bob",
                 Name = "Ross",
                 Path = "🦄.🖼",
-                Items = new List<string> { "😜" },
+                Value = DateTimeOffset.Now
             };
         }
 
-        public static AssignIsInListStrategyToFeatureController GivenController(
-            this AssignIsInListStrategyToFeatureControllerTests tests, 
-            IHandleCommand<AssignIsInListStrategyToFeatureCommand> handler)
+        public static AssignIsAfterStrategyToFeatureController GivenController(
+            this AssignIsAfterStrategyToFeatureControllerTests tests, 
+            IHandleCommand<AssignIsAfterStrategyToFeatureCommand> handler)
         {
-            return new AssignIsInListStrategyToFeatureController(handler);
+            return new AssignIsAfterStrategyToFeatureController(handler);
         }
 
         public static Func<Task<IActionResult>> WhenProcessingCommand(
-            this AssignIsInListStrategyToFeatureController controller,
-            AssignIsInListStrategyToFeatureRequest request)
+            this AssignIsAfterStrategyToFeatureController controller,
+            AssignIsAfterStrategyToFeatureRequest request)
         {
             return () => controller.Post(request);
         }
