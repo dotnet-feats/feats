@@ -150,6 +150,30 @@ namespace Feats.Evaluation.Client.Tests
         }
         
         [Test]
+        public void GivenBuilder_WhenAddingMultipleStrategies_ThenICanBuild()
+        {
+            var name = "name";
+            var path = "path";
+            var time = DateTimeOffset.Now;
+            
+            var request = this.GivenBuilder()
+                .WithName(name)
+                .WithPath(path)
+                .WithIsBefore(time)
+                .WithIsAfter(time)
+                .WithIsGreaterThan(5)
+                .WithIsLowerThan(7)
+                .Build();
+
+            request.Should().NotBeNull();
+            request.Name.Should().Be(name);
+            request.Path.Should().Be(path);
+            request.Strategies.Any(_ =>
+                    _.Key.Equals(StrategySettings.Before) && _.Value.Equals(time.ToIsoStopBuggingMeFormat()))
+                .Should().BeTrue();
+        }
+        
+        [Test]
         public void GivenBuilder_WhenMissingName_ThenWeThrow()
         {
             var path = "path";

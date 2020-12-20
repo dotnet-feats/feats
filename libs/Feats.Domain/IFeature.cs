@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Feats.Domain 
 {
@@ -18,7 +19,21 @@ namespace Feats.Domain
 
         FeatureState State { get; }
 
-        IDictionary<string, string> Strategies { get; }
+        IEnumerable<IFeatureStrategy> Strategies { get; }
+    }
+
+    public interface IFeatureStrategy
+    {
+        string Name { get; }
+        
+        string Value { get; }
+    }
+
+    public sealed class FeatureStrategy : IFeatureStrategy
+    {
+        public string Name { get; set; }
+        
+        public string Value { get; set; }
     }
     
     [ExcludeFromCodeCoverage]
@@ -27,7 +42,7 @@ namespace Feats.Domain
     {
         public Feature()
         {
-            this.Strategies = new Dictionary<string, string>();
+            this.Strategies = Enumerable.Empty<IFeatureStrategy>();
             this.State = FeatureState.Draft;
         }
 
@@ -43,6 +58,6 @@ namespace Feats.Domain
 
         public FeatureState State {get; set;}
 
-        public IDictionary<string, string> Strategies {get; set;}
+        public IEnumerable<IFeatureStrategy> Strategies {get; set;}
     }
 }

@@ -112,7 +112,7 @@ namespace Feats.EventStore.Tests.Events
                 .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
 
             features.Where(_ => _.Name == unassigned.Name)
-                .SelectMany(_ => _.Strategies.Select(s => s.Key))
+                .SelectMany(_ => _.Strategies.Select(s => s.Name))
                 .Should()
                 .BeEquivalentTo(new List<string> 
                 {

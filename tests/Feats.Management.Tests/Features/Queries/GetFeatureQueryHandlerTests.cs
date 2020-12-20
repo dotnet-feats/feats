@@ -44,11 +44,11 @@ namespace Feats.Management.Tests.Features.Queries
                     CreatedOn = this._clock.UtcNow,
                     UpdatedOn = this._clock.UtcNow,
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        {"test", "test"},
-                        {"test2", "test"}
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" },
+                        new FeatureStrategy { Name = "two", Value = "two" }
+                    }
                 },
             };
 
@@ -84,11 +84,11 @@ namespace Feats.Management.Tests.Features.Queries
                     CreatedOn = this._clock.UtcNow,
                     UpdatedOn = this._clock.UtcNow,
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        {"test", "test"},
-                        {"test2", "test"}
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" },
+                        new FeatureStrategy { Name = "two", Value = "two" }
+                    }
                 },
             };
 
@@ -124,11 +124,10 @@ namespace Feats.Management.Tests.Features.Queries
                     CreatedOn = this._clock.UtcNow,
                     UpdatedOn = this._clock.UtcNow,
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        {"test", "test"},
-                        {"test2", "test"}
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
                 },
             };
             

@@ -58,7 +58,7 @@ namespace Feats.Management.Features.Queries
 
         public string Path { get;set; }
 
-        public IDictionary<string, string> Strategies { get; set; }
+        public IEnumerable<IFeatureStrategy> Strategies { get; set; }
 
         public FeatureState State { get; set; }
 

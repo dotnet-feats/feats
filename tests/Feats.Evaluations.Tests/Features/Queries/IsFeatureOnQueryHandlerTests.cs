@@ -30,10 +30,10 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
                 }
             };
 
@@ -63,10 +63,10 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
                 }
             };
 
@@ -96,10 +96,10 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Draft,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
                 }
             };
 
@@ -129,12 +129,12 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                        { "two", "two" },
-                        { "three", "two" }
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" },
+                        new FeatureStrategy { Name = "two", Value = "two" },
+                        new FeatureStrategy { Name = "three", Value = "two" }
+                    }
                 }
             };
 
@@ -164,12 +164,12 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                        { "two", "two" },
-                        { "three", "two" }
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" },
+                        new FeatureStrategy { Name = "two", Value = "two" },
+                        new FeatureStrategy { Name = "three", Value = "two" }
+                    }
                 }
             };
 
@@ -200,12 +200,12 @@ namespace Feats.Evaluations.Tests.Features.Queries
                     Name = "name",
                     Path = "path/",
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        { "one", "two" },
-                        { "two", "two" },
-                        { "three", "two" }
-                    },
+                        new FeatureStrategy { Name = "one", Value = "two" },
+                        new FeatureStrategy { Name = "two", Value = "two" },
+                        new FeatureStrategy { Name = "three", Value = "two" }
+                    }
                 }
             };
 
