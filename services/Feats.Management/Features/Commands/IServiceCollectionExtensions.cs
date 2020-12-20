@@ -11,6 +11,8 @@ namespace Feats.Management.Features.Commands
         {
             services.TryAddScoped<IHandleCommand<CreateFeatureCommand>, CreateFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<PublishFeatureCommand>, PublishFeatureCommandHandler>();
+            services.TryAddScoped<IHandleCommand<AssignIsBeforeStrategyToFeatureCommand>, AssignIsBeforeStrategyToFeatureCommandHandler>();
+            services.TryAddScoped<IHandleCommand<AssignIsAfterStrategyToFeatureCommand>, AssignIsAfterStrategyToFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<AssignIsOnStrategyToFeatureCommand>, AssignIsOnStrategyToFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<AssignIsInListStrategyToFeatureCommand>, AssignIsInListStrategyToFeatureCommandHandler>();
             services.TryAddScoped<IHandleCommand<UnAssignStrategyCommand>, UnAssignStrategyCommandHandler>();
