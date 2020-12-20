@@ -33,6 +33,29 @@ namespace Feats.Management.Tests
                 await host.StopAsync();
             }
         }
+        
+        [Test]
+        public async Task GivenHost_WhenQueryingMetrics_ThenWeGetAnswer()
+        {
+            using var host = this.GivenHost();
+            await host.StartAsync();
+            try 
+            {
+                using var client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:8003");
+                
+                var metricsRequest = new HttpRequestMessage(
+                    HttpMethod.Get, 
+                    new Uri("/metrics", UriKind.Relative));
+
+                var response = await client.SendAsync(metricsRequest);
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+            }
+            finally
+            {
+                await host.StopAsync();
+            }
+        }
     }
 
     public static class StartUpTestsExtensions
