@@ -1,10 +1,9 @@
-namespace Feats.Domain.Strategies
-{
-    public interface IStrategySettings
-    {
-    }
+﻿using System.Diagnostics.CodeAnalysis;
 
-    public static class StrategySettings
+namespace Feats.Evaluation.Client
+{
+    [ExcludeFromCodeCoverage]
+    internal static class StrategySettings
     {
         public const string List = "feats.list";
         
