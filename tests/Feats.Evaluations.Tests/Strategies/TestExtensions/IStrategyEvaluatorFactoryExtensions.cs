@@ -24,6 +24,24 @@ namespace Feats.Evaluations.Tests.Strategies.TestExtensions
             return mock;
         }
         
+        public static Mock<IStrategyEvaluatorFactory> With(
+            this Mock<IStrategyEvaluatorFactory> mock,
+            params bool[] calls)
+        {
+            var seq = mock
+                .SetupSequence(_ => _.IsOn(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<IDictionary<string, string>>()));
+
+            foreach(var call in calls)
+            {
+                seq.ReturnsAsync(call);
+            }
+
+            return mock;
+        }
+        
         public static Mock<IStrategyEvaluatorFactory> WithOff(this Mock<IStrategyEvaluatorFactory> mock)
         {
             mock

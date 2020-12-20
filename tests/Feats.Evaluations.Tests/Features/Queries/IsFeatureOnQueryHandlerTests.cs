@@ -114,6 +114,112 @@ namespace Feats.Evaluations.Tests.Features.Queries
                 .WhenHandling(query)
                 .ThenExceptionIsThrown<FeatureNotPublishedException>();
         }
+
+        [Test]
+        public async Task GivenIsOnMoreThanOneStrategy_WhenEvaluating_ThenIGetOn()
+        {
+            var query = new IsFeatureOnQuery()
+            {
+                Name = "name",
+                Path = "path/",
+            };
+            var features = new List<IFeature> {
+                new Feature 
+                {
+                    Name = "name",
+                    Path = "path/",
+                    State = FeatureState.Published,
+                    Strategies = new Dictionary<string, string> 
+                    {
+                        { "one", "two" },
+                        { "two", "two" },
+                        { "three", "two" }
+                    },
+                }
+            };
+
+            var featuresAggregate = this.GivenIFeaturesAggregate()
+                .WithFeatures(features);
+            
+            var strategyEvaluator = this.GivenIStrategyEvaluatorFactory()
+                .WithOn();
+
+            await this
+                .GivenHandler(featuresAggregate.Object, strategyEvaluator.Object)
+                .WhenHandling(query)
+                .ThenIGetIsOn();
+        }
+        
+        [Test]
+        public async Task GivenIsOffWithMoreThanOneStrategy_WhenEvaluating_ThenIGetOff()
+        {
+            var query = new IsFeatureOnQuery()
+            {
+                Name = "name",
+                Path = "path/",
+            };
+            var features = new List<IFeature> {
+                new Feature 
+                {
+                    Name = "name",
+                    Path = "path/",
+                    State = FeatureState.Published,
+                    Strategies = new Dictionary<string, string> 
+                    {
+                        { "one", "two" },
+                        { "two", "two" },
+                        { "three", "two" }
+                    },
+                }
+            };
+
+            var featuresAggregate = this.GivenIFeaturesAggregate()
+                .WithFeatures(features);
+            
+            var strategyEvaluator = this.GivenIStrategyEvaluatorFactory()
+                .WithOff();
+
+            await this
+                .GivenHandler(featuresAggregate.Object, strategyEvaluator.Object)
+                .WhenHandling(query)
+                .ThenIGetIsOff();
+        }
+        
+        
+        [Test]
+        public async Task GivenIsOffWithAtLeastOneStrategy_WhenEvaluating_ThenIGetOff()
+        {
+            var query = new IsFeatureOnQuery()
+            {
+                Name = "name",
+                Path = "path/",
+            };
+            var features = new List<IFeature> {
+                new Feature 
+                {
+                    Name = "name",
+                    Path = "path/",
+                    State = FeatureState.Published,
+                    Strategies = new Dictionary<string, string> 
+                    {
+                        { "one", "two" },
+                        { "two", "two" },
+                        { "three", "two" }
+                    },
+                }
+            };
+
+            var featuresAggregate = this.GivenIFeaturesAggregate()
+                .WithFeatures(features);
+
+            var strategyEvaluator = this.GivenIStrategyEvaluatorFactory()
+                .With(true, false, true);
+
+            await this
+                .GivenHandler(featuresAggregate.Object, strategyEvaluator.Object)
+                .WhenHandling(query)
+                .ThenIGetIsOff();
+        }
     }
 
     public static class IsFeatureOnQueryHandlerTestsExtensions
