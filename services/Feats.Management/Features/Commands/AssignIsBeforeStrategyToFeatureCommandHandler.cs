@@ -14,25 +14,18 @@ using System.Linq;
 
 namespace Feats.Management.Features.Commands
 {
-    public sealed class AssignIsInListStrategyToFeatureCommand : ICommand
+    public sealed class AssignIsBeforeStrategyToFeatureCommand : ICommand
     {
-        public AssignIsInListStrategyToFeatureCommand()
-        {
-            this.Items = Enumerable.Empty<string>();
-        }
-        
         public string Name { get; set; }
 
         public string Path { get; set; }
 
         public string AssignedBy { get; set; }
-        
-        public string ListName { get; set; }
 
-        public IEnumerable<string> Items { get; set; }
+        public DateTimeOffset Value { get; set; }
     }
 
-    public class AssignIsInListStrategyToFeatureCommandHandler : IHandleCommand<AssignIsInListStrategyToFeatureCommand>
+    public class AssignIsBeforeStrategyToFeatureCommandHandler : IHandleCommand<AssignIsBeforeStrategyToFeatureCommand>
     {
         private readonly IFeaturesAggregate _featuresAggregate;
 
@@ -40,7 +33,7 @@ namespace Feats.Management.Features.Commands
         
         private readonly IStrategySettingsSerializer _serializer;
 
-        public AssignIsInListStrategyToFeatureCommandHandler(
+        public AssignIsBeforeStrategyToFeatureCommandHandler(
             IFeaturesAggregate featuresAggregate,
             ISystemClock clock,
             IStrategySettingsSerializer serializer)
@@ -50,7 +43,7 @@ namespace Feats.Management.Features.Commands
             this._serializer = serializer;
         }
 
-        public async Task Handle(AssignIsInListStrategyToFeatureCommand command)
+        public async Task Handle(AssignIsBeforeStrategyToFeatureCommand command)
         {
             command.Validate();
             await this._featuresAggregate.Load();
@@ -64,17 +57,18 @@ namespace Feats.Management.Features.Commands
         }
     }
 
-    public static class AssignIsInListStrategyToFeatureCommandExtensions 
+    public static class AssignIsBeforeStrategyToFeatureCommandExtensions 
     {
-        public static void Validate(this AssignIsInListStrategyToFeatureCommand command)
+        public static void Validate(this AssignIsBeforeStrategyToFeatureCommand command)
         {
             command.Required(nameof(command));
             command.Name.Required(nameof(command.Name));
+            command.Value.Required(nameof(command.Value));
             command.AssignedBy.Required(nameof(command.AssignedBy));
         }
 
         public static StrategyAssignedEvent ExtractStrategyAssignedEvent(
-            this AssignIsInListStrategyToFeatureCommand command, 
+            this AssignIsBeforeStrategyToFeatureCommand command, 
             ISystemClock clock,
             IStrategySettingsSerializer serializer)
         {
@@ -84,11 +78,10 @@ namespace Feats.Management.Features.Commands
                 Path = command.Path,
                 AssignedBy = command.AssignedBy,
                 AssignedOn = clock.UtcNow,
-                StrategyName = StrategyNames.IsInList,
-                Settings = serializer.Serialize(new IsInListStrategySettings 
+                StrategyName = StrategyNames.IsBefore,
+                Settings = serializer.Serialize(new DateTimeOffsetStrategySettings 
                 {
-                    Items = command.Items,
-                    ListName = command.ListName
+                    Value = command.Value
                 })
             };
         }

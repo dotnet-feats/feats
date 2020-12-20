@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class AssignIsInListStrategyToFeatureControllerTests : TestBase
+    public class AssignIsGreaterThanStrategyToFeatureControllerTests : TestBase
     {
         [Test]
         public async Task GivenRequest_WhenProcessingTheCommandIsSuccessful_ThenWeReturnOk()
@@ -19,7 +19,7 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<AssignIsInListStrategyToFeatureCommand>()
+                .GivenCommandHandler<AssignIsGreaterThanStrategyToFeatureCommand>()
                 .WithHandling();
 
             await this
@@ -34,8 +34,8 @@ namespace Feats.Management.Tests.Features
             var request = this
                 .GivenRequest();
             var handler = this
-                .GivenCommandHandler<AssignIsInListStrategyToFeatureCommand>()
-                .WithException<AssignIsInListStrategyToFeatureCommand, TestException>();
+                .GivenCommandHandler<AssignIsGreaterThanStrategyToFeatureCommand>()
+                .WithException<AssignIsGreaterThanStrategyToFeatureCommand, TestException>();
 
             await this
                 .GivenController(handler.Object)
@@ -44,30 +44,30 @@ namespace Feats.Management.Tests.Features
         }
     }
 
-    public static class AssignIsInListStrategyToFeatureControllerTestsExtensions
+    public static class AssignIsGreaterThanStrategyToFeatureControllerTestsExtensions
     {
-        public static AssignIsInListStrategyToFeatureRequest GivenRequest(
-            this AssignIsInListStrategyToFeatureControllerTests tests)
+        public static AssignIsGreaterThanStrategyToFeatureRequest GivenRequest(
+            this AssignIsGreaterThanStrategyToFeatureControllerTests tests)
         {
-            return new AssignIsInListStrategyToFeatureRequest
+            return new AssignIsGreaterThanStrategyToFeatureRequest
             {
                 AssignedBy = "bob",
                 Name = "Ross",
                 Path = "🦄.🖼",
-                Items = new List<string> { "😜" },
+                Value = -567.12313213131231313
             };
         }
 
-        public static AssignIsInListStrategyToFeatureController GivenController(
-            this AssignIsInListStrategyToFeatureControllerTests tests, 
-            IHandleCommand<AssignIsInListStrategyToFeatureCommand> handler)
+        public static AssignIsGreaterThanStrategyToFeatureController GivenController(
+            this AssignIsGreaterThanStrategyToFeatureControllerTests tests, 
+            IHandleCommand<AssignIsGreaterThanStrategyToFeatureCommand> handler)
         {
-            return new AssignIsInListStrategyToFeatureController(handler);
+            return new AssignIsGreaterThanStrategyToFeatureController(handler);
         }
 
         public static Func<Task<IActionResult>> WhenProcessingCommand(
-            this AssignIsInListStrategyToFeatureController controller,
-            AssignIsInListStrategyToFeatureRequest request)
+            this AssignIsGreaterThanStrategyToFeatureController controller,
+            AssignIsGreaterThanStrategyToFeatureRequest request)
         {
             return () => controller.Post(request);
         }

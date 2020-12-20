@@ -46,6 +46,8 @@ namespace Feats.Management.Features
         
         public string AssignedBy { get; set; }
         
+        public string ListName { get; set; }
+        
         public IEnumerable<string> Items { get; set; }
     }
 
@@ -66,6 +68,7 @@ namespace Feats.Management.Features
                 Path = request.Path,
                 AssignedBy = request.AssignedBy,
                 Items = request.Items,
+                ListName = request.ListName
             };
         }   
     }

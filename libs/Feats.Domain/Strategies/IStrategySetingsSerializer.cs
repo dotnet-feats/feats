@@ -32,6 +32,30 @@ namespace Feats.Domain.Strategies
                         Settings = JsonSerializer.Deserialize<IsInListStrategySettings>(strategySettings)
                     };
                     
+                case StrategyNames.IsGreaterThan:
+                    return new IsGreaterThanStrategy
+                    {
+                        Settings = JsonSerializer.Deserialize<NumericalStrategySettings>(strategySettings)
+                    };
+                
+                case StrategyNames.IsLowerThan:
+                    return new IsLowerThanStrategy
+                    {
+                        Settings = JsonSerializer.Deserialize<NumericalStrategySettings>(strategySettings)
+                    };
+                    
+                case StrategyNames.IsAfter:
+                    return new IsAfterStrategy()
+                    {
+                        Settings = JsonSerializer.Deserialize<DateTimeOffsetStrategySettings>(strategySettings)
+                    };
+                
+                case StrategyNames.IsBefore:
+                    return new IsBeforeStrategy()
+                    {
+                        Settings = JsonSerializer.Deserialize<DateTimeOffsetStrategySettings>(strategySettings)
+                    };
+                
                 default: 
                     throw new NotImplementedException($"Requested settings don't exists for strategy {strategyName}");
             }

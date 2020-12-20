@@ -15,6 +15,13 @@ namespace Feats.Domain.Strategies
     [ExcludeFromCodeCoverage]
     public sealed class IsInListStrategySettings : IStrategySettings
     {
+        public IsInListStrategySettings()
+        {
+            this.ListName = "feats.list"; //this is the default value, but can be overridden by users
+        }
+
+        public string ListName { get; set; }
+        
         public IEnumerable<string> Items { get; set; }
     }
 }

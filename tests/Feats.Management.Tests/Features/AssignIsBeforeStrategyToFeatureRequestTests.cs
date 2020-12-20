@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features
 {
-    public class AssignIsInListToFeatureRequestTests : TestBase
+    public class AssignIsBeforeStrategyToFeatureRequestTests : TestBase
     {
         [Test]
         public void GivenARequestWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -25,7 +25,7 @@ namespace Feats.Management.Tests.Features
         [Test]
         public void GivenARequestIsNUll_WhenValidating_ThenArgumentNullIsThrown()
         {
-            AssignIsInListStrategyToFeatureRequest request = null;
+            AssignIsBeforeStrategyToFeatureRequest request = null;
 
             request
                 .WhenValidating()
@@ -57,6 +57,19 @@ namespace Feats.Management.Tests.Features
         }
 
         [Test]
+        public void GivenARequestWithNullDateValue_WhenValidating_ThenExceptionIsThrown()
+        {
+            var request = this
+                .GivenValidRequest();
+            request.Value = null;
+
+            request
+                .WhenValidating()
+                .ThenExceptionIsThrown<ArgumentValidationException>();
+        }
+
+
+        [Test]
         public void GivenARequestWithMissingCreatedBy_WhenValidating_ThenArgumentNullIsThrown()
         {
             var request = this
@@ -84,52 +97,40 @@ namespace Feats.Management.Tests.Features
             request
                 .WhenExtractingCommand()
                 .ThenCommandIsFilled(request);
-        }          
-                        
-        [Test]
-        public void GivenARequestWithDisabledStrategy_WhenExtractingCommand_ThenCommandIsFilled()
-        {
-            var request = this
-                .GivenValidRequest();
-            request.Items = Enumerable.Empty<string>();
-            
-            request
-                .WhenExtractingCommand()
-                .ThenCommandIsFilled(request);
-        }     
+        }
     }
 
-    public static class AssignIsInListToFeatureRequestTestsExtensions 
+    public static class AssignIsBeforeToFeatureRequestTestsExtensions 
     {
-        public static AssignIsInListStrategyToFeatureRequest GivenValidRequest(this AssignIsInListToFeatureRequestTests tests)
+        public static AssignIsBeforeStrategyToFeatureRequest GivenValidRequest(this AssignIsBeforeStrategyToFeatureRequestTests tests)
         {
-            return new AssignIsInListStrategyToFeatureRequest
+            return new AssignIsBeforeStrategyToFeatureRequest
             {
                 AssignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
-                Items = new List<string> { "are you suggesting coconuts migrate" },
+                Value = DateTimeOffset.Now
             };
         }
 
-        public static Action WhenValidating(this AssignIsInListStrategyToFeatureRequest request)
+        public static Action WhenValidating(this AssignIsBeforeStrategyToFeatureRequest request)
         {
             return () => request.Validate();
         }
 
-        public static Func<AssignIsInListStrategyToFeatureCommand> WhenExtractingCommand(this AssignIsInListStrategyToFeatureRequest request)
+        public static Func<AssignIsBeforeStrategyToFeatureCommand> WhenExtractingCommand(this AssignIsBeforeStrategyToFeatureRequest request)
         {
-            return () => request.ToAssignIsInListStrategyToFeatureCommand();
+            return () => request.ToAssignIsBeforeStrategyToFeatureCommand();
         }
 
-        public static void ThenCommandIsFilled(this Func<AssignIsInListStrategyToFeatureCommand> createFunc, AssignIsInListStrategyToFeatureRequest request)
+        public static void ThenCommandIsFilled(this Func<AssignIsBeforeStrategyToFeatureCommand> createFunc, AssignIsBeforeStrategyToFeatureRequest request)
         {
             var command = createFunc();
 
             command.Name.Should().Be(request.Name);   
             command.Path.Should().Be(request.Path);
             command.AssignedBy.Should().Be(request.AssignedBy);
-            command.Items.Should().BeEquivalentTo(request.Items);
+            command.Value.Should().Be(request.Value.GetValueOrDefault());
         }
     }
 }

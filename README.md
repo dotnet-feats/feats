@@ -167,7 +167,6 @@ our features:
 ]
 ```
 
-
 ## Listing Paths features
 
 We can return all features at the root of the path and sub-paths when calling this endpoint (currently no filtering on status):
@@ -192,17 +191,56 @@ We can return all features at the root of the path and sub-paths when calling th
 ]
 ```
 
+## Feature details
+
+- Relative Path : `/features?path={{UrlEncodedPath}}&name={{UrlEncodedName}}`
+- Verb: `GET`
+- Content-Type: `application/json`
+- Response: a list of features
+```json
+{
+    "feature": "dimsum",
+    "path": "one/level",
+    "strategies": {
+        "IsInList": "{\"Items\":[\"cat\",\"fat\"]}"
+    },
+    "state": "Published",
+    "createdOn": "2020-12-06T23:31:33.155409+00:00",
+    "updatedOn": "2020-12-06T23:33:52.0215134+00:00",
+    "createdBy": "moua"
+}
+```
+
 # Strategy Evaluation
 
 There is currently only one endpoint for feature evaluation on the evaluation service:
 
-- Relative Path : `/features/?path={{UrlEncodedPath}}&name={{UrlEncodedName}}`
+- Relative Path : `/features?path={{UrlEncodedPath}}&name={{UrlEncodedName}}`
 - Verb: `GET`
 - Content-Type: `application/json`
+- Headers:
+    - IsOn : none
+    - IsInList: 
+        - key: add a header per list name specified in your feature. The default is `feats.list`
+        - value: your value
+    - IsBefore: 
+        - key: `feats.before`
+        - value: your date, iso format
+    - IsAfter: 
+        - key: `feats.after`
+        - value: your date, iso format
+    - IsGreaterThan: 
+        - key: `feats.greater`
+        - value: your number (int, negative & floats accepted)
+    - IsLowerThan: 
+        - key: `feats.lower`
+        - value: your number (int, negative & floats accepted)
 - Response: 
 ```json
 true | false
 ```
+
+If your feature has a multitude of strategies : add all the headers you need.
 
 
 # Running locally

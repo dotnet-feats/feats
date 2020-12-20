@@ -16,12 +16,19 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class AssignIsInListStrategyToFeatureCommandTests : TestBase
+    public class AssignIsBeforeStrategyToFeatureCommandTests : TestBase
     {
+        private readonly ISystemClock _clock;
+
+        public AssignIsBeforeStrategyToFeatureCommandTests()
+        {
+            this._clock = this.GivenClock();
+        }
+
         [Test]
         public void GivenACommandWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
         {
-            this.GivenValidCommand()
+            this.GivenValidCommand(this._clock)
                 .WhenValidating()
                 .ThenNoExceptionIsThrown();
         }
@@ -40,7 +47,7 @@ namespace Feats.Management.Tests.Features.Commands
         public void GivenACommandWithMissingName_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
-                .GivenValidCommand();
+                .GivenValidCommand(this._clock);
             command.Name = string.Empty;
 
             command
@@ -52,7 +59,7 @@ namespace Feats.Management.Tests.Features.Commands
         public void GivenACommandWithMissingPath_WhenValidating_ThenNoExceptionIsThrown()
         {
             var command = this
-                .GivenValidCommand();
+                .GivenValidCommand(this._clock);
             command.Path = string.Empty;
 
             command
@@ -61,22 +68,22 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         [Test]
-        public void GivenACommandWithMissingListName_WhenValidating_ThenNoExceptionIsThrown()
+        public void GivenACommandWithMinDateValue_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
-                .GivenValidCommand();
-            command.ListName = string.Empty;
+                .GivenValidCommand(this._clock);
+            command.Value = DateTimeOffset.MinValue;
 
             command
                 .WhenValidating()
-                .ThenNoExceptionIsThrown();
+                .ThenExceptionIsThrown<ArgumentValidationException>();
         }
-
+        
         [Test]
         public void GivenACommandWithMissingAssignedBy_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
-                .GivenValidCommand();
+                .GivenValidCommand(this._clock);
             command.AssignedBy = string.Empty;
 
             command
@@ -87,47 +94,45 @@ namespace Feats.Management.Tests.Features.Commands
         [Test]
         public void GivenACommand_WhenExtractingEvent_ThenNoExceptionIsThrownt()
         {
-            var clock = this.GivenClock();
-            
-            this.GivenValidCommand()
-                .WhenExtractingEvent(clock, this.GivenIStrategySettingsSerializer())
+            this.GivenValidCommand(this._clock)
+                .WhenExtractingEvent(this._clock, this.GivenIStrategySettingsSerializer())
                 .ThenNoExceptionIsThrown();
         }
         
         [Test]
         public void GivenACommand_WhenExtractingEvent_ThenWeGetAPathCreatedEvent()
         {
-            var clock = this.GivenClock();
             var request = this
-                .GivenValidCommand();
+                .GivenValidCommand(this._clock);
             
             request
-                .WhenExtractingEvent(clock, this.GivenIStrategySettingsSerializer())
-                .ThenWeGetAFeaturePublishedEvent(request, clock);
+                .WhenExtractingEvent(this._clock, this.GivenIStrategySettingsSerializer())
+                .ThenWeGetAFeaturePublishedEvent(request, this._clock);
         }
     }
 
-    public static class AssignIsInListStrategyToFeatureCommandTestsExtensions 
+    public static class AssignIsBeforeStrategyToFeatureCommandTestsExtensions 
     {
-        public static AssignIsInListStrategyToFeatureCommand GivenValidCommand(this AssignIsInListStrategyToFeatureCommandTests tests)
+        public static AssignIsBeforeStrategyToFeatureCommand GivenValidCommand(
+            this AssignIsBeforeStrategyToFeatureCommandTests tests,
+            ISystemClock clock)
         {
-            return new AssignIsInListStrategyToFeatureCommand
+            return new AssignIsBeforeStrategyToFeatureCommand
             {
                 AssignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
-                Items = new List<string> { "🎉" },
-                ListName = "allo"
+                Value = clock.UtcNow
             };
         }
 
-        public static Action WhenValidating(this AssignIsInListStrategyToFeatureCommand command)
+        public static Action WhenValidating(this AssignIsBeforeStrategyToFeatureCommand command)
         {
             return () => command.Validate();
         }
 
         public static Func<StrategyAssignedEvent> WhenExtractingEvent(
-            this AssignIsInListStrategyToFeatureCommand command,
+            this AssignIsBeforeStrategyToFeatureCommand command,
             ISystemClock clock,
             IStrategySettingsSerializer serializer)
         {
@@ -136,7 +141,10 @@ namespace Feats.Management.Tests.Features.Commands
                 serializer);
         }
         
-        public static void ThenWeGetAFeaturePublishedEvent(this Func<StrategyAssignedEvent> featFunc, AssignIsInListStrategyToFeatureCommand command, ISystemClock clock)
+        public static void ThenWeGetAFeaturePublishedEvent(
+            this Func<StrategyAssignedEvent> featFunc, 
+            AssignIsBeforeStrategyToFeatureCommand command, 
+            ISystemClock clock)
         {
             var feat = featFunc();
 
@@ -144,11 +152,10 @@ namespace Feats.Management.Tests.Features.Commands
             feat.AssignedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
-            feat.StrategyName.Should().Be(StrategyNames.IsInList);
-            feat.Settings.Should().Be(JsonSerializer.Serialize(new IsInListStrategySettings 
+            feat.StrategyName.Should().Be(StrategyNames.IsBefore);
+            feat.Settings.Should().Be(JsonSerializer.Serialize(new DateTimeOffsetStrategySettings 
             {
-                Items = command.Items,
-                ListName = command.ListName
+                Value = clock.UtcNow
             }));
         }
     }

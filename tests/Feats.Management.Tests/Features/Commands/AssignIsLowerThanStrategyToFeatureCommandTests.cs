@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 namespace Feats.Management.Tests.Features.Commands
 {
-    public class AssignIsInListStrategyToFeatureCommandTests : TestBase
+    public class AssignIsLowerThanStrategyToFeatureCommandTests : TestBase
     {
         [Test]
         public void GivenACommandWithAllSettings_WhenValidating_ThenNoExceptionIsThrown()
@@ -61,18 +61,6 @@ namespace Feats.Management.Tests.Features.Commands
         }
 
         [Test]
-        public void GivenACommandWithMissingListName_WhenValidating_ThenNoExceptionIsThrown()
-        {
-            var command = this
-                .GivenValidCommand();
-            command.ListName = string.Empty;
-
-            command
-                .WhenValidating()
-                .ThenNoExceptionIsThrown();
-        }
-
-        [Test]
         public void GivenACommandWithMissingAssignedBy_WhenValidating_ThenArgumentNullIsThrown()
         {
             var command = this
@@ -107,27 +95,26 @@ namespace Feats.Management.Tests.Features.Commands
         }
     }
 
-    public static class AssignIsInListStrategyToFeatureCommandTestsExtensions 
+    public static class AssignIsLowerThanStrategyToFeatureCommandTestsExtensions 
     {
-        public static AssignIsInListStrategyToFeatureCommand GivenValidCommand(this AssignIsInListStrategyToFeatureCommandTests tests)
+        public static AssignIsLowerThanStrategyToFeatureCommand GivenValidCommand(this AssignIsLowerThanStrategyToFeatureCommandTests tests)
         {
-            return new AssignIsInListStrategyToFeatureCommand
+            return new AssignIsLowerThanStrategyToFeatureCommand
             {
                 AssignedBy = "🦄",
                 Name = "bob ross 🎨🖌🖼",
                 Path = "painting/in/winter",
-                Items = new List<string> { "🎉" },
-                ListName = "allo"
+                Value = 8.88545
             };
         }
 
-        public static Action WhenValidating(this AssignIsInListStrategyToFeatureCommand command)
+        public static Action WhenValidating(this AssignIsLowerThanStrategyToFeatureCommand command)
         {
             return () => command.Validate();
         }
 
         public static Func<StrategyAssignedEvent> WhenExtractingEvent(
-            this AssignIsInListStrategyToFeatureCommand command,
+            this AssignIsLowerThanStrategyToFeatureCommand command,
             ISystemClock clock,
             IStrategySettingsSerializer serializer)
         {
@@ -136,7 +123,7 @@ namespace Feats.Management.Tests.Features.Commands
                 serializer);
         }
         
-        public static void ThenWeGetAFeaturePublishedEvent(this Func<StrategyAssignedEvent> featFunc, AssignIsInListStrategyToFeatureCommand command, ISystemClock clock)
+        public static void ThenWeGetAFeaturePublishedEvent(this Func<StrategyAssignedEvent> featFunc, AssignIsLowerThanStrategyToFeatureCommand command, ISystemClock clock)
         {
             var feat = featFunc();
 
@@ -144,11 +131,10 @@ namespace Feats.Management.Tests.Features.Commands
             feat.AssignedOn.Should().Be(clock.UtcNow);
             feat.Name.Should().Be(command.Name);
             feat.Path.Should().Be(command.Path);
-            feat.StrategyName.Should().Be(StrategyNames.IsInList);
-            feat.Settings.Should().Be(JsonSerializer.Serialize(new IsInListStrategySettings 
+            feat.StrategyName.Should().Be(StrategyNames.IsLowerThan);
+            feat.Settings.Should().Be(JsonSerializer.Serialize(new NumericalStrategySettings() 
             {
-                Items = command.Items,
-                ListName = command.ListName
+                Value = command.Value
             }));
         }
     }

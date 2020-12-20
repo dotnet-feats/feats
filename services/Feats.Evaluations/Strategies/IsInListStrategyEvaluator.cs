@@ -11,9 +11,9 @@ namespace Feats.Evaluations.Strategies
             IsInListStrategy strategy, 
             IDictionary<string, string> values = null)
         {
-            if (values.ContainsKey(StrategySettings.List))
+            if (values.ContainsKey(strategy.Settings.ListName))
             {
-                var myStrategyValues = values[StrategySettings.List];
+                var myStrategyValues = values[strategy.Settings.ListName];
 
                 return Task.FromResult(strategy.Settings.Items.Contains(myStrategyValues));
             }
