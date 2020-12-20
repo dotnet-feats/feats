@@ -12,20 +12,20 @@ namespace Feats.Management.Features
 {
     [ApiController]
     [Route("features/strategies")]
-    public class AssignIsAfterStrategyToFeatureController
+    public class AssignIsGreaterThanStrategyToFeatureController
     {
-        private readonly IHandleCommand<AssignIsAfterStrategyToFeatureCommand> _handleCommand;
+        private readonly IHandleCommand<AssignIsGreaterThanStrategyToFeatureCommand> _handleCommand;
 
-        public AssignIsAfterStrategyToFeatureController(IHandleCommand<AssignIsAfterStrategyToFeatureCommand> handleCommand)
+        public AssignIsGreaterThanStrategyToFeatureController(IHandleCommand<AssignIsGreaterThanStrategyToFeatureCommand> handleCommand)
         {
             this._handleCommand = handleCommand;
         }
 
-        [Route("isafter")]
-        public async Task<IActionResult> Post([FromBody] AssignIsAfterStrategyToFeatureRequest request)
+        [Route("isgreater")]
+        public async Task<IActionResult> Post([FromBody] AssignIsGreaterThanStrategyToFeatureRequest request)
         {
             request.Validate();
-            var command = request.ToAssignIsAfterStrategyToFeatureCommand();
+            var command = request.ToAssignIsGreaterThanStrategyToFeatureCommand();
 
             await this._handleCommand.Handle(command);
 
@@ -33,7 +33,7 @@ namespace Feats.Management.Features
         }
     }
 
-    public class AssignIsAfterStrategyToFeatureRequest
+    public class AssignIsGreaterThanStrategyToFeatureRequest
     {
         public string Name { get; set; }
 
@@ -41,12 +41,12 @@ namespace Feats.Management.Features
         
         public string AssignedBy { get; set; }
         
-        public DateTimeOffset? Value { get; set; }
+        public double? Value { get; set; }
     }
 
-    public static class AssignIsAfterStrategyToFeatureRequestExtensions
+    public static class AssignIsGreaterThanStrategyToFeatureRequestExtensions
     {
-        public static void Validate(this AssignIsAfterStrategyToFeatureRequest request)
+        public static void Validate(this AssignIsGreaterThanStrategyToFeatureRequest request)
         {
             request.Required(nameof(request));
             request.Name.Required(nameof(request.Name));
@@ -54,9 +54,9 @@ namespace Feats.Management.Features
             request.AssignedBy.Required(nameof(request.AssignedBy));
         } 
 
-        public static AssignIsAfterStrategyToFeatureCommand ToAssignIsAfterStrategyToFeatureCommand(this AssignIsAfterStrategyToFeatureRequest request)
+        public static AssignIsGreaterThanStrategyToFeatureCommand ToAssignIsGreaterThanStrategyToFeatureCommand(this AssignIsGreaterThanStrategyToFeatureRequest request)
         {
-            return new AssignIsAfterStrategyToFeatureCommand
+            return new AssignIsGreaterThanStrategyToFeatureCommand
             {
                 Name = request.Name,
                 Path = request.Path,
