@@ -24,13 +24,13 @@ The management service is where all feature toggle creation & manipulation are d
 - publish
 - archive
 
-Still to do : an beauuutifull UI for this ;)
+Still to do : an beauuutifull UI for this
 
 ### Evaluation service
 
-The evaluation service is where you need to call to know if a toggle is on or not. 
-The current version only enables you to evaluate a single feature at a time, but one day i'll add 
-the possibility to evaluate more than one at a time ;)
+The evaluation service is where you need to call to know if a toggle is on or not. Everytime a call is made to this endpoint we increase a Counter Metric for Prometheus. We don't push our metrics, you have to scrape them.
+
+The current version only enables you to evaluate a single feature at a time: but you can send all the strategy values at once.
 
 ## Feature strategies
 
@@ -81,7 +81,8 @@ Through this endpoint you can only update the name and path if your feature has 
 ## Assign a strategy
 
 Through these endpoints you can assign your strategy if your feature has not been published yet.
-You can assign more than one strategy to a feature, they are currently all linked by `AND` logic.
+
+> You can assign more than one strategy to a feature, they are currently all linked by `AND` logic.
 
 ### IsOn
 
@@ -112,6 +113,74 @@ You can assign more than one strategy to a feature, they are currently all linke
     "items": ["cat", "fat"]
 }
 ```
+
+### IsGreaterThan
+
+- Relative Path : `/features/strategies/isgreaterthan`
+- Verb: `POST`
+- Content-Type: `application/json`
+- Body: 
+```json
+{
+    "name": "dimsum",
+    "path" : "cats",
+    "assignedBy" : "mommy",
+    "value": 45678.45678
+}
+```
+
+> `value` is a double
+
+### IsLowerThan
+
+- Relative Path : `/features/strategies/islowerthan`
+- Verb: `POST`
+- Content-Type: `application/json`
+- Body: 
+```json
+{
+    "name": "dimsum",
+    "path" : "cats",
+    "assignedBy" : "mommy",
+    "value": 45678.45678
+}
+```
+
+> `value` is a double
+
+### IsBefore
+
+- Relative Path : `/features/strategies/isbefore`
+- Verb: `POST`
+- Content-Type: `application/json`
+- Body: 
+```json
+{
+    "name": "dimsum",
+    "path" : "cats",
+    "assignedBy" : "mommy",
+    "value": "2020-12-21T21:38:46Z"
+}
+```
+
+> `value` is a iso 8601 date format, the date is **EXCLUSIVE** 
+
+### IsAfter
+
+- Relative Path : `/features/strategies/isafter`
+- Verb: `POST`
+- Content-Type: `application/json`
+- Body: 
+```json
+{
+    "name": "dimsum",
+    "path" : "cats",
+    "assignedBy" : "mommy",
+    "value": "2020-12-21T21:38:46Z"
+}
+```
+
+> `value` is a iso 8601 date format, the date is **EXCLUSIVE**
 
 ## Publish a feature
 
@@ -201,9 +270,16 @@ We can return all features at the root of the path and sub-paths when calling th
 {
     "feature": "dimsum",
     "path": "one/level",
-    "strategies": {
-        "IsInList": "{\"Items\":[\"cat\",\"fat\"]}"
-    },
+    "strategies": [
+        {
+            "name": "IsOn",
+            "value": "{\"IsOn\":true}"
+        },
+        {
+            "name": "IsInList",
+            "value": "{\"ListName\":null,\"Items\":[\"cat\",\"fat\"]}"
+        }
+    ],
     "state": "Published",
     "createdOn": "2020-12-06T23:31:33.155409+00:00",
     "updatedOn": "2020-12-06T23:33:52.0215134+00:00",
