@@ -48,11 +48,11 @@ namespace Feats.Evaluations.Features.Queries
             }
 
             var results = new List<bool>();
-            foreach(var (strategyName, settings) in feature.Strategies)
+            foreach(var strategy in feature.Strategies)
             {
                 var result = await this._strategyEvaluator.IsOn(
-                    strategyName,
-                    settings,
+                    strategy.Name,
+                    strategy.Value,
                     query.Values);
                 
                 results.Add(result);

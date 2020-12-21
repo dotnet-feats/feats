@@ -86,7 +86,7 @@ namespace Feats.EventStore.Tests.Events
                 .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
 
             features.Where(_ => _.Name == assigned.Name)
-                .SelectMany(_ => _.Strategies.Keys)
+                .SelectMany(_ => _.Strategies.Select(s => s.Name))
                 .Should()
                 .BeEquivalentTo(new List<string> { StrategyNames.IsOn });
         }
@@ -156,7 +156,7 @@ namespace Feats.EventStore.Tests.Events
                 .BeEquivalentTo(new List<string> { created.Name, notMe.Name });
 
             features.Where(_ => _.Name == assigned.Name)
-                .SelectMany(_ => _.Strategies.Keys)
+                .SelectMany(_ => _.Strategies.Select(s => s.Name))
                 .Should()
                 .BeEquivalentTo(new List<string> { StrategyNames.IsOn });
         }

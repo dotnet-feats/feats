@@ -17,7 +17,7 @@ namespace Feats.Domain.Strategies
     {
         public IsInListStrategySettings()
         {
-            this.ListName = "feats.list"; //this is the default value, but can be overridden by users
+            this.ListName = StrategySettings.List; //this is the default value, but can be overridden by users
         }
 
         public string ListName { get; set; }

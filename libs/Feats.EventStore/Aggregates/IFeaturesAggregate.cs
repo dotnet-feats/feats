@@ -146,7 +146,7 @@ namespace Feats.EventStore.Aggregates
                 UpdatedOn = e.CreatedOn,
                 Path = e.Path,
                 State = FeatureState.Draft,
-                Strategies = new Dictionary<string, string>(),
+                Strategies = Enumerable.Empty<IFeatureStrategy>()
             }).ToList();
         }
 
@@ -273,15 +273,6 @@ namespace Feats.EventStore.Aggregates
                             throw new FeatureIsNotInDraftException();
                         }
 
-                        if (!f.Strategies.ContainsKey(e.StrategyName))
-                        {
-                            f.Strategies.Add(e.StrategyName, e.Settings);
-                        }
-                        else 
-                        {
-                            f.Strategies[e.StrategyName] = e.Settings;
-                        }
-
                         return new Feature
                         {
                             Name = f.Name,
@@ -290,7 +281,11 @@ namespace Feats.EventStore.Aggregates
                             UpdatedOn = e.AssignedOn,
                             Path = f.Path,
                             State = f.State,
-                            Strategies = f.Strategies,
+                            Strategies = f.Strategies.Append(new FeatureStrategy
+                            {
+                                Name = e.StrategyName,
+                                Value = e.Settings
+                            })
                         };
                     }
 
@@ -319,12 +314,7 @@ namespace Feats.EventStore.Aggregates
                         {
                             throw new FeatureIsNotInDraftException();
                         }
-
-                        if (f.Strategies.ContainsKey(e.StrategyName))
-                        {
-                            f.Strategies.Remove(e.StrategyName);
-                        }
-
+                        
                         return new Feature
                         {
                             Name = f.Name,
@@ -333,7 +323,7 @@ namespace Feats.EventStore.Aggregates
                             UpdatedOn = e.UnassignedOn,
                             Path = f.Path,
                             State = f.State,
-                            Strategies = f.Strategies,
+                            Strategies = f.Strategies.Where(_ => !_.Name.Equals(e.StrategyName, StringComparison.InvariantCultureIgnoreCase)),
                         };
                     }
 

@@ -27,10 +27,10 @@ namespace Feats.Management.Tests.Features
                 Path = string.Empty,
                 Feature = name,
                 State = FeatureState.Published,
-                Strategies = new Dictionary<string, string>
+                Strategies = new List<IFeatureStrategy>()
                 {
-                    { "one", "one" },
-                },
+                    new FeatureStrategy { Name = "one", Value = "two" }
+                }
             };
 
             var handler = this

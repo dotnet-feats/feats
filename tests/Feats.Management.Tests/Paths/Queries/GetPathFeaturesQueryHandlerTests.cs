@@ -43,12 +43,11 @@ namespace Feats.Management.Tests.Paths.Queries
                     CreatedOn = this._clock.UtcNow,
                     UpdatedOn = this._clock.UtcNow,
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        {"test", "test"},
-                        {"test2", "test"}
-                    },
-                },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
+                }
             };
 
             var aggregate = this.GivenIFeaturesAggregate()
@@ -79,12 +78,11 @@ namespace Feats.Management.Tests.Paths.Queries
                     CreatedOn = this._clock.UtcNow,
                     UpdatedOn = this._clock.UtcNow,
                     State = FeatureState.Published,
-                    Strategies = new Dictionary<string, string> 
+                    Strategies = new List<IFeatureStrategy>()
                     {
-                        {"test", "test"},
-                        {"test2", "test"}
-                    },
-                },
+                        new FeatureStrategy { Name = "one", Value = "two" }
+                    }
+                }
             };
             
             var aggregate = this.GivenIFeaturesAggregate()
@@ -157,7 +155,7 @@ namespace Feats.Management.Tests.Paths.Queries
                         Feature = _.Name,
                         Path = _.Path,
                         State = _.State,
-                        StrategyNames = _.Strategies.Select(_ => _.Key),
+                        StrategyNames = _.Strategies.Select(_ => _.Name),
                         CreatedBy = _.CreatedBy,
                         CreatedOn = _.CreatedOn,
                         UpdatedOn = _.UpdatedOn,
