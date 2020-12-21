@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 
 using Feats.CQRS.Commands;
+using Feats.Domain.Aggregates;
 using Feats.Domain.Events;
 using Feats.Domain.Validations;
-using Feats.EventStore.Aggregates;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 

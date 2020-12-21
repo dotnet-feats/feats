@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.Domain;
-using Feats.EventStore.Aggregates;
+using Feats.Domain.Aggregates;
 using Moq;
 
 namespace Feats.Management.Tests.Paths.TestExtensions

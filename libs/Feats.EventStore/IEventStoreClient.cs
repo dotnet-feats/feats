@@ -74,7 +74,7 @@ namespace Feats.EventStore
             CancellationToken cancellationToken = default);
     }
 
-    public sealed class DecoratedEventStoreClient : IEventStoreClient
+    internal sealed class DecoratedEventStoreClient : IEventStoreClient
     {
         private readonly EventStoreClient _eventStoreClient;
 

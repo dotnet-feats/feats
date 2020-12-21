@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Domain;
+using Feats.Domain.Aggregates;
 using Feats.Evaluations.Features.Exceptions;
 using Feats.Evaluations.Features.Queries;
 using Feats.Evaluations.Strategies;
 using Feats.Evaluations.Tests.Features.TestExtensions;
 using Feats.Evaluations.Tests.Strategies.TestExtensions;
-using Feats.EventStore.Aggregates;
 using FluentAssertions;
 using NUnit.Framework;
 

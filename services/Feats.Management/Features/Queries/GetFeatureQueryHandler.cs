@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Feats.CQRS.Queries;
 using Feats.Domain;
-using Feats.EventStore.Aggregates;
+using Feats.Domain.Aggregates;
 using Feats.Management.Features.Exceptions;
 
 namespace Feats.Management.Features.Queries 

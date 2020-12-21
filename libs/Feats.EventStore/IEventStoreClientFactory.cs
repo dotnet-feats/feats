@@ -10,7 +10,7 @@ namespace Feats.EventStore
         IEventStoreClient Create();
     }
 
-    public sealed class EventStoreClientFactory : IEventStoreClientFactory
+    internal sealed class EventStoreClientFactory : IEventStoreClientFactory
     {
         private readonly IEventStoreConfiguration _eventStoreConfiguration;
 

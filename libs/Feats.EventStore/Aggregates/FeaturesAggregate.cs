@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventStore.Client;
-using Feats.CQRS;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
 using Feats.Domain;
+using Feats.Domain.Aggregates;
 using Feats.Domain.Events;
 using Feats.EventStore.Events;
 using Feats.EventStore.Exceptions;
@@ -14,12 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Feats.EventStore.Aggregates
 {
-    public interface IFeaturesAggregate : IAggregate
-    {
-        IEnumerable<IFeature> Features { get; }
-    }
-
-    public class FeaturesAggregate : IFeaturesAggregate
+    internal class FeaturesAggregate : IFeaturesAggregate
     {
         private readonly ILogger _logger;
 

@@ -5,12 +5,9 @@ using Feats.CQRS.Commands;
 using Feats.Domain.Validations;
 
 using Microsoft.Extensions.Internal;
-using Microsoft.Extensions.Logging;
 using Feats.Domain.Events;
 using Feats.Domain.Strategies;
-using Feats.EventStore.Aggregates;
-using System.Collections.Generic;
-using System.Linq;
+using Feats.Domain.Aggregates;
 
 namespace Feats.Management.Features.Commands
 {

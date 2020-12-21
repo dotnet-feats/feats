@@ -77,7 +77,7 @@ namespace Feats.EventStore.Tests.Events
 
     public static class FeatureStreamEventsReaderTestsExtenstions
     {
-        public static FeatureStreamEventsReader GivenFeatureStreamEventsReader(
+        internal static FeatureStreamEventsReader GivenFeatureStreamEventsReader(
             this FeatureStreamEventsReaderTests tests,
             IEventStoreClient client)
         {
@@ -86,7 +86,7 @@ namespace Feats.EventStore.Tests.Events
                 client);
         }
 
-        public static Func<IAsyncEnumerable<IEvent>> WhenReading(
+        internal static Func<IAsyncEnumerable<IEvent>> WhenReading(
             this FeatureStreamEventsReader reader)
         {
             return () => reader.Read();

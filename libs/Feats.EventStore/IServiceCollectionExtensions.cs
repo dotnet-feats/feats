@@ -1,5 +1,6 @@
 using System;
 using Feats.CQRS.Streams;
+using Feats.Domain.Aggregates;
 using Feats.EventStore.Aggregates;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

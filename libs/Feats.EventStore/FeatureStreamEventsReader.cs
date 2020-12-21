@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Feats.EventStore
 {
-    public sealed class FeatureStreamEventsReader : IReadStreamedEvents<FeatureStream>
+    internal sealed class FeatureStreamEventsReader : IReadStreamedEvents<FeatureStream>
     {
         private readonly IEventStoreClient _client;
 

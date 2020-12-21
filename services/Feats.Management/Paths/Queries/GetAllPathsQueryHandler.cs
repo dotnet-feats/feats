@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Feats.CQRS.Queries;
-using Feats.EventStore.Aggregates;
+using Feats.Domain.Aggregates;
 
 namespace Feats.Management.Paths.Queries 
 {

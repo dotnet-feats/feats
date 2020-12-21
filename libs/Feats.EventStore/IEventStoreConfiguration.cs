@@ -16,7 +16,7 @@ namespace Feats.EventStore
         bool IsClusterModeEnabled { get; }
     }
 
-    public class EventStoreConfiguration : IEventStoreConfiguration
+    internal class EventStoreConfiguration : IEventStoreConfiguration
     {
         public EventStoreConfiguration(IConfiguration configuration)
         {

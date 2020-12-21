@@ -74,7 +74,7 @@ namespace Feats.EventStore.Tests.Events
 
     public static class PathStreamEventsReaderTestsExtenstions
     {
-        public static PathStreamEventsReader GivenPathStreamEventsReader(
+        internal static PathStreamEventsReader GivenPathStreamEventsReader(
             this PathStreamEventsReaderTests tests,
             IEventStoreClient client)
         {
@@ -83,7 +83,7 @@ namespace Feats.EventStore.Tests.Events
                 client);
         }
 
-        public static Func<IAsyncEnumerable<IEvent>> WhenReading(
+        internal static Func<IAsyncEnumerable<IEvent>> WhenReading(
             this PathStreamEventsReader reader)
         {
             return () => reader.Read();
