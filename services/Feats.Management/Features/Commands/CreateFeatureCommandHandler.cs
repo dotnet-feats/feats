@@ -2,12 +2,12 @@ using System;
 using System.Threading.Tasks;
 
 using Feats.CQRS.Commands;
+using Feats.Domain.Aggregates;
 using Feats.Domain.Validations;
 
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Feats.Domain.Events;
-using Feats.EventStore.Aggregates;
 
 namespace Feats.Management.Features.Commands
 {

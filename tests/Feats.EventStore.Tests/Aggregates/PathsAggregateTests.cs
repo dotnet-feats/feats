@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
+using Feats.Domain.Aggregates;
 using Feats.EventStore.Aggregates;
 
 namespace Feats.EventStore.Tests.Aggregates

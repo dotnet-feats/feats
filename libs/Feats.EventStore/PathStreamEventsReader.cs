@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Feats.EventStore
 {
-    public sealed class PathStreamEventsReader : IReadStreamedEvents<PathStream>
+    internal sealed class PathStreamEventsReader : IReadStreamedEvents<PathStream>
     {
         private readonly IEventStoreClient _client;
 

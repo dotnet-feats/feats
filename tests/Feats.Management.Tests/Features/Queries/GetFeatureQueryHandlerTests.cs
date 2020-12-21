@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Feats.Common.Tests;
 using Feats.Domain;
-using Feats.EventStore.Aggregates;
+using Feats.Domain.Aggregates;
 using Feats.Management.Features.Exceptions;
 using Feats.Management.Features.Queries;
 using Feats.Management.Tests.Features.TestExtensions;

@@ -6,6 +6,7 @@ using EventStore.Client;
 using Feats.Common.Tests;
 using Feats.CQRS.Events;
 using Feats.CQRS.Streams;
+using Feats.Domain.Aggregates;
 using Feats.EventStore.Aggregates;
 using Feats.EventStore.Tests.TestExtensions;
 using FluentAssertions;
