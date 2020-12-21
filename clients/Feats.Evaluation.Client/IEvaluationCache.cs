@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Feats.Evaluation.Client
 {
-    public interface IEvaluationCache
+    internal interface IEvaluationCache
     {
         Task<bool> isOn(IFeatureEvaluationRequest request, Func<Task<bool>> isOnTask);
     }
@@ -15,11 +15,9 @@ namespace Feats.Evaluation.Client
         
         private readonly IFeatsEvaluationConfiguration _configuration;
 
-        public EvaluationCache(
-            IMemoryCache cache,
-            IFeatsEvaluationConfiguration configuration)
+        public EvaluationCache(IFeatsEvaluationConfiguration configuration)
         {
-            this._cache = cache;
+            this._cache = new MemoryCache(new MemoryCacheOptions());
             this._configuration = configuration;
         }
 

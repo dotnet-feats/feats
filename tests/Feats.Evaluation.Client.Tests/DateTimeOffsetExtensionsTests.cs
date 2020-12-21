@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Feats.Evaluation.Client.Tests
@@ -6,9 +7,14 @@ namespace Feats.Evaluation.Client.Tests
     public class DateTimeOffsetExtensionsTests
     {
         [Test]
-        public void Given()
+        public void GivenADate_WhenCalling_ThenIHaveAnIsoFormat()
         {
-            throw new NotImplementedException();
+            var date = DateTimeOffset.Now;
+            var expected = date.ToString("O");
+                
+            date
+                .ToIsoStopBuggingMeFormat()
+                .Should().Be(expected);
         }
     }
 }

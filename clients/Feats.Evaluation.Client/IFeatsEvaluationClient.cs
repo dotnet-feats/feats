@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -24,8 +23,6 @@ namespace Feats.Evaluation.Client
 
         private readonly HttpClient _client;
         
-        private readonly UrlEncoder _encoder;
-        
         private readonly JsonSerializerOptions _jsonOptions;
 
         public FeatsEvaluationClient(
@@ -36,17 +33,13 @@ namespace Feats.Evaluation.Client
         {
             this._logger = logger;
             this._cache = cache;
-            this._encoder = UrlEncoder.Default;
             this._client = httpClientFactory.CreateClient("evaluations");
             this._client.BaseAddress = configuration.Host;
             this._client.Timeout = configuration.RequestTimeout;
             this._client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this._jsonOptions = new JsonSerializerOptions
-            {
-                Converters = { new JsonStringEnumConverter() }
-            };
+            this._jsonOptions = new JsonSerializerOptions();
         }
 
         public async Task<bool> IsOn(IFeatureEvaluationRequest request, CancellationToken token = default)
@@ -66,7 +59,7 @@ namespace Feats.Evaluation.Client
         
         private async Task<bool> FetchIsOn(IFeatureEvaluationRequest request, CancellationToken token = default)
         {
-            var httpRequest = request.ToHttpRequestMessage(this._encoder);
+            var httpRequest = request.ToHttpRequestMessage();
             
             if (!token.IsCancellationRequested)
             {

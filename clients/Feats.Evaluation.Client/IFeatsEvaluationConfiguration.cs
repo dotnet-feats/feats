@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Feats.Evaluation.Client
 {
-    internal interface IFeatsEvaluationConfiguration
+    public interface IFeatsEvaluationConfiguration
     {
         Uri Host { get; }
         
@@ -44,7 +44,8 @@ namespace Feats.Evaluation.Client
 
             try
             {
-                this.Host = new Uri(host.Trim('/'));
+                var builder = new UriBuilder(host);
+                this.Host = builder.Uri;
             }
             catch (UriFormatException formatException)
             {

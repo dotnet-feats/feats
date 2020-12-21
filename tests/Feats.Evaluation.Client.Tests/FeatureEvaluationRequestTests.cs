@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -13,7 +12,7 @@ namespace Feats.Evaluation.Client.Tests
         public void GivenNoStrategiesToInject_WhenTransformingToHttpRequestMessage_ThenNOAdditionalHeadersAreFound()
         {
             var httpRequestMessage = this.GivenRequest()
-                .ToHttpRequestMessage(UrlEncoder.Default);
+                .ToHttpRequestMessage();
             httpRequestMessage.Should().NotBeNull();
             httpRequestMessage.RequestUri.Should().NotBeNull();
             httpRequestMessage.RequestUri.ToString().Should().Contain("features?");
@@ -26,7 +25,7 @@ namespace Feats.Evaluation.Client.Tests
         public void GivenUrlSpecialCharacters_WhenTransformingToHttpRequestMessage_ThenQueryParametersAreEncoded()
         {
             var httpRequestMessage = this.GivenRequest("cat is a demon!", "where/can i @run")
-                .ToHttpRequestMessage(UrlEncoder.Default);
+                .ToHttpRequestMessage();
             httpRequestMessage.Should().NotBeNull();
             httpRequestMessage.RequestUri.Should().NotBeNull();
             httpRequestMessage.RequestUri.ToString().Should().Contain("features?");
@@ -40,7 +39,7 @@ namespace Feats.Evaluation.Client.Tests
         {
             var httpRequestMessage = this.GivenRequest()
                 .WithStrategies("a", "b")
-                .ToHttpRequestMessage(UrlEncoder.Default);
+                .ToHttpRequestMessage();
             
             httpRequestMessage.Should().NotBeNull();
             httpRequestMessage.RequestUri.Should().NotBeNull();

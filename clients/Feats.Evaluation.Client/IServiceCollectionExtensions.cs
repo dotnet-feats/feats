@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Polly;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -8,7 +9,9 @@ namespace Feats.Evaluation.Client
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddFeatsEvaluationClient(this IServiceCollection services)
+        public static IServiceCollection AddFeatsEvaluationClient(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services
                 .AddHttpClient("evaluation")
@@ -20,8 +23,8 @@ namespace Feats.Evaluation.Client
                 }));
             
             services.AddLogging();
-            services.TryAddSingleton<IMemoryCache, MemoryCache>();
             services.TryAddSingleton<IEvaluationCache, EvaluationCache>();
+            services.TryAddSingleton<IConfiguration>(configuration);
             services.TryAddSingleton<IFeatsEvaluationConfiguration, FeatsEvaluationConfiguration>();
             services.TryAddSingleton<IFeatsEvaluationClient, FeatsEvaluationClient>();
             services.TryAddSingleton<IFeatureEvaluationRequestBuilder, FeatureEvaluationRequestBuilder>();

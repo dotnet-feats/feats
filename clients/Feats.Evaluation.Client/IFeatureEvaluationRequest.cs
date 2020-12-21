@@ -34,9 +34,9 @@ namespace Feats.Evaluation.Client
     internal static class IFeatureEvaluationRequestExtensions
     {
         internal static HttpRequestMessage ToHttpRequestMessage(
-            this IFeatureEvaluationRequest request,
-            UrlEncoder encoder)
+            this IFeatureEvaluationRequest request)
         {
+            var encoder = UrlEncoder.Default;
             var builder = new UriBuilder();
             builder.Path = "features";
             var query = HttpUtility.ParseQueryString(builder.Query);
@@ -46,7 +46,7 @@ namespace Feats.Evaluation.Client
             
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                builder.ToString());
+                new Uri($"{builder.Path}?{builder.Query}", UriKind.Relative));
             
             foreach (var (key, value) in request.Strategies)
             {

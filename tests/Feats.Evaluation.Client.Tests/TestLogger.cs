@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
-namespace Feats.Common.Tests
+namespace Feats.Evaluation.Client.Tests
 {
     // too lazy, stolen from https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-5.0#create-a-custom-logger
     [ExcludeFromCodeCoverage]
