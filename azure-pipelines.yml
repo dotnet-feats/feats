@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   managementProject: 'Feats.Management'
@@ -15,11 +15,23 @@ variables:
   eventStoreProject: 'Feats.EventStore'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: 'Installing nuget tooling'
+
+- task: gitversion/setup@0
+  displayName: 'Installing Git version'
+  inputs:
+    versionSpec: '5.x'
+
+- task: gitversion/execute@0
+  displayName: 'Version'
+  name: Version
 
 - task: DotNetCoreCLI@2
+  displayName: 'tests'
   inputs:
     command: 'test'
     projects: 'feats.sln'
@@ -32,4 +44,32 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/CoverageResults/**.cobertura.xml'
 
+- task: DockerInstaller@0
+  name: 'installDockerCli'
+  inputs:
+    dockerVersion: '17.09.0-ce'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -t "feats.evaluations:$(GitVersion.SemVer)" -f Dockerfile.evaluations .
+    failOnStderr: true
+  name: 'BuildEvalDockerfile'
+  displayName: 'Build feats.evaluations dockerfile'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -t "feats.management:$(GitVersion.SemVer)" -f Dockerfile.management .
+    failOnStderr: true
+  name: 'BuildMgmtDockerfile'
+  displayName: 'Build feats.management dockerfile'
+
+#- task: Docker@2
+#  inputs:
+#    command: 'build'
+#    arguments: '-t "feats.management:$(Build.BuildId)" -f Dockerfile.evaluations .'
+#  name: 'ManagementDocker'
 
