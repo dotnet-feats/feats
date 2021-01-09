@@ -33,6 +33,16 @@ steps:
       git config --global user.name "$(GitUser)"
     failOnStderr: true
 
+- bash: |
+    GITCOMMIT=$(git rev-parse HEAD)
+    echo "##vso[task.setvariable variable=LastCommit]$GITCOMMIT"
+  displayName: Set new variable value
+  condition: and(succeeded(), eq(variables.isMain, true))
+  
+- script: |
+    echo $(LastCommit)
+  name: "CurrentLastCommit"
+
 - task: gitversion/setup@0
   displayName: 'Installing Git version'
   inputs:
@@ -90,10 +100,5 @@ steps:
       git tag -a "v$(GitVersion.SemVer)" -m "v$(GitVersion.SemVer)" "$(LastCommit)"
       git push origin "v$(GitVersion.SemVer)"
     failOnStderr: false
-
-#- task: Docker@2
-#  inputs:
-#    command: 'build'
-#    arguments: '-t "feats.management:$(Build.BuildId)" -f Dockerfile.evaluations .'
-#  name: 'ManagementDocker'
+  condition: and(succeeded(), eq(variables.isMain, true))
 
