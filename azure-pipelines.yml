@@ -1,0 +1,35 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  managementProject: 'Feats.Management'
+  evaluationsProject: 'Feats.Evaluations'
+  eventStoreProject: 'Feats.EventStore'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'feats.sln'
+    testRunTitle: 'all tests'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/CoverageResults/ /p:MergeWith=$(Build.SourcesDirectory)/CoverageResults/coverage.json /p:CoverletOutputFormat=json%2ccobertura -m:1'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/CoverageResults/**.cobertura.xml'
+
+
