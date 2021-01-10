@@ -70,6 +70,7 @@ steps:
   name: 'installDockerCli'
   inputs:
     dockerVersion: '17.09.0-ce'
+  condition: and(succeeded(), eq(variables.isMain, true))
 
 - task: Bash@3
   inputs:
@@ -80,7 +81,7 @@ steps:
   name: 'BuildEvalDockerfile'
   displayName: 'Build feats.evaluations dockerfile'
   condition: and(succeeded(), eq(variables.isMain, true))
-  # i don't have a registry yet
+# todo push to registry
 
 - task: Bash@3
   inputs:
@@ -91,7 +92,7 @@ steps:
   name: 'BuildMgmtDockerfile'
   displayName: 'Build feats.management dockerfile'
   condition: and(succeeded(), eq(variables.isMain, true))
-  # i don't have a registry yet
+# todo push to registry
 
 - task: CmdLine@2
   displayName: "Tagging version"
