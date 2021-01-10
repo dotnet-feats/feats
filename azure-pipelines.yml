@@ -10,8 +10,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  GitUser: 'az-ci'
-  GitEmail: '74823672+notyetcrazymimi@users.noreply.github.com '
+  GitUser: 'donet-feats'
+  GitEmail: 'notyetcrazymimi@gmai.com'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
