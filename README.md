@@ -1,8 +1,6 @@
 [![Coverage](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://img.shields.io/azure-devops/coverage/dotnet-feats/feats/1)
-
 [![Build Status](https://dev.azure.com/dotnet-feats/feats/_apis/build/status/dotnet-feats.feats?branchName=main)](https://dev.azure.com/dotnet-feats/feats/_build/latest?definitionId=1&branchName=main)
-
-[![Stage](https://img.shields.io/badge/Stage-alpha-blue)]
+[![Stage](https://img.shields.io/badge/Stage-alpha-blue)]()
 
 # feats
 
