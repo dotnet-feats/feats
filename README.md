@@ -8,7 +8,7 @@
 
 Yet another application to manage feature toggles!
 
-This project requires the following:
+If you want to play around the code for this project, you will require the following:
 
 - .net 5
 - Docker
@@ -21,6 +21,8 @@ This project is split in 2 services :
 - the management service
 - the evaluation service
 
+As for database/persistence, it uses the awesome [EventStore](https://www.eventstore.com/).
+
 ### Management service
 
 The management service is where all feature toggle creation & manipulation are done:
@@ -30,7 +32,7 @@ The management service is where all feature toggle creation & manipulation are d
 - publish
 - archive
 
-Still to do : an beauuutifull UI for this
+Still to do : a beauuutifull UI for this, coming up, one day ;)
 
 ### Evaluation service
 
@@ -45,7 +47,11 @@ A strategy is what drives the evaluation of a feature toggle.
 Here is the list of currently supported strategies:
 
 - simple IsOn strategy : only a basic true/false flag;
-- IsInList strategy:: given a list of items during strategy assignation, the evaluation will validate if the given value is in the list;
+- IsInList strategy: given a list of items during strategy assignation, the evaluation will validate if the given value is in the list;
+- IsBefore: date-time related evaluation, evaluates if the given date is before the one set in the strategy (all checks are exclusive)
+- IsAfter: date-time related evaluation, evaluates if the given date is after the one set in the strategy (all checks are exclusive)
+- IsGreaterThan: given a number (can be a decimal, double, who cares, ah eh, no exponential format though, give me a little break here....), evaluates if the given value is greater (exclusive values as well: > only)
+- IsLowerThan: given a number (same as greater rule), evaluates if the given value is lower (exclusive values as well: < only)
 
 # Feature Management
 
@@ -326,6 +332,20 @@ If your feature has a multitude of strategies : add all the headers you need.
 
 
 # Running locally
+
+## Building docker images
+
+Since we have 2 docker files, there's alittle trik to build them:
+
+```
+docker build -t "feats.evaluations:1.0.0-SNAPSHOT" -f Dockerfile.evaluations .
+```
+
+```
+docker build -t "feats.management:1.0.0-SNAPSHOT" -f Dockerfile.management .
+```
+
+## Running containers
 
 - Navigate to the `deploy/local` folder 
 - in a terminal, run `docker-compose up`
