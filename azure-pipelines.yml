@@ -10,6 +10,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  DECODE_PERCENTS: false
   GitUser: 'donet-feats'
   GitEmail: 'notyetcrazymimi@gmai.com'
   buildPlatform: 'Any CPU'
